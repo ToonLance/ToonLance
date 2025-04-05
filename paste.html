@@ -1,0 +1,134 @@
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="toonlance.com" class="logo">TOONLANCE</a>
+        
+        <div class="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#work">Work</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>I'm Sagar, <span>Animation Artist</span></h1>
+                <p>Bringing characters and stories to life through captivating 2D animation and motion design. Specializing in character animation, motion graphics, and visual storytelling.</p>
+                <div class="btn-container">
+                    <button class="btn open-modal-btn">Hire Me</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="sagar-hero-image.jpg" alt="Sagar - Animator">
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section" id="work">
+        <div class="section-header">
+            <h2 class="section-title">Animation Showcase</h2>
+            <p class="section-subtitle">Explore my latest animation projects and creative works</p>
+        </div>
+
+        <div class="video-grid">
+            <!-- Video 1 -->
+            <div class="video-container">
+                <div class="video-player">
+                    <video poster="https://source.unsplash.com/random/800x450/?animation">
+                        <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="play-overlay">
+                        <div class="play-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Character Animation Reel</h3>
+                    <p class="video-description">A collection of my best character animation work from various projects, showcasing expressive movements and personality.</p>
+                    <span class="video-tag">2D Animation</span>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-container">
+                <div class="video-player">
+                    <video poster="https://source.unsplash.com/random/800x450/?motion-graphics">
+                        <source src="https://samplelib.com/lib/preview/mp4/sample-10s.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="play-overlay">
+                        <div class="play-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Motion Graphics Project</h3>
+                    <p class="video-description">Dynamic motion graphics piece created for a tech startup, featuring sleek transitions and vibrant colors.</p>
+                    <span class="video-tag">Motion Design</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Modal -->
+    <div class="contact-modal" id="contact">
+        <div class="contact-container">
+            <button class="close-modal">&times;</button>
+            <div class="contact-grid">
+                <div class="project-details">
+                    <h2>Project Details</h2>
+                    <div class="detail-item">
+                        <h3>Work Information</h3>
+                        <p>2D Animation, Motion Graphics, Character Design, Storyboarding</p>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Pricing</h3>
+                        <p>Starting from ₹25,000 per project (custom quotes available)</p>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Deadline</h3>
+                        <p>Standard turnaround: 1-2 weeks<br>Rush projects available (+30% fee)</p>
+                    </div>
+                    <a href="#work" class="terms-link">View portfolio examples →</a>
+                </div>
+                
+                <form class="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-type">Project Type</label>
+                        <select id="project-type" name="project-type" required>
+                            <option value="">Select Project Type</option>
+                            <option value="2d-animation">2D Animation</option>
+                            <option value="motion-graphics">Motion Graphics</option>
+                            <option value="character-design">Character Design</option>
+                            <option value="storyboarding">Storyboarding</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Project Details</label>
+                        <textarea id="message" name="message" rows="4" required placeholder="Tell me about your project, timeline, and budget..."></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Proposal</button>
+                </form>
+            </div>
+        </div>
+    </div>

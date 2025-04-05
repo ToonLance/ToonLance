@@ -2,14 +2,14 @@
     --primary: #7c4dff;
     --primary-dark: #5e35b1;
     --secondary: #00e5ff;
-    --accent: #ff4081;
+    --accent: #0f0d0e;
     --dark: #121212;
     --dark-gray: #1e1e1e;
     --medium-gray: #2d2d2d;
     --light-gray: #b0b0b0;
     --light: #ffffff;
     --success: #00e676;
-    --warning: #ff9100;
+    --warning: #29251f;
     --error: #ff5252;
 }
 /* Custom Scrollbar Styles */
@@ -171,7 +171,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 10px 0;
 }
 
 .logo {

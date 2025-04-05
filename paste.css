@@ -1,0 +1,108 @@
+:root {
+    --primary: #7c4dff;         /* Purple */
+    --primary-dark: #5e35b1;    /* Darker Purple */
+    --secondary: #00e5ff;       /* Cyan */
+    --accent: #ff4081;          /* Pink Accent */
+    --dark: #121212;            /* Dark background */
+    --dark-gray: #1e1e1e;       /* Slightly lighter than dark */
+    --medium-gray: #2d2d2d;     /* Medium Gray */
+    --light-gray: #b0b0b0;      /* Light Gray text */
+    --light: #ffffff;           /* White text */
+    --success: #00e676;         /* Green for success */
+    --warning: #ff9100;         /* Orange for warnings */
+    --error: #ff5252;           /* Red for errors */
+}
+        
+        h1, p {
+            color: #fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            padding-top: 80px;
+        }
+
+        /* Navigation - Fixed Responsive Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(1, 1, 1, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
