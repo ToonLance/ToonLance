@@ -72,6 +72,38 @@
             transform: translateY(-5px);
         }
         
+        /* SPECIAL STYLES FOR SAGAR'S CARD ONLY */
+        .freelancer-card.sagar-card {
+            border: 3px solid gold;
+            box-shadow: 0 0 20px gold;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .freelancer-card.sagar-card::after {
+            content: "FEATURED";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: gold;
+            color: #121212;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .freelancer-card.sagar-card .freelancer-avatar {
+            border-color: gold;
+        }
+        
+        .freelancer-card.sagar-card .portfolio-btn {
+            background: gold;
+            color: #121212;
+            font-weight: bold;
+        }
+        /* END OF SAGAR'S CARD STYLES */
+        
         .freelancer-header {
             display: flex;
             align-items: center;
@@ -154,6 +186,7 @@
         .portfolio-btn:hover {
             background: var(--primary-dark);
         }
+        
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -163,8 +196,10 @@
         <div class="container">
             <nav>
                 <div class="logo">
-                    <i class="fas fa-pencil-ruler"></i>
-                    <span>ToonLance</span>
+                    <a href="https://toonlance.com/">
+                        <i class="fas fa-pencil-ruler"></i>
+                        <span>ToonLance</span>
+                    </a>
                 </div>
                 <div class="hamburger">
                     <span></span>
@@ -177,8 +212,6 @@
                     <a href="index.html#testimonials">Testimonials</a>
                     <a href="index.html#about">About</a>
                     <a href="freelancers.html" class="active">Freelancers</a>
-                    <!-- <a href="">Projects</a>
-                    <a href="">Contact</a> -->
                 </div>
             </nav>
         </div>
@@ -188,9 +221,8 @@
             <i class="fas fa-bolt"></i>Want to Hire Any FreeLancer  <span class="highlight">DM Me</span> 
              <span class="highlight">On Discord My Discord ID : </span>  
             <span class="sparkle">strangelies</span>
-            
-          </p>
-        </div>
+        </p>
+    </div>
     <h1 class="page-title">Available Freelancers</h1>
     <div class="search-container">
         <div class="search-box">
@@ -202,80 +234,80 @@
     <div class="freelancers-grid" id="freelancersGrid"></div>
 
     <script>
-                document.documentElement.style.scrollBehavior = 'smooth';
-       document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Menu Toggle
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    
-    hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navLinks.classList.toggle('active');
-    });
-    
-    // Close mobile menu when clicking a link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-        });
-    });
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
+        document.documentElement.style.scrollBehavior = 'smooth';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
             
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
             
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
                 });
-            }
-        });
-    });
-    
-    // Active link highlighting based on scroll position
-    const sections = document.querySelectorAll('section[id]'); // Only select sections with IDs
-    const navItems = document.querySelectorAll('.nav-links a[href^="#"]'); // Only select nav links with href starting with #
-    
-    window.addEventListener('scroll', function() {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            const sectionId = section.getAttribute('id');
+            });
             
-            // Check if section is in view
-            if (pageYOffset >= sectionTop - 100 && 
-                pageYOffset < sectionTop + sectionHeight - 100) {
-                current = sectionId;
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Active link highlighting based on scroll position
+            const sections = document.querySelectorAll('section[id]');
+            const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (pageYOffset >= sectionTop - 100 && 
+                        pageYOffset < sectionTop + sectionHeight - 100) {
+                        current = sectionId;
+                    }
+                });
+                
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    const href = item.getAttribute('href');
+                    if (href === `#${current}`) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+            
+            // Initialize first link as active
+            if (window.location.hash) {
+                const initialActive = document.querySelector(`.nav-links a[href="${window.location.hash}"]`);
+                if (initialActive) {
+                    document.querySelector('.nav-links a.active')?.classList.remove('active');
+                    initialActive.classList.add('active');
+                }
             }
         });
-        
-        navItems.forEach(item => {
-            item.classList.remove('active');
-            const href = item.getAttribute('href');
-            if (href === `#${current}`) {
-                item.classList.add('active');
-            }
-        });
-    });
-    
-    // Initialize first link as active
-    if (window.location.hash) {
-        const initialActive = document.querySelector(`.nav-links a[href="${window.location.hash}"]`);
-        if (initialActive) {
-            document.querySelector('.nav-links a.active')?.classList.remove('active');
-            initialActive.classList.add('active');
-        }
-    }
-});
+
         // Sample freelancer data
         const freelancers = [
             {
@@ -285,8 +317,7 @@
                 skills: ["Clip Studio Paint", "Adobe Animate CC", "After Effects", "Premiere Pro"],
                 description: "Experinced in Animation,Storyboarding and Composition",
                 avatar: "logo.jpg",
-                portfolio: "#" // Add portfolio link here
-                // rate: "$10/hr"
+                portfolio: "#"
             },
             {
                 id: 2,
@@ -295,8 +326,7 @@
                 skills: ["Adobe Animate CC", "Clip Studio Paint", "Krita"],
                 description: "Experienced in Storyboarding,Animation and Character Design",
                 avatar: "zeder-logo.png",
-                portfolio: "zeder.html" // Add portfolio link here
-                // rate: "$10/hr"
+                portfolio: "zeder.html"
             },
             {
                 id: 3,
@@ -305,8 +335,7 @@
                 skills: ["Clip Studio Paint", "Adobe Animate", "Krita", "OpenToonz"],
                 description: "Recently Animated BLUR (ShortFilm), Animated Storyboard For a Cartoon Show",
                 avatar: "sagarlogo.png",
-                portfolio: "sagarportfolio.html" // Add portfolio link here
-                // rate: "$10/hr"
+                portfolio: "sagarportfolio.html"
             },
             {
                 id: 4,
@@ -315,18 +344,8 @@
                 skills: ["Flipaclip", "Ibispaint X", "Sketchbook", "infinite Painter" ],
                 description: "Rough Animator and Illustrator (Mobile Animator),Good with Motions",
                 avatar: "sarthaklogo.jpg",
-                portfolio: "#" // Add portfolio link here
-                // rate: "$10/hr"
+                portfolio: "#"
             },
-            // {
-            //     id: 3,
-            //     name: "Priya Patel",
-            //     title: "Content Writer",
-            //     skills: ["SEO Writing", "Blog Posts", "Whitepapers", "Copywriting"],
-            //     description: "SEO content specialist for tech and marketing.",
-            //     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-            //     rate: "$45/hr"
-            // }
         ];
 
         // Display all freelancers initially
@@ -339,7 +358,7 @@
             }
             
             grid.innerHTML = freelancersToShow.map(freelancer => `
-                <div class="freelancer-card">
+                <div class="freelancer-card ${freelancer.id === 3 ? 'sagar-card' : ''}">
                     <div class="freelancer-header">
                         <img src="${freelancer.avatar}" alt="${freelancer.name}" class="freelancer-avatar">
                         <div class="freelancer-info">
@@ -357,17 +376,16 @@
                 </div>
             `).join('');
         }
-        // • ${freelancer.rate}
+
         // Simple fuzzy search function
         function searchFreelancers(searchTerm) {
             if (!searchTerm) {
-                return freelancers; // Return all if empty search
+                return freelancers;
             }
             
             searchTerm = searchTerm.toLowerCase();
             
             return freelancers.filter(freelancer => {
-                // Combine all searchable text
                 const searchText = `
                     ${freelancer.name.toLowerCase()}
                     ${freelancer.title.toLowerCase()}
@@ -375,14 +393,13 @@
                     ${freelancer.description.toLowerCase()}
                 `;
                 
-                // Check for approximate matches
                 return (
-                    searchText.includes(searchTerm) || // Exact match
-                    freelancer.name.toLowerCase().includes(searchTerm) || // Name match
+                    searchText.includes(searchTerm) ||
+                    freelancer.name.toLowerCase().includes(searchTerm) ||
                     freelancer.skills.some(skill => 
-                        skill.toLowerCase().includes(searchTerm) // Skill match
+                        skill.toLowerCase().includes(searchTerm)
                     ) ||
-                    searchTerm.split(' ').some(word => // Partial word match
+                    searchTerm.split(' ').some(word => 
                         searchText.includes(word)
                     )
                 );
