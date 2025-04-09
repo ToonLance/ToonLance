@@ -232,7 +232,6 @@ nav {
     position: relative;
     overflow: hidden;
 }
-
 .donate-btn::before {
     content: '';
     position: absolute;
