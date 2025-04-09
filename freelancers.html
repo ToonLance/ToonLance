@@ -123,15 +123,15 @@
 
         // Sample freelancer data
         const freelancers = [
-            {
-                id: 1,
-                name: "Raj",
-                title: "Animator",
-                skills: ["Clip Studio Paint", "Adobe Animate CC", "After Effects", "Premiere Pro"],
-                description: "Experinced in Animation,Storyboarding and Composition",
-                avatar: "logo.jpg",
-                portfolio: "#"
-            },
+            // {
+            //     id: 1,
+            //     name: "Raj",
+            //     title: "Animator",
+            //     skills: ["Clip Studio Paint", "Adobe Animate CC", "After Effects", "Premiere Pro"],
+            //     description: "Experinced in Animation,Storyboarding and Composition",
+            //     avatar: "logo.jpg",
+            //     portfolio: "#"
+            // },
             {
                 id: 4,
                 name: "Sagar",
@@ -176,7 +176,7 @@
                         ${freelancer.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
                     </div>
                     <div class="freelancer-actions">
-                        <button class="portfolio-btn" onclick="window.location.href='${freelancer.portfolio}'">Not Updated</button>
+                        <button class="portfolio-btn" onclick="window.location.href='${freelancer.portfolio}'">Portfolio</button>
                     </div>
                 </div>
             `).join('');
