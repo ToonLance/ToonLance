@@ -1,8 +1,8 @@
 :root {
-    --primary: #7c4dff;
+    --primary: #7549ef;
     --primary-dark: #5e35b1;
-    --secondary: #00e5ff;
-    --accent: #0f0d0e;
+    --secondary: #31c0d0;
+    --accent: #000000;
     --dark: #121212;
     --dark-gray: #1e1e1e;
     --medium-gray: #2d2d2d;
@@ -12,6 +12,91 @@
     --warning: #29251f;
     --error: #ff5252;
 }
+.donate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 36px;  /* Wider and taller */
+    min-width: 100px;    /* Ensures consistent width */
+    background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+    color: var(--light);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;   /* Slightly bigger text */
+    letter-spacing: 0.5px;
+    border-radius: 10px;  /* Softer rounded corners */
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 
+                0 2px 6px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.donate-btn:hover {
+    background: linear-gradient(145deg, var(--primary-dark), var(--primary));
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 24px rgba(0, 0, 0, 0.3), 
+                0 6px 12px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.donate-btn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 
+                0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.donate-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.25), 
+                transparent);
+    transition: left 0.7s ease-in-out;
+    z-index: -1;
+}
+
+.donate-btn:hover::before {
+    left: 100%;
+}
+
+.donate-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.donate-btn:hover::after {
+    opacity: 1;
+}
+
+/* Optional: Add a pulse animation on hover for extra attention */
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(124, 77, 255, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(124, 77, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(124, 77, 255, 0); }
+}
+
+.donate-btn.pulse:hover {
+    animation: pulse-glow 1.5s infinite;
+}
+
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
 width: 12px;

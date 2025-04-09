@@ -6,200 +6,21 @@
     <title>Find Freelancers | Toonlance</title>
     <link rel="icon" type="image/x-icon" href="favicon-16x16.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --primary: #7c4dff;
-            --primary-dark: #5e35b1;
-            --secondary: #00e5ff;
-            --accent: #ff4081;
-            --dark: #121212;
-            --dark-gray: #1e1e1e;
-            --medium-gray: #2d2d2d;
-            --light-gray: #b0b0b0;
-            --light: #ffffff;
-        }
-        
-        body {
-            background-color: var(--dark);
-            color: var(--light);
-            font-family: 'Inter', -apple-system, sans-serif;
-            padding: 20px;
-            margin: 0;
-        }
-        
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-        
-        .search-box {
-            display: flex;
-        }
-        
-        #searchInput {
-            flex: 1;
-            padding: 12px;
-            background: var(--medium-gray);
-            border: none;
-            border-radius: 6px 0 0 6px;
-            color: white;
-            font-size: 16px;
-        }
-        
-        #searchButton {
-            padding: 12px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 0 6px 6px 0;
-            cursor: pointer;
-        }
-        
-        .freelancers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .freelancer-card {
-            background: var(--dark-gray);
-            border-radius: 10px;
-            padding: 20px;
-            transition: transform 0.2s;
-        }
-        
-        .freelancer-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        /* SPECIAL STYLES FOR SAGAR'S CARD ONLY */
-        .freelancer-card.sagar-card {
-            border: 3px solid gold;
-            box-shadow: 0 0 20px gold;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .freelancer-card.sagar-card::after {
-            content: "FEATURED";
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: gold;
-            color: #121212;
-            font-weight: bold;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .freelancer-card.sagar-card .freelancer-avatar {
-            border-color: gold;
-        }
-        
-        .freelancer-card.sagar-card .portfolio-btn {
-            background: gold;
-            color: #121212;
-            font-weight: bold;
-        }
-        /* END OF SAGAR'S CARD STYLES */
-        
-        .freelancer-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .freelancer-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-        }
-        
-        .freelancer-info h3 {
-            margin: 0;
-            font-size: 1.2rem;
-        }
-        
-        .freelancer-info p {
-            margin: 5px 0 0;
-            color: var(--light-gray);
-        }
-        
-        .freelancer-skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 15px 0;
-        }
-        
-        .skill-tag {
-            background: var(--medium-gray);
-            color: var(--light);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: var(--light-gray);
-            grid-column: 1 / -1;
-        }
-        
-        .highlight {
-            background-color: rgba(124, 77, 255, 0.3);
-            padding: 2px;
-            border-radius: 3px;
-        }
-        .page-title {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .freelancer-actions {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .portfolio-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-        
-        .portfolio-btn:hover {
-            background: var(--primary-dark);
-        }
         
     </style>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="freelancers.css">
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
             <nav>
                 <div class="logo">
                     <a href="https://toonlance.com/">
-                        <i class="fas fa-pencil-ruler"></i>
-                        <span>ToonLance</span>
-                    </a>
+                    <i class="fas fa-pencil-ruler"></i>
+                    <span>ToonLance</span>
+                </a>
                 </div>
                 <div class="hamburger">
                     <span></span>
@@ -207,22 +28,15 @@
                     <span></span>
                 </div>
                 <div class="nav-links">
-                    <a href="index.html#home" >Home</a>
-                    <a href="index.html#how-it-works">How It Works</a>
-                    <a href="index.html#testimonials">Testimonials</a>
-                    <a href="index.html#about">About</a>
-                    <a href="freelancers.html" class="active">Freelancers</a>
+                    <a href="https://toonlance.com/" >Home</a>
+                    <a href="#" class="active">Freelancers</a>
+                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn" target="_blank">DONATE</a>
+                    <!-- <a href="">Projects</a>
+                    <a href="">Contact</a> -->
                 </div>
             </nav>
         </div>
     </header>
-    <div class="ppnote">
-        <p class="platform-promo">
-            <i class="fas fa-bolt"></i>Want to Hire Any FreeLancer  <span class="highlight">DM Me</span> 
-             <span class="highlight">On Discord My Discord ID : </span>  
-            <span class="sparkle">strangelies</span>
-        </p>
-    </div>
     <h1 class="page-title">Available Freelancers</h1>
     <div class="search-container">
         <div class="search-box">
@@ -323,28 +137,19 @@
                 id: 2,
                 name: "Zeder",
                 title: "Animator",
-                skills: ["Adobe Animate CC", "Clip Studio Paint", "Krita"],
+                skills: ["Adobe Animate CC", "Clip Studio Paint", "Krita", "Open Toonz"],
                 description: "Experienced in Storyboarding,Animation and Character Design",
                 avatar: "zeder-logo.png",
                 portfolio: "zeder.html"
             },
             {
-                id: 3,
+                id: 4,
                 name: "Sagar",
                 title: "Animator",
                 skills: ["Clip Studio Paint", "Adobe Animate", "Krita", "OpenToonz"],
                 description: "Recently Animated BLUR (ShortFilm), Animated Storyboard For a Cartoon Show",
                 avatar: "sagarlogo.png",
                 portfolio: "sagarportfolio.html"
-            },
-            {
-                id: 4,
-                name: "Sarthak",
-                title: "Animator",
-                skills: ["Flipaclip", "Ibispaint X", "Sketchbook", "infinite Painter" ],
-                description: "Rough Animator and Illustrator (Mobile Animator),Good with Motions",
-                avatar: "sarthaklogo.jpg",
-                portfolio: "#"
             },
         ];
 
