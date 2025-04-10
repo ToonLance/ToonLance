@@ -1079,3 +1079,137 @@ html {
 a {
     text-decoration: none;
 }
+.scss{
+    background: linear-gradient(135deg, #19192f, #18181b);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    width: 100%;
+  }
+
+  .video-card {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background: #192f50;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    aspect-ratio: 16/9;
+  }
+
+  .video-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 40px rgba(85, 19, 19, 0.3);
+  }
+
+  .video-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    opacity: 1;
+  }
+
+  .play-overlay:hover {
+    background: #ff4d4d;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .video-card.playing .play-overlay {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .video-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .video-card:hover .video-title {
+    opacity: 1;
+  }
+
+  .controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .video-card:hover .controls {
+    opacity: 1;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 90%;
+    border-radius: 2px;
+    margin: 0 auto;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .progress {
+    height: 100%;
+    background: #ff4d4d;
+    border-radius: 2px;
+    width: 0%;
+  }
+
+  @media (max-width: 768px) {
+    .video-grid {
+      grid-template-columns: 1fr;
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+    }
+    
+    .play-overlay {
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+    }
+  }

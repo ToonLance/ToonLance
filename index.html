@@ -60,7 +60,7 @@
                     <a href="#how-it-works">How It Works</a>
                     <a href="#testimonials">Testimonials</a>
                     <a href="#about">About</a>
-                    <a href="freelancers.html">Freelancers</a>
+                    <a href="/freelancers">Freelancers</a>
                     <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn" target="_blank">DONATE</a>
                     <!-- <a href="">Projects</a>
                     <a href="">Contact</a> -->
@@ -77,7 +77,7 @@
                     <h1>Hire Top 2D Animation Freelancers</h1>
                     <p>ToonLance connects you with the world's best animation talent. Find, collaborate with, and pay freelancers all in one place.</p>
                     <div class="hero-buttons">
-                        <a href="freelancers.html" class="btn btn-primary fade-in delay-1">
+                        <a href="/freelancers" class="btn btn-primary fade-in delay-1">
                             <i class="fas fa-search"></i> Find Freelancers
                         </a>
                         <a href="apply.html" class="btn btn-outline fade-in delay-2">
@@ -91,7 +91,31 @@
             </div>
         </div>
     </section>
+    <div class="scss">
+    <div class="video-grid">
+        <div class="video-card">
+          <video src="e.mp4" muted loop poster="/Blur.jpg"></video>
+          <div class="play-overlay">▶</div>
+          <div class="video-title">SHORT FILM</div>
+          <div class="controls">
+            <div class="progress-bar">
+              <div class="progress"></div>
+            </div>
+          </div>
+        </div>
+        <div class="video-card">
+          <video src="mime.mp4" muted loop poster="postervid1.png"></video>
+          <div class="play-overlay">▶</div>
+          <div class="video-title">PASSION PROJECT</div>
+          <div class="controls">
+            <div class="progress-bar">
+              <div class="progress"></div>
+            </div>
+          </div>
+        </div>
+          </div>
 
+      </div>
     <!-- Stats Section -->
     <section class="stats">
         <div class="container">
@@ -379,5 +403,65 @@ paypal.Buttons({
           "logo": "https://toonlance.com/favicon-16x16.png"
         }
         </script>
+        <script>
+            document.querySelectorAll('.video-card').forEach(card => {
+              const video = card.querySelector('video');
+              const overlay = card.querySelector('.play-overlay');
+              const progress = card.querySelector('.progress');
+              const progressBar = card.querySelector('.progress-bar');
+              
+              // Click to play/pause
+              card.addEventListener('click', (e) => {
+                // Don't trigger if clicking on the progress bar
+                if (e.target === progressBar || e.target === progress) return;
+                
+                if (video.paused) {
+                  video.play();
+                  card.classList.add('playing');
+                } else {
+                  video.pause();
+                  card.classList.remove('playing');
+                }
+              });
+              
+              // Progress bar click
+              progressBar.addEventListener('click', (e) => {
+                const pos = (e.pageX - progressBar.getBoundingClientRect().left) / progressBar.offsetWidth;
+                video.currentTime = pos * video.duration;
+              });
+              
+              // Update progress bar as video plays
+              video.addEventListener('timeupdate', () => {
+                const percent = (video.currentTime / video.duration) * 100;
+                progress.style.width = percent + '%';
+              });
+              
+              // Show overlay when video ends
+              video.addEventListener('ended', () => {
+                card.classList.remove('playing');
+              });
+              
+              // Show overlay when video is paused (except when ended)
+              video.addEventListener('pause', () => {
+                if (video.currentTime < video.duration - 0.1) {
+                  card.classList.remove('playing');
+                }
+              });
+              
+              // Keyboard controls
+              document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' && document.activeElement === video) {
+                  e.preventDefault();
+                  if (video.paused) {
+                    video.play();
+                    card.classList.add('playing');
+                  } else {
+                    video.pause();
+                    card.classList.remove('playing');
+                  }
+                }
+              });
+            });
+          </script>
 </body>
 </html>
