@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Freelancers | Toonlance</title>
+    <link rel="icon" type="image/x-icon" href="../favicon-16x16.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        
+    </style>
+    <link rel="stylesheet" href="../freelancers.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="/">
+                    <i class="fas fa-pencil-ruler"></i>
+                    <span>ToonLance</span>
+                </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="nav-links">
+                    <a href="https://toonlance.com/" >Home</a>
+                    <a href="#" class="active">Freelancers</a>
+                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn" target="_blank">DONATE</a>
+                    <!-- <a href="">Projects</a>
+                    <a href="">Contact</a> -->
+                </div>
+            </nav>
+        </div>
+    </header>
+    <h1 class="page-title">Available Freelancers</h1>
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by name, skills, or description">
+            <button id="searchButton">Search</button>
+        </div>
+    </div>
+    
+    <div class="freelancers-grid" id="freelancersGrid"></div>
+
+    <script>
+        document.documentElement.style.scrollBehavior = 'smooth';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Active link highlighting based on scroll position
+            const sections = document.querySelectorAll('section[id]');
+            const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (pageYOffset >= sectionTop - 100 && 
+                        pageYOffset < sectionTop + sectionHeight - 100) {
+                        current = sectionId;
+                    }
+                });
+                
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    const href = item.getAttribute('href');
+                    if (href === `#${current}`) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+            
+            // Initialize first link as active
+            if (window.location.hash) {
+                const initialActive = document.querySelector(`.nav-links a[href="${window.location.hash}"]`);
+                if (initialActive) {
+                    document.querySelector('.nav-links a.active')?.classList.remove('active');
+                    initialActive.classList.add('active');
+                }
+            }
+        });
+
+        // Sample freelancer data
+        const freelancers = [
+            // {
+            //     id: 1,
+            //     name: "Raj",
+            //     title: "Animator",
+            //     skills: ["Clip Studio Paint", "Adobe Animate CC", "After Effects", "Premiere Pro"],
+            //     description: "Experinced in Animation,Storyboarding and Composition",
+            //     avatar: "logo.jpg",
+            //     portfolio: "#"
+            // },
+            {
+                id: 4,
+                name: "Sagar",
+                title: "Animator",
+                skills: ["Clip Studio Paint", "Adobe Animate", "Krita", "OpenToonz"],
+                description: "Recently Animated BLUR (ShortFilm), Animated Storyboard For a Cartoon Show",
+                avatar: "../sagarlogo.png",
+                portfolio: "/sagar"
+            },
+            {
+                id: 2,
+                name: "Zeder",
+                title: "Animator",
+                skills: ["Adobe Animate CC", "Clip Studio Paint", "Krita", "Open Toonz"],
+                description: "Experienced in Storyboarding,Animation and Character Design",
+                avatar: "../zeder-logo.png",
+                portfolio: "/zeder"
+            },
+
+        ];
+
+        // Display all freelancers initially
+        function displayFreelancers(freelancersToShow) {
+            const grid = document.getElementById('freelancersGrid');
+            
+            if (freelancersToShow.length === 0) {
+                grid.innerHTML = '<div class="no-results">No freelancers found matching your search</div>';
+                return;
+            }
+            
+            grid.innerHTML = freelancersToShow.map(freelancer => `
+                <div class="freelancer-card ${freelancer.id === 3 ? 'sagar-card' : ''}">
+                    <div class="freelancer-header">
+                        <img src="${freelancer.avatar}" alt="${freelancer.name}" class="freelancer-avatar">
+                        <div class="freelancer-info">
+                            <h3>${freelancer.name}</h3>
+                            <p>${freelancer.title}</p>
+                        </div>
+                    </div>
+                    <p>${freelancer.description}</p>
+                    <div class="freelancer-skills">
+                        ${freelancer.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                    <div class="freelancer-actions">
+                        <button class="portfolio-btn" onclick="window.location.href='${freelancer.portfolio}'">Portfolio</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Simple fuzzy search function
+        function searchFreelancers(searchTerm) {
+            if (!searchTerm) {
+                return freelancers;
+            }
+            
+            searchTerm = searchTerm.toLowerCase();
+            
+            return freelancers.filter(freelancer => {
+                const searchText = `
+                    ${freelancer.name.toLowerCase()}
+                    ${freelancer.title.toLowerCase()}
+                    ${freelancer.skills.join(' ').toLowerCase()}
+                    ${freelancer.description.toLowerCase()}
+                `;
+                
+                return (
+                    searchText.includes(searchTerm) ||
+                    freelancer.name.toLowerCase().includes(searchTerm) ||
+                    freelancer.skills.some(skill => 
+                        skill.toLowerCase().includes(searchTerm)
+                    ) ||
+                    searchTerm.split(' ').some(word => 
+                        searchText.includes(word)
+                    )
+                );
+            });
+        }
+
+        // Handle search button click
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            const results = searchFreelancers(searchTerm);
+            displayFreelancers(results);
+        });
+
+        // Handle Enter key press
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const searchTerm = document.getElementById('searchInput').value.trim();
+                const results = searchFreelancers(searchTerm);
+                displayFreelancers(results);
+            }
+        });
+
+        // Initial display
+        displayFreelancers(freelancers);
+    </script>
+</body>
+</html>
