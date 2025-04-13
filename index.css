@@ -1,3 +1,9 @@
+.nav-donate{
+    background-color: var(--primary);
+    border: none;
+    border-radius: 20%;
+    padding: 20px 20px 20px;
+}
 :root {
     /* Enhanced Color Palette */
     --primary: #8a5cff;

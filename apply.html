@@ -149,19 +149,146 @@
         }
         
         .donate-btn {
-            background: var(--gradient);
-            color: white;
-            padding: 10px 20px;
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(138, 99, 255, 0.3);
-        }
-        
-        .donate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(138, 99, 255, 0.4);
-        }
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, var(--accent), #ff267a);
+    color: white !important;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 50px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 5px 20px rgba(255, 94, 125, 0.3);
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+    min-width: 180px;
+    height: 50px;
+}
+
+.donate-btn-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.donate-text {
+    transition: all 0.3s ease;
+}
+
+.donate-hover {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.donate-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff267a, var(--accent));
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.donate-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effects */
+.donate-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(255, 94, 125, 0.5);
+}
+
+.donate-btn:hover .donate-effect {
+    opacity: 1;
+}
+
+.donate-btn:hover .donate-text {
+    transform: translateY(-10px);
+    opacity: 0;
+}
+
+.donate-btn:hover .donate-hover {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.donate-btn:hover i {
+    transform: scale(1.2);
+}
+
+/* Click Effect */
+.donate-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 15px rgba(255, 94, 125, 0.5);
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Ripple Effect */
+.donate-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.donate-btn:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .donate-btn {
+        padding: 10px 20px;
+        min-width: 150px;
+        height: 45px;
+    }
+    
+    .donate-btn i {
+        font-size: 1rem;
+    }
+}
         
         .hamburger {
             display: none;
@@ -636,7 +763,19 @@
                 </div>
                 <div class="nav-links">
                     <a href="index.html">Home</a>
-                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn">DONATE</a>
+                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" 
+                    class="donate-btn" 
+                    target="_blank"
+                    aria-label="Donate via PayPal">
+                    
+                    <span class="donate-btn-inner">
+                       <!-- <i class="fas fa-heart pulse"></i> -->
+                       <span class="donate-text">SUPPORT US</span>
+                       <span class="donate-hover">DONATE US</span>
+                    </span>
+                    
+                    <span class="donate-effect"></span>
+                 </a>
                 </div>
             </nav>
         </div>

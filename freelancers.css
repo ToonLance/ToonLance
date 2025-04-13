@@ -21,6 +21,7 @@
 * {
     box-sizing: border-box;
     margin: 0;
+
     padding: 0;
     transition: 
         background-color var(--animation-speed) ease-out, 
@@ -221,8 +222,10 @@ nav {
 
 .donate-btn {
     background: linear-gradient(135deg, var(--accent), #ff267a);
-    color: var(--dark) !important;
-    padding: 0.7rem 1.4rem;
+ color: var(--light) !important;
+    padding: 12px 24px;
+    height: 48px;
+    width: 150px;
     border-radius: 8px;
     font-weight: 600 !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -231,7 +234,13 @@ nav {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
 }
+
 .donate-btn::before {
     content: '';
     position: absolute;
