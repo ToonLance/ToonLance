@@ -7,9 +7,326 @@
     <link rel="icon" type="image/x-icon" href="../favicon-16x16.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        
+        /* Clean Dark Theme */
+        :root {
+            --primary: #7c4dff;
+            --primary-dark: #5e35b1;
+            --primary-light: #b388ff;
+            --secondary: #00e5ff;
+            --accent: #ff4081;
+            --dark: #0f0f0f;
+            --darker: #080808;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #252525;
+            --light-gray: #d1d1d1;
+            --light: #ffffff;
+            --animation-speed: 0.3s;
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: rgba(20, 20, 20, 0.95);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1001;
+        }
+
+        .logo a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--light);
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 1001;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--light);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--light);
+        }
+
+        .donate-btn {
+            background: var(--primary);
+            color: var(--light) !important;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .donate-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Page Content */
+        .page-title {
+            text-align: center;
+            margin: 6rem 0 2rem;
+            font-size: 2.5rem;
+            color: var(--primary-light);
+            font-weight: 700;
+        }
+
+        /* Search Container */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            padding: 0 rem;
+        }
+
+        .search-box {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--medium-gray);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #searchButton {
+            padding: 0 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        #searchButton:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Freelancers Grid */
+        .freelancers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .freelancer-card {
+            background: var(--dark-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .freelancer-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .freelancer-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .freelancer-info h3 {
+            font-size: 1.3rem;
+            color: var(--light);
+        }
+
+        .freelancer-info p {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .freelancer-card p {
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .freelancer-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .skill-tag {
+            background: rgba(124, 77, 255, 0.15);
+            color: var(--primary-light);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .portfolio-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .portfolio-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: var(--darker);
+                flex-direction: column;
+                justify-content: center;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                padding: 2rem;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .page-title {
+                margin-top: 5rem;
+                font-size: 2rem;
+            }
+            
+            .freelancers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            #searchInput {
+                padding: 0.8rem 1rem;
+            }
+            
+            #searchButton {
+                padding: 0 1rem;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="../freelancers.css">
 </head>
 <body>
     <header>
@@ -17,9 +334,9 @@
             <nav>
                 <div class="logo">
                     <a href="/">
-                    <i class="fas fa-pencil-ruler"></i>
-                    <span>ToonLance</span>
-                </a>
+                        <!-- <i class="fas fa-pencil-ruler"></i> -->
+                        <span>ToonLance</span>
+                    </a>
                 </div>
                 <div class="hamburger">
                     <span></span>
@@ -27,113 +344,68 @@
                     <span></span>
                 </div>
                 <div class="nav-links">
-                    <a href="https://toonlance.com/" >Home</a>
+                    <a href="https://toonlance.com/">Home</a>
                     <a href="#" class="active">Freelancers</a>
-                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn" target="_blank">DONATE</a>
-                    <!-- <a href="">Projects</a>
-                    <a href="">Contact</a> -->
+                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn" target="_blank">
+                        <i class="fas fa-heart"></i> DONATE
+                    </a>
                 </div>
             </nav>
         </div>
     </header>
-    <h1 class="page-title">Available Freelancers</h1>
-    <div class="search-container">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by name, skills, or description">
-            <button id="searchButton">Search</button>
-        </div>
-    </div>
     
-    <div class="freelancers-grid" id="freelancersGrid"></div>
+    <main>
+        <h1 class="page-title">Available Freelancers</h1>
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by name, skills, or description">
+                <button id="searchButton"><i class="fas fa-search"></i> </button>
+            </div>
+        </div>
+        
+        <div class="freelancers-grid" id="freelancersGrid"></div>
+    </main>
 
     <script>
-        document.documentElement.style.scrollBehavior = 'smooth';
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Menu Toggle
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
             
-            hamburger.addEventListener('click', function() {
-                this.classList.toggle('active');
-                navLinks.classList.toggle('active');
+            // Toggle body scroll when menu is open
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
             });
-            
-            // Close mobile menu when clicking a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                });
-            });
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Active link highlighting based on scroll position
-            const sections = document.querySelectorAll('section[id]');
-            const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
-            
-            window.addEventListener('scroll', function() {
-                let current = '';
-                
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    const sectionId = section.getAttribute('id');
-                    
-                    if (pageYOffset >= sectionTop - 100 && 
-                        pageYOffset < sectionTop + sectionHeight - 100) {
-                        current = sectionId;
-                    }
-                });
-                
-                navItems.forEach(item => {
-                    item.classList.remove('active');
-                    const href = item.getAttribute('href');
-                    if (href === `#${current}`) {
-                        item.classList.add('active');
-                    }
-                });
-            });
-            
-            // Initialize first link as active
-            if (window.location.hash) {
-                const initialActive = document.querySelector(`.nav-links a[href="${window.location.hash}"]`);
-                if (initialActive) {
-                    document.querySelector('.nav-links a.active')?.classList.remove('active');
-                    initialActive.classList.add('active');
-                }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.hamburger') && !e.target.closest('.nav-links') && 
+                navLinks.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
             }
         });
 
         // Sample freelancer data
         const freelancers = [
-            // {
-            //     id: 1,
-            //     name: "Raj",
-            //     title: "Animator",
-            //     skills: ["Clip Studio Paint", "Adobe Animate CC", "After Effects", "Premiere Pro"],
-            //     description: "Experinced in Animation,Storyboarding and Composition",
-            //     avatar: "logo.jpg",
-            //     portfolio: "#"
-            // },
             {
-                id: 4,
+                id: 1,
                 name: "Sagar",
                 title: "Animator",
                 skills: ["Clip Studio Paint", "Adobe Animate", "Krita", "OpenToonz"],
@@ -146,11 +418,28 @@
                 name: "Zeder",
                 title: "Animator",
                 skills: ["Adobe Animate CC", "Clip Studio Paint", "Krita", "Open Toonz"],
-                description: "Experienced in Storyboarding,Animation and Character Design",
+                description: "Experienced in Storyboarding, Animation, Character Design and Illustrations",
                 avatar: "../zeder-logo.png",
                 portfolio: "/zeder"
             },
-
+            {
+                id: 3,
+                name: "Raj",
+                title: "Animator",
+                skills: ["Clip Studio Paint", "After Effects", "Photoshop", "Adobe Paint"],
+                description: "Experienced in Animation, Composition, Illustration and Video Editing",
+                avatar: "../raj-logo.jpg",
+                portfolio: "/raj"
+            },
+            {
+                id: 3,
+                name: "Sarthak",
+                title: "Animator",
+                skills: ["FlipaCLip", "Ibis paint x", "Sketchbook", "ETC"],
+                description: "Experienced in Animation, Composition, Illustration and Video Editing",
+                avatar: "../sarthaklogo.jpg",
+                portfolio: "/sarthak"
+            },
         ];
 
         // Display all freelancers initially
@@ -163,7 +452,7 @@
             }
             
             grid.innerHTML = freelancersToShow.map(freelancer => `
-                <div class="freelancer-card ${freelancer.id === 3 ? 'sagar-card' : ''}">
+                <div class="freelancer-card">
                     <div class="freelancer-header">
                         <img src="${freelancer.avatar}" alt="${freelancer.name}" class="freelancer-avatar">
                         <div class="freelancer-info">
@@ -182,7 +471,7 @@
             `).join('');
         }
 
-        // Simple fuzzy search function
+        // Search function
         function searchFreelancers(searchTerm) {
             if (!searchTerm) {
                 return freelancers;
@@ -198,33 +487,19 @@
                     ${freelancer.description.toLowerCase()}
                 `;
                 
-                return (
-                    searchText.includes(searchTerm) ||
-                    freelancer.name.toLowerCase().includes(searchTerm) ||
-                    freelancer.skills.some(skill => 
-                        skill.toLowerCase().includes(searchTerm)
-                    ) ||
-                    searchTerm.split(' ').some(word => 
-                        searchText.includes(word)
-                    )
-                );
+                return searchText.includes(searchTerm);
             });
         }
 
-        // Handle search button click
-        document.getElementById('searchButton').addEventListener('click', () => {
+        // Search event handlers
+        function handleSearch() {
             const searchTerm = document.getElementById('searchInput').value.trim();
             const results = searchFreelancers(searchTerm);
             displayFreelancers(results);
-        });
-
-        // Handle Enter key press
+        }
+        document.getElementById('searchButton').addEventListener('click', handleSearch);
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const searchTerm = document.getElementById('searchInput').value.trim();
-                const results = searchFreelancers(searchTerm);
-                displayFreelancers(results);
-            }
+            if (e.key === 'Enter') handleSearch();
         });
 
         // Initial display
