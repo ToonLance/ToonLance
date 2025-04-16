@@ -4,48 +4,242 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Profile - ToonLance</title>
-  <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    /* Profile-specific styles */
+    .profile-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary);
+      margin: 0 auto 1rem;
+    }
+    
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      color: var(--light);
+      font-weight: 500;
+    }
+    
+    .form-control {
+      padding: 0.8rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 1rem;
+    }
+    
+    .btn-save {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-save:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    .profile-display {
+      display: none;
+      margin-top: 2rem;
+    }
+    
+    .profile-info {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-info p {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+    
+    .profile-info strong {
+      color: var(--secondary);
+    }
+  </style>
 </head>
 <body>
-  <!-- Include your existing header -->
+  <!-- Your existing header -->
   <header>
-    <!-- Your existing header content -->
+    <!-- Header content from your main site -->
   </header>
 
-  <main class="profile-container">
-    <div class="profile-header">
-      <img id="profile-pic" src="" alt="Profile Picture">
-      <h1 id="profile-name"></h1>
-      <p id="profile-email"></p>
-    </div>
-    
-    <div class="profile-actions">
-      <!-- <button id="logout-btn" class="btn btn-primary">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </button> -->
+  <main class="container">
+    <div class="profile-container">
+      <div class="profile-header">
+        <img id="userPhoto" class="profile-pic" src="" alt="Profile Picture">
+        <h2>Your Profile</h2>
+      </div>
+      
+      <!-- Profile Creation Form -->
+      <form id="profileForm" class="profile-form">
+        <div class="form-group">
+          <label for="displayName">Full Name</label>
+          <input type="text" id="displayName" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" class="form-control" rows="4"></textarea>
+        </div>
+        
+        <button type="submit" class="btn-save">
+          <i class="fas fa-save"></i> Save Profile
+        </button>
+      </form>
+      
+      <!-- Profile Display Section -->
+      <div id="profileDisplay" class="profile-display">
+        <div class="profile-info">
+          <p><strong>Name:</strong> <span id="displayNameText"></span></p>
+          <p><strong>Username:</strong> @<span id="usernameText"></span></p>
+          <p><strong>Bio:</strong> <span id="bioText"></span></p>
+        </div>
+        <button id="editProfile" class="btn btn-outline">
+          <i class="fas fa-edit"></i> Edit Profile
+        </button>
+      </div>
     </div>
   </main>
 
+  <!-- Firebase and profile scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  
   <script>
-    // Check auth status
+    // Initialize Firebase (use your config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+    authDomain: "testing-dba79.firebaseapp.com",
+    projectId: "testing-dba79",
+    storageBucket: "testing-dba79.firebasestorage.app",
+    messagingSenderId: "808371260131",
+    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    // DOM elements
+    const profileForm = document.getElementById('profileForm');
+    const profileDisplay = document.getElementById('profileDisplay');
+    const editProfileBtn = document.getElementById('editProfile');
+    const userPhoto = document.getElementById('userPhoto');
+    
+    // Check auth state
     auth.onAuthStateChanged((user) => {
       if (!user) {
-        // Not logged in - redirect to home
-        window.location.href = '/';
+        window.location.href = '/'; // Redirect if not logged in
       } else {
-        // Display user info
-        document.getElementById('profile-pic').src = user.photoURL || 'https://via.placeholder.com/150';
-        document.getElementById('profile-name').textContent = user.displayName || 'User';
-        document.getElementById('profile-email').textContent = user.email || '';
+        // Set profile photo
+        if (user.photoURL) {
+          userPhoto.src = user.photoURL;
+        }
+        
+        // Check if profile exists
+        checkProfile(user.uid);
       }
     });
-
-    // Logout button
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      auth.signOut().then(() => {
-        window.location.href = '/';
-      });
+    
+    // Check if profile exists in Firestore
+    function checkProfile(userId) {
+      db.collection('profiles').doc(userId).get()
+        .then((doc) => {
+          if (doc.exists) {
+            // Profile exists - show profile
+            displayProfile(doc.data());
+          } else {
+            // No profile yet - show form
+            document.getElementById('displayName').value = auth.currentUser.displayName || '';
+            profileForm.style.display = 'flex';
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting profile:", error);
+        });
+    }
+    
+    // Save profile data
+    profileForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const userId = auth.currentUser.uid;
+      const profileData = {
+        displayName: document.getElementById('displayName').value,
+        username: document.getElementById('username').value,
+        bio: document.getElementById('bio').value,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      db.collection('profiles').doc(userId).set(profileData)
+        .then(() => {
+          alert('Profile saved successfully!');
+          displayProfile(profileData);
+        })
+        .catch((error) => {
+          console.error("Error saving profile:", error);
+          alert('Error saving profile. Please try again.');
+        });
+    });
+    
+    // Display profile data
+    function displayProfile(data) {
+      document.getElementById('displayNameText').textContent = data.displayName;
+      document.getElementById('usernameText').textContent = data.username;
+      document.getElementById('bioText').textContent = data.bio || 'No bio yet';
+      
+      profileForm.style.display = 'none';
+      profileDisplay.style.display = 'block';
+    }
+    
+    // Edit profile button
+    editProfileBtn.addEventListener('click', () => {
+      profileDisplay.style.display = 'none';
+      profileForm.style.display = 'flex';
     });
   </script>
 </body>
