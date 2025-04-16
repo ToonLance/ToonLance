@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Your existing head content -->
+  <title>Your Profile - ToonLance</title>
+</head>
+<body>
+  <!-- Your existing header -->
+  
+  <section class="profile-section">
+    <div class="container">
+      <h1>Your Profile</h1>
+      <div class="profile-info">
+        <img id="profilePhoto" width="120" height="120">
+        <h2 id="profileName"></h2>
+        <p id="profileEmail"></p>
+      </div>
+      <!-- Add more profile content here -->
+    </div>
+  </section>
+
+  <script>
+    // Check auth status on profile page
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = '/'; // Redirect if not logged in
+      } else {
+        // Display user info
+        document.getElementById('profilePhoto').src = user.photoURL || 'https://via.placeholder.com/120';
+        document.getElementById('profileName').textContent = user.displayName || 'User';
+        document.getElementById('profileEmail').textContent = user.email || '';
+      }
+    });
+  </script>
+</body>
+</html>
