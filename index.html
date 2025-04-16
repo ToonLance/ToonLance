@@ -67,34 +67,36 @@
             </div>
           </div>
           <div id="userGreeting" style="display: none;">
-            Hello, <span id="userDisplayName"></span>!
+            Hello, <span id="userDisplayName"></span>! Welcome To Toonlance
           </div>
         <div class="container">
             <nav>
                 <div class="logo">
-                    <a href="https://toonlance.com/">
-                    <!-- <i class="fas fa-pencil-ruler"></i> -->
+                  <a href="https://toonlance.com/">
                     <span>ToonLance</span>
-                </a>
+                  </a>
                 </div>
                 <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </div>
                 <div class="nav-links">
-                    <a href="#home" class="active">Home</a>
-                    <!-- <a href="#how-it-works">H-I-T</a> -->
-                    <a href="#testimonials">Testimonials</a>
-                    <a href="#about">About</a>
-                    <a href="/freelancers">Freelancers</a>
-                    <button class="nav-donate">
+                  <a href="#home" class="active">Home</a>
+                  <a href="#testimonials">Testimonials</a>
+                  <a href="#about">About</a>
+                  <a href="/freelancers">Freelancers</a>
+                  
+                  <!-- Add this new profile link (initially hidden) -->
+                  <a href="/profile" id="profileLink" style="display: none;">
+                    <i class="fas fa-user-circle"></i> Profile
+                  </a>
+                  
+                  <button class="nav-donate">
                     <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" class="donate-btn" target="_blank">DONATE</a>
-                </button>
-                    <!-- <a href="">Projects</a>
-                    <a href="">Contact</a> -->
+                  </button>
                 </div>
-            </nav>
+              </nav>
         </div>
     </header>
 
@@ -698,6 +700,34 @@ function updateUserProfile(user) {
     document.getElementById('userGreeting').style.display = 'none';
     userProfile.style.display = 'none';
     document.querySelector('.auth-buttons').style.display = 'flex';
+  }
+}
+
+// Auth state observer
+auth.onAuthStateChanged((user) => {
+  updateUserProfile(user);
+});
+// Update UI with user profile
+function updateUserProfile(user) {
+  const profileLink = document.getElementById('profileLink');
+  const authButtons = document.querySelector('.auth-buttons');
+  
+  if (user) {
+    // User is logged in
+    if (profileLink) profileLink.style.display = 'block';
+    if (authButtons) authButtons.style.display = 'none';
+    
+    // Update other user info if needed
+    const greetingElement = document.getElementById('userGreeting');
+    if (greetingElement) {
+      greetingElement.style.display = 'block';
+      document.getElementById('userDisplayName').textContent = user.displayName || 'User';
+    }
+  } else {
+    // User is logged out
+    if (profileLink) profileLink.style.display = 'none';
+    if (authButtons) authButtons.style.display = 'flex';
+    if (greetingElement) greetingElement.style.display = 'none';
   }
 }
 

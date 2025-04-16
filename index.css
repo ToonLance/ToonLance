@@ -1501,3 +1501,28 @@ a {
       justify-content: center;
     }
   }
+  /* Profile link in navbar */
+#profileLink {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--light-gray);
+    transition: all 0.3s ease;
+  }
+  
+  #profileLink:hover {
+    color: var(--light);
+    transform: translateY(-2px);
+  }
+  
+  #profileLink i {
+    font-size: 1.2em;
+  }
+  
+  /* Mobile responsive styles */
+  @media (max-width: 768px) {
+    #profileLink {
+      padding: 1rem;
+      justify-content: center;
+    }
+  }
