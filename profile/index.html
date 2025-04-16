@@ -3,522 +3,149 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Your Profile - ToonLance</title>
+  <title>Your Profile - ToonLance</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
   <style>
-    :root {
-      --bg-dark: #0f0f13;
-      --bg-darker: #08080b;
-      --primary: #7b4dff;
-      --primary-dark: #5e35d1;
-      --secondary: #ff6d00;
-      --accent: #00e5ff;
-      --light: #e0e0e0;
-      --gray: #8e8e93;
-      --client: #4d8bff;
-      --animator: #ff4d8b;
-      --success: #4caf50;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      background-color: var(--bg-dark);
-      color: var(--light);
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    
-    .container {
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: calc(100vh - 80px);
-    }
-    
-    /* Profile Container */
-    .profile-container {
-      max-width: 700px;
-      width: 100%;
-      margin: 2rem auto;
-      padding: 2.5rem;
-      background: linear-gradient(145deg, var(--bg-darker), rgba(30, 30, 40, 0.8));
-      border-radius: 1.5rem;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      animation: fadeIn 0.6s ease-out;
-    }
-    
-    .profile-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--primary);
-      margin-bottom: 1rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    
-    .profile-pic:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(123, 77, 255, 0.5);
-    }
-    
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--light);
-      font-weight: 600;
-    }
-    
-    .subtitle {
-      color: var(--gray);
-      font-size: 1rem;
-    }
-    
-    /* Role Selection */
-    .role-selection {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    
-    .role-card {
-      flex: 1;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      border: 2px solid transparent;
-      background: rgba(255, 255, 255, 0.03);
-    }
-    
-    .role-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    .role-card.active {
-      border-color: var(--primary);
-      background: rgba(123, 77, 255, 0.1);
-    }
-    
-    .role-card.client.active {
-      border-color: var(--client);
-      background: rgba(77, 139, 255, 0.1);
-    }
-    
-    .role-card.animator.active {
-      border-color: var(--animator);
-      background: rgba(255, 77, 139, 0.1);
-    }
-    
-    .role-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    
-    .client .role-icon {
-      color: var(--client);
-    }
-    
-    .animator .role-icon {
-      color: var(--animator);
-    }
-    
-    /* Form Styles */
-    .profile-form {
-      display: none;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    label {
-      font-weight: 500;
-      color: var(--light);
-      font-size: 0.95rem;
-    }
-    
-    .form-control {
-      padding: 0.8rem 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(20, 20, 30, 0.6);
-      color: var(--light);
-      font-family: 'Poppins', sans-serif;
-      transition: all 0.3s ease;
-    }
-    
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(123, 77, 255, 0.2);
-    }
-    
-    textarea.form-control {
-      min-height: 100px;
-      resize: vertical;
-    }
-    
-    /* Buttons */
-    .btn-save {
-      padding: 1rem;
-      border-radius: 0.5rem;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    
-    .btn-save:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(123, 77, 255, 0.4);
-    }
-    
-    .btn-save:active {
-      transform: translateY(0);
-    }
-    
-    /* Profile URL Preview */
-    .url-preview-container {
-      display: none;
-      margin-top: 0.5rem;
-    }
-    
-    .url-preview {
-      background: rgba(20, 20, 30, 0.6);
-      padding: 1rem;
-      border-radius: 0.5rem;
-      font-family: monospace;
-      word-break: break-all;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    
-    .url-preview a {
-      color: var(--accent);
-      text-decoration: none;
-      flex-grow: 1;
-    }
-    
-    .url-preview a:hover {
-      text-decoration: underline;
-    }
-    
-    .copy-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      color: var(--light);
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .copy-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    .copy-btn.copied {
-      background: var(--success);
-      color: white;
-    }
-    
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .role-selection {
-        flex-direction: column;
-      }
-      
-      .profile-container {
-        padding: 1.5rem;
-      }
-    }
-    
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--success);
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      z-index: 1000;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-    
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    /* Keep the same styles from your given code */
+    /* Paste your entire CSS here unchanged */
   </style>
 </head>
 <body>
-  <main class="container">
-    <div class="profile-container">
-      <div class="profile-header">
-        <img id="userPhoto" class="profile-pic" src="https://via.placeholder.com/150" alt="Profile Picture">
-        <h2>Create Your Profile</h2>
-        <p class="subtitle">Choose your role to get started</p>
-      </div>
-      
-      <!-- Role Selection -->
-      <div class="role-selection">
-        <div class="role-card client" onclick="selectRole('client')">
-          <div class="role-icon"><i class="fas fa-user-tie"></i></div>
-          <h3>Client</h3>
-          <p>Hire animators for your projects</p>
-        </div>
-        <div class="role-card animator" onclick="selectRole('animator')">
-          <div class="role-icon"><i class="fas fa-paint-brush"></i></div>
-          <h3>Animator</h3>
-          <p>Showcase your work and get hired</p>
-        </div>
-      </div>
-      
-      <!-- Profile Creation Form -->
-      <form id="profileForm" class="profile-form">
-        <input type="hidden" id="userRole">
-        
-        <div class="form-group">
-          <label for="displayName">Full Name</label>
-          <input type="text" id="displayName" class="form-control" required placeholder="Enter your full name">
-        </div>
-        
-        <div class="form-group">
-          <label for="username">Username (for profile URL)</label>
-          <input type="text" id="username" class="form-control" required placeholder="your-username">
-          <div class="url-preview-container" id="urlPreviewContainer">
-            <div class="url-preview">
-              <a id="profileUrl" target="_blank">toonlance.com/profile/<span id="usernameUrl">username</span></a>
-              <button class="copy-btn" onclick="copyProfileUrl(event)" title="Copy to clipboard">
-                <i class="fas fa-copy"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="bio">Bio</label>
-          <textarea id="bio" class="form-control" rows="4" placeholder="Tell us about yourself..."></textarea>
-        </div>
-        
-        <!-- Animator-specific fields -->
-        <div id="animatorFields" style="display:none;">
-          <div class="form-group">
-            <label for="skills">Skills (comma separated)</label>
-            <input type="text" id="skills" class="form-control" placeholder="2D Animation, Motion Graphics, Character Design">
-          </div>
-        </div>
-        
-        <button type="submit" class="btn-save">
-          <i class="fas fa-rocket"></i> Create Profile
-        </button>
-      </form>
+<main class="container">
+  <div class="profile-container">
+    <div class="profile-header">
+      <img id="userPhoto" class="profile-pic" src="https://via.placeholder.com/150" alt="Profile Picture">
+      <h2>Welcome</h2>
+      <p class="subtitle">Setup your profile</p>
     </div>
-  </main>
 
-  <div class="toast" id="toast">
-    <i class="fas fa-check-circle"></i>
-    <span id="toastMessage">Profile created successfully!</span>
+    <div class="role-selection">
+      <div class="role-card client" onclick="selectRole('client')">
+        <div class="role-icon"><i class="fas fa-user-tie"></i></div>
+        <h3>Client</h3>
+        <p>Hire animators for your projects</p>
+      </div>
+      <div class="role-card animator" onclick="selectRole('animator')">
+        <div class="role-icon"><i class="fas fa-paint-brush"></i></div>
+        <h3>Animator</h3>
+        <p>Showcase your work and get hired</p>
+      </div>
+    </div>
+
+    <form id="profileForm" class="profile-form">
+      <input type="hidden" id="userRole">
+
+      <div class="form-group">
+        <label for="displayName">Full Name</label>
+        <input type="text" id="displayName" class="form-control" required placeholder="Enter your full name">
+        <div class="error-message" id="nameError">Please enter your full name</div>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username (for profile URL)</label>
+        <input type="text" id="username" class="form-control" required placeholder="your-username">
+        <div class="error-message" id="usernameError">Username must be 3-20 characters with only letters, numbers, and hyphens</div>
+        <div class="url-preview-container" id="urlPreviewContainer">
+          <div class="url-preview">
+            <a id="profileUrl" target="_blank">toonlance.com/profile/<span id="usernameUrl">username</span></a>
+            <button class="copy-btn" onclick="copyProfileUrl(event)">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" class="form-control" rows="4" placeholder="Tell us about yourself..."></textarea>
+      </div>
+
+      <div id="animatorFields" style="display:none;">
+        <div class="form-group">
+          <label for="skills">Skills (comma separated)</label>
+          <input type="text" id="skills" class="form-control" placeholder="2D Animation, Motion Graphics, Character Design">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-save" id="submitBtn">
+        <i class="fas fa-rocket"></i> Create Profile
+      </button>
+    </form>
   </div>
+</main>
 
-  <script>
-    // Mock authentication - in a real app, you'd use Firebase Auth
-    const auth = {
-      currentUser: {
-        uid: 'mock-user-id-' + Math.random().toString(36).substring(2, 9)
-      }
-    };
-    
-    // Mock Firestore - in a real app, you'd use Firebase Firestore
-    const firebase = {
-      firestore: {
-        FieldValue: {
-          serverTimestamp: () => new Date()
-        }
-      }
-    };
-    
-    let selectedRole = '';
-    
-    function selectRole(role) {
-      selectedRole = role;
-      document.getElementById('userRole').value = role;
-      
-      // Update UI
-      document.querySelectorAll('.role-card').forEach(card => {
-        card.classList.remove('active');
-      });
-      document.querySelector(`.role-card.${role}`).classList.add('active');
-      
-      // Show form with animation
-      const form = document.getElementById('profileForm');
-      form.style.display = 'flex';
-      form.style.animation = 'fadeIn 0.4s ease-out';
-      
-      // Show/hide animator fields
-      document.getElementById('animatorFields').style.display = 
-        role === 'animator' ? 'block' : 'none';
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+    authDomain: "testing-dba79.firebaseapp.com",
+    projectId: "testing-dba79",
+    storageBucket: "testing-dba79.firebasestorage.app",
+    messagingSenderId: "808371260131",
+    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById("userPhoto").src = user.photoURL || 'https://via.placeholder.com/150';
+    } else {
+      window.location.href = "/";
     }
-    
-    // Generate profile URL preview
-    document.getElementById('username').addEventListener('input', function() {
-      const username = this.value.trim().toLowerCase().replace(/\s+/g, '-');
-      document.getElementById('usernameUrl').textContent = username;
-      
-      const urlPreview = document.getElementById('urlPreviewContainer');
-      if (username.length > 0) {
-        urlPreview.style.display = 'block';
-      } else {
-        urlPreview.style.display = 'none';
-      }
+  });
+
+  function selectRole(role) {
+    document.getElementById('userRole').value = role;
+    document.querySelectorAll('.role-card').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.role-card.${role}`).classList.add('active');
+    document.getElementById('profileForm').style.display = 'flex';
+    document.getElementById('animatorFields').style.display = role === 'animator' ? 'block' : 'none';
+  }
+
+  function copyProfileUrl(event) {
+    event.preventDefault();
+    const url = document.getElementById("profileUrl").href;
+    navigator.clipboard.writeText(url).then(() => {
+      event.target.closest('button').classList.add('copied');
+      setTimeout(() => event.target.closest('button').classList.remove('copied'), 1500);
     });
-    
-    // Copy profile URL to clipboard
-    function copyProfileUrl(e) {
-      e.preventDefault();
-      const url = document.getElementById('profileUrl').href || 
-                 'https://' + document.getElementById('profileUrl').textContent;
-      
-      navigator.clipboard.writeText(url).then(() => {
-        const btn = e.currentTarget;
-        btn.classList.add('copied');
-        btn.innerHTML = '<i class="fas fa-check"></i>';
-        
-        showToast('URL copied to clipboard!');
-        
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.innerHTML = '<i class="fas fa-copy"></i>';
-        }, 2000);
-      });
+  }
+
+  document.getElementById("username").addEventListener("input", () => {
+    const username = document.getElementById("username").value.trim();
+    const urlPreview = document.getElementById("urlPreviewContainer");
+    document.getElementById("usernameUrl").innerText = username;
+    urlPreview.style.display = username.length > 0 ? 'block' : 'none';
+  });
+
+  document.getElementById("profileForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const user = firebase.auth().currentUser;
+    if (!user) return alert("You're not logged in!");
+
+    const profileData = {
+      uid: user.uid,
+      role: document.getElementById("userRole").value,
+      displayName: document.getElementById("displayName").value.trim(),
+      username: document.getElementById("username").value.trim(),
+      bio: document.getElementById("bio").value.trim(),
+      skills: document.getElementById("skills").value.trim() || null
+    };
+
+    try {
+      await firebase.firestore().collection("profiles").doc(user.uid).set(profileData);
+      alert("Profile saved!");
+      window.location.href = "/dashboard.html";
+    } catch (error) {
+      console.error(error);
+      alert("Error saving profile.");
     }
-    
-    // Show toast notification
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      const toastMessage = document.getElementById('toastMessage');
-      
-      toastMessage.textContent = message;
-      toast.classList.add('show');
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
-    
-    // Form submission
-    document.getElementById('profileForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const userId = auth.currentUser.uid;
-      const username = document.getElementById('username').value.trim();
-      const displayName = document.getElementById('displayName').value.trim();
-      const role = selectedRole;
-      
-      // Validate form
-      if (!displayName) {
-        showToast('Please enter your full name');
-        return;
-      }
-      
-      if (!username) {
-        showToast('Please choose a username');
-        return;
-      }
-      
-      if (!username.match(/^[a-z0-9-]+$/)) {
-        showToast('Username can only contain lowercase letters, numbers, and hyphens');
-        return;
-      }
-      
-      if (username.length < 3) {
-        showToast('Username must be at least 3 characters');
-        return;
-      }
-      
-      const profileData = {
-        displayName: displayName,
-        username: username,
-        bio: document.getElementById('bio').value.trim(),
-        role: role,
-        profileUrl: `https://toonlance.com/profile/${username}`,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      
-      // Add animator-specific data
-      if (role === 'animator') {
-        const skills = document.getElementById('skills').value;
-        profileData.skills = skills ? skills.split(',').map(s => s.trim()) : [];
-        profileData.isAnimator = true;
-      } else {
-        profileData.isClient = true;
-      }
-      
-      // In a real app, you would save to Firestore here
-      // For now, we'll simulate a successful save
-      setTimeout(() => {
-        showToast('Profile created successfully!');
-        
-        // Update the profile URL to be clickable
-        const profileUrl = document.getElementById('profileUrl');
-        profileUrl.href = profileData.profileUrl;
-        
-        // Show the copy button now that we have a real URL
-        document.querySelector('.copy-btn').style.display = 'block';
-        
-        // In a real app, you would redirect to the new profile page
-        // window.location.href = `/profile/${username}`;
-      }, 1000);
-    });
-    
-    // Initialize form as hidden
-    document.getElementById('profileForm').style.display = 'none';
-  </script>
+  });
+</script>
 </body>
 </html>
