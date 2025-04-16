@@ -66,6 +66,9 @@
               <button id="logoutBtn" class="btn btn-outline">Logout</button>
             </div>
           </div>
+          <div id="userGreeting" style="display: none;">
+            Hello, <span id="userDisplayName"></span>!
+          </div>
         <div class="container">
             <nav>
                 <div class="logo">
@@ -666,6 +669,41 @@ auth.onAuthStateChanged((user) => {
   if (user) {
     updateUserProfile(user);
   }
+});
+// Update UI with user profile
+function updateUserProfile(user) {
+  if (user) {
+    // Update profile picture if you have one
+    if (user.photoURL) {
+      userPhoto.src = user.photoURL;
+    }
+    
+    // Update user name display
+    userName.textContent = user.displayName || 'User';
+    
+    // Show welcome message
+    const greetingElement = document.getElementById('userGreeting');
+    const nameElement = document.getElementById('userDisplayName');
+    
+    if (greetingElement && nameElement) {
+      nameElement.textContent = user.displayName || 'User';
+      greetingElement.style.display = 'block';
+    }
+    
+    // Show profile section and hide auth buttons
+    userProfile.style.display = 'flex';
+    document.querySelector('.auth-buttons').style.display = 'none';
+  } else {
+    // User is signed out - hide profile and show auth buttons
+    document.getElementById('userGreeting').style.display = 'none';
+    userProfile.style.display = 'none';
+    document.querySelector('.auth-buttons').style.display = 'flex';
+  }
+}
+
+// Auth state observer
+auth.onAuthStateChanged((user) => {
+  updateUserProfile(user);
 });
           </script>
 </body>

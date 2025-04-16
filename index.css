@@ -1480,3 +1480,24 @@ a {
         grid-template-columns: 1fr;
     }
 }
+#userGreeting {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    color: var(--light);
+    font-weight: 500;
+  }
+  
+  #userGreeting #userDisplayName {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-left: 0.3rem;
+  }
+  
+  @media (max-width: 768px) {
+    #userGreeting {
+      margin: 0.5rem 0;
+      width: 100%;
+      justify-content: center;
+    }
+  }
