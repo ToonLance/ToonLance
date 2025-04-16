@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <meta name="google-adsense-account" content="ca-pub-1008053454228702">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,25 +18,25 @@
     <meta name="description" content="ToonLance connects clients with top verified animators for affordable, high-quality animations. A trusted platform like Fiverr & Upwork, making premium animation accessible to all.">
 <meta name="keywords" content="hire animators, find animation clients, affordable animation, freelance animators, premium animation services, verified animators, animation marketplace, cartoon animation, motion graphics, 2D/3D animation">
 
-<!-- Open Graph / Social Meta (for sharing) -->
+<!-- Open Graph / Social Meta (for sharing)
 <meta property="og:title" content="ToonLance | Hire Verified Animators & Find Animation Clients">
 <meta property="og:description" content="Connecting clients with top animators for affordable, high-quality animations. Premium animation made accessible.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://www.toonlance.com">
+<meta property="og:url" content="https://www.toonlance.com"> -->
    <!-- Primary Meta Tags -->
 <title>ToonLance | Hire Top 2D Animation Freelancers or Find Work</title>
 <meta name="description" content="ToonLance connects clients with professional 2D animators. Hire freelancers or apply as an animator. Get quality motion graphics, character animation, and explainer videos.">
 <meta name="keywords" content="2D animation, hire animator, freelance animators, motion graphics, cartoon animation">
 
-<!-- Open Graph (Social Sharing) -->
+<!-- Open Graph (Social Sharing)
 <meta property="og:title" content="ToonLance | Premium 2D Animation Freelance Platform">
 <meta property="og:description" content="Find top 2D animation talent or showcase your skills. Join our creative network today!">
 <meta property="og:image" content="https://toonlance.com/Toonlance-logo.png">
 <meta property="og:url" content="https://toonlance.com">
-<meta property="og:type" content="website">
+<meta property="og:type" content="website"> -->
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
+<!-- <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@ToonLance">
 <meta property="og:title" content="ToonLance | Premium 2D Animation Freelance Platform" />
 <meta property="og:description" content="Find top 2D animation talent or showcase your skills. Join our creative network today!" />
@@ -43,7 +45,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="ToonLance | Premium 2D Animation Freelance Platform" />
 <meta name="twitter:description" content="Find top 2D animation talent or showcase your skills. Join our creative network today!" />
-<meta name="twitter:image" content="https://toonlance.com/Toonlance-logo.png" />
+<meta name="twitter:image" content="https://toonlance.com/Toonlance-logo.png" /> -->
 
 <!-- Canonical URL -->
 <link rel="canonical" href="https://toonlance.github.io">
@@ -51,6 +53,19 @@
 <body>
     <!-- Header -->
     <header>
+        <div class="auth-buttons">
+            <button id="loginBtn" class="btn btn-outline">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            <button id="signupBtn" class="btn btn-primary">
+              <i class="fas fa-user-plus"></i> Sign Up
+            </button>
+            <div id="userProfile" style="display:none;">
+              <img id="userPhoto" width="40" height="40" style="border-radius:50%;">
+              <span id="userName"></span>
+              <button id="logoutBtn" class="btn btn-outline">Logout</button>
+            </div>
+          </div>
         <div class="container">
             <nav>
                 <div class="logo">
@@ -87,6 +102,7 @@
                 <div class="hero-text fade-in">
                     <h1>Hire Top 2D Animation Freelancers</h1>
                     <p>ToonLance connects you with the world's best animation talent. Find, collaborate with, and pay freelancers all in one place.</p>
+                    
                     <div class="hero-buttons">
                         <a href="/freelancers" class="btn btn-primary fade-in delay-1">
                             <i class="fas fa-search"></i> Find Freelancers
@@ -132,7 +148,7 @@
             <div class="video-card">
               <video src="Tree.mp4" muted loop poster="ss3.png"></video>
               <div class="play-overlay">▶</div>
-              <div class="video-title">kkkkk</div>
+              <div class="video-title">Tree Branch</div>
               <div class="controls">
                 <div class="progress-bar">
                   <div class="progress"></div>
@@ -578,6 +594,79 @@ paypal.Buttons({
                 }
               });
             });
+          </script>
+          <script>
+            // Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+    authDomain: "testing-dba79.firebaseapp.com",
+    projectId: "testing-dba79",
+    storageBucket: "testing-dba79.firebasestorage.app",
+    messagingSenderId: "808371260131",
+    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Google Auth Provider
+const provider = new firebase.auth.GoogleAuthProvider();
+
+// DOM elements
+const loginBtn = document.getElementById('loginBtn');
+const signupBtn = document.getElementById('signupBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const userProfile = document.getElementById('userProfile');
+const userPhoto = document.getElementById('userPhoto');
+const userName = document.getElementById('userName');
+
+// Login function
+function loginWithGoogle() {
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      // User signed in
+      updateUserProfile(result.user);
+    })
+    .catch((error) => {
+      console.error("Error signing in:", error);
+      alert("Error signing in: " + error.message);
+    });
+}
+
+// Logout function
+function logout() {
+  auth.signOut()
+    .then(() => {
+      userProfile.style.display = 'none';
+      document.querySelector('.auth-buttons').style.display = 'flex';
+    })
+    .catch((error) => {
+      console.error("Error signing out:", error);
+    });
+}
+
+// Update UI with user profile
+function updateUserProfile(user) {
+  if (user) {
+    userPhoto.src = user.photoURL || 'https://via.placeholder.com/40';
+    userName.textContent = user.displayName || 'User';
+    userProfile.style.display = 'flex';
+    document.querySelector('.auth-buttons').style.display = 'none';
+  }
+}
+
+// Event listeners
+loginBtn.addEventListener('click', loginWithGoogle);
+signupBtn.addEventListener('click', loginWithGoogle); // Same for signup in this case
+logoutBtn.addEventListener('click', logout);
+
+// Auth state observer
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    updateUserProfile(user);
+  }
+});
           </script>
 </body>
 </html>
