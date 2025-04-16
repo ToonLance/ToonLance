@@ -1,35 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Your existing head content -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Profile - ToonLance</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-  <!-- Your existing header -->
-  
-  <section class="profile-section">
-    <div class="container">
-      <h1>Your Profile</h1>
-      <div class="profile-info">
-        <img id="profilePhoto" width="120" height="120">
-        <h2 id="profileName"></h2>
-        <p id="profileEmail"></p>
-      </div>
-      <!-- Add more profile content here -->
+  <!-- Include your existing header -->
+  <header>
+    <!-- Your existing header content -->
+  </header>
+
+  <main class="profile-container">
+    <div class="profile-header">
+      <img id="profile-pic" src="" alt="Profile Picture">
+      <h1 id="profile-name"></h1>
+      <p id="profile-email"></p>
     </div>
-  </section>
+    
+    <div class="profile-actions">
+      <!-- <button id="logout-btn" class="btn btn-primary">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button> -->
+    </div>
+  </main>
 
   <script>
-    // Check auth status on profile page
+    // Check auth status
     auth.onAuthStateChanged((user) => {
       if (!user) {
-        window.location.href = '/'; // Redirect if not logged in
+        // Not logged in - redirect to home
+        window.location.href = '/';
       } else {
         // Display user info
-        document.getElementById('profilePhoto').src = user.photoURL || 'https://via.placeholder.com/120';
-        document.getElementById('profileName').textContent = user.displayName || 'User';
-        document.getElementById('profileEmail').textContent = user.email || '';
+        document.getElementById('profile-pic').src = user.photoURL || 'https://via.placeholder.com/150';
+        document.getElementById('profile-name').textContent = user.displayName || 'User';
+        document.getElementById('profile-email').textContent = user.email || '';
       }
+    });
+
+    // Logout button
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = '/';
+      });
     });
   </script>
 </body>
