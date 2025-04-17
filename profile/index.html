@@ -385,79 +385,68 @@
       saveUsernameBtn.classList.remove('hidden');
     });
 
-    // Save username
-    saveUsernameBtn.addEventListener('click', () => {
+        // Updated Save Username event listener
+        saveUsernameBtn.addEventListener('click', async () => {
       const user = auth.currentUser;
-      if (user) {
-        const newUsername = usernameInput.value.trim().toLowerCase();
-        
-        if (!newUsername) {
-          alert("Username cannot be empty");
-          return;
-        }
-        
-        if (!/^[a-z0-9_]+$/.test(newUsername)) {
-          alert("Username can only contain letters, numbers and underscores");
-          return;
-        }
-        
-        if (newUsername.length < 3 || newUsername.length > 20) {
-          alert("Username must be between 3-20 characters");
-          return;
-        }
-        
+      if (!user) {
+        alert("You must be logged in to set a username");
+        return;
+      }
+
+      const newUsername = usernameInput.value.trim().toLowerCase();
+      
+      // Validation
+      if (!newUsername) {
+        alert("Username cannot be empty");
+        return;
+      }
+      
+      if (!/^[a-z0-9_]+$/.test(newUsername)) {
+        alert("Username can only contain letters, numbers and underscores");
+        return;
+      }
+      
+      if (newUsername.length < 3 || newUsername.length > 20) {
+        alert("Username must be between 3-20 characters");
+        return;
+      }
+      
+      try {
         // Check if username is available
-        database.ref('usernames/' + newUsername).once('value')
-          .then(snapshot => {
-            if (snapshot.exists() && snapshot.val() !== user.uid) {
-              alert("Username is already taken");
-            } else {
-              // Save the username
-              const updates = {};
-              updates['users/' + user.uid + '/username'] = newUsername;
-              updates['usernames/' + newUsername] = user.uid;
-              
-              // If user had a previous username, remove it
-              database.ref('users/' + user.uid + '/username').once('value')
-                .then(oldSnapshot => {
-                  const oldUsername = oldSnapshot.val();
-                  if (oldUsername && oldUsername !== newUsername) {
-                    updates['usernames/' + oldUsername] = null;
-                  }
-                  
-                  database.ref().update(updates)
-                    .then(() => {
-                      toggleUsernameEditView();
-                      window.history.pushState({}, '', '/u/' + newUsername);
-                    })
-                    .catch(error => {
-                      console.error("Error saving username:", error);
-                      alert("Failed to save username. Please try again.");
-                    });
-                });
-            }
-          });
+        const snapshot = await database.ref('usernames/' + newUsername).once('value');
+        
+        if (snapshot.exists() && snapshot.val() !== user.uid) {
+          alert("Username is already taken");
+          return;
+        }
+
+        // Prepare updates
+        const updates = {};
+        updates['users/' + user.uid + '/username'] = newUsername;
+        updates['usernames/' + newUsername] = user.uid;
+        
+        // Remove old username if exists
+        const oldSnapshot = await database.ref('users/' + user.uid + '/username').once('value');
+        const oldUsername = oldSnapshot.val();
+        
+        if (oldUsername && oldUsername !== newUsername) {
+          updates['usernames/' + oldUsername] = null;
+        }
+        
+        // Execute all updates
+        await database.ref().update(updates);
+        
+        // Update UI and URL
+        toggleUsernameEditView();
+        window.history.pushState({}, '', '/u/' + newUsername);
+        
+        // Show success message
+        alert("Username saved successfully!");
+      } catch (error) {
+        console.error("Error saving username:", error);
+        alert("Failed to save username. Please try again.");
       }
     });
-
-    // Copy profile link
-    copyLinkBtn.addEventListener('click', () => {
-      const link = profileLink.textContent;
-      if (link && link !== 'Not available') {
-        navigator.clipboard.writeText(link)
-          .then(() => {
-            const originalText = copyLinkBtn.innerHTML;
-            copyLinkBtn.innerHTML = '<i class="fas fa-check"></i>';
-            setTimeout(() => {
-              copyLinkBtn.innerHTML = originalText;
-            }, 2000);
-          })
-          .catch(err => {
-            console.error('Could not copy text: ', err);
-          });
-      }
-    });
-
     // Helper function to toggle between edit and view modes for bio
     function toggleBioEditView() {
       profileBio.style.display = 'block';
