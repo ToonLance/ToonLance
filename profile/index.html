@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile</title>
+  <title>Profile - ToonLance</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   <style>
     :root {
       --primary: #8a5cff;
+      --primary-dark: #6a3dff;
       --light: #ffffff;
       --light-gray: #c5c5d6;
+      --dark: #0d0d12;
+      --darker: #07070b;
     }
     
     * {
@@ -24,7 +23,7 @@
     }
     
     body {
-      background-color: #0d0d12;
+      background-color: var(--dark);
       color: var(--light);
       min-height: 100vh;
       display: flex;
@@ -38,9 +37,10 @@
       border-radius: 1rem;
       padding: 2rem;
       width: 100%;
-      max-width: 400px;
+      max-width: 500px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
     .profile-pic {
@@ -58,9 +58,15 @@
       margin-bottom: 0.25rem;
     }
     
+    .profile-username {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    
     .profile-email {
       color: var(--light-gray);
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       font-size: 0.9rem;
     }
     
@@ -70,18 +76,16 @@
       border-radius: 0.5rem;
       margin: 1.5rem 0;
       text-align: left;
+      position: relative;
     }
     
-    .edit-bio {
+    .profile-bio-text {
+      min-height: 20px;
+    }
+    
+    .profile-bio-edit {
+      display: none;
       width: 100%;
-      padding: 0.8rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 1rem;
     }
     
     .bio-textarea {
@@ -92,39 +96,99 @@
       border-radius: 0.5rem;
       padding: 1rem;
       color: var(--light);
-      margin: 1rem 0;
       resize: vertical;
+    }
+    
+    .profile-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .profile-btn {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: rgba(138, 92, 255, 0.1);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .edit-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: var(--light-gray);
+      cursor: pointer;
+    }
+    
+    .edit-icon:hover {
+      color: var(--primary);
     }
   </style>
 </head>
 <body>
   <div class="profile-card" id="profile-card">
-    <img id="profile-pic" class="profile-pic" alt="Profile">
+    <img id="profile-pic" class="profile-pic" alt="Profile Picture">
     <h1 class="profile-name" id="profile-name">Loading...</h1>
+    <p class="profile-username" id="profile-username">
+      <span id="username-text">No username set</span>
+      <i class="fas fa-edit edit-icon" id="edit-username-btn"></i>
+    </p>
+    <input type="text" id="username-input" class="hidden" placeholder="Enter username">
     <p class="profile-email" id="profile-email">Loading...</p>
     
     <div class="profile-bio">
-      <p id="profile-bio">No bio added yet</p>
-      <textarea class="bio-textarea" id="bio-textarea" placeholder="Add your bio..." style="display: none;"></textarea>
-      <button class="edit-bio" id="edit-bio-btn">
-        <i class="fas fa-edit"></i> Edit Bio
-      </button>
-      <button class="edit-bio" id="save-bio-btn" style="display: none;">
-        <i class="fas fa-save"></i> Save Bio
-      </button>
+      <div class="profile-bio-text" id="profile-bio-text">No bio added yet</div>
+      <textarea class="profile-bio-edit" id="bio-textarea" placeholder="Tell us about yourself..."></textarea>
+      <i class="fas fa-edit edit-icon" id="edit-bio-btn"></i>
+    </div>
+    
+    <div class="profile-actions" id="edit-actions" style="display: none;">
+      <button class="profile-btn btn-outline" id="cancel-edit-btn">Cancel</button>
+      <button class="profile-btn btn-primary" id="save-edit-btn">Save</button>
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  
   <script>
-    // Firebase configuration - REPLACE WITH YOUR CONFIG
+    // Firebase configuration - replace with your actual config
     const firebaseConfig = {
       apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
-      authDomain: "testing-dba79.firebaseapp.com",
-      projectId: "testing-dba79",
-      storageBucket: "testing-dba79.appspot.com",
-      messagingSenderId: "808371260131",
-      appId: "1:808371260131:web:a59f409f532e617cba13d6",
-      databaseURL: "https://testing-dba79-default-rtdb.firebaseio.com/"  // Added databaseURL
+    authDomain: "testing-dba79.firebaseapp.com",
+    projectId: "testing-dba79",
+    storageBucket: "testing-dba79.firebasestorage.app",
+    messagingSenderId: "808371260131",
+    appId: "1:808371260131:web:a59f409f532e617cba13d6"
     };
 
     // Initialize Firebase
@@ -133,98 +197,166 @@
     const database = firebase.database();
 
     // DOM elements
-    const profileCard = document.getElementById('profile-card');
     const profileName = document.getElementById('profile-name');
     const profileEmail = document.getElementById('profile-email');
     const profilePic = document.getElementById('profile-pic');
-    const profileBio = document.getElementById('profile-bio');
+    const profileBioText = document.getElementById('profile-bio-text');
     const bioTextarea = document.getElementById('bio-textarea');
     const editBioBtn = document.getElementById('edit-bio-btn');
-    const saveBioBtn = document.getElementById('save-bio-btn');
+    const usernameText = document.getElementById('username-text');
+    const usernameInput = document.getElementById('username-input');
+    const editUsernameBtn = document.getElementById('edit-username-btn');
+    const editActions = document.getElementById('edit-actions');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const saveEditBtn = document.getElementById('save-edit-btn');
 
     // Check auth state
     auth.onAuthStateChanged(user => {
       if (user) {
-        // User is signed in (from homepage)
+        // User is signed in
         loadProfile(user);
-        
-        // Set up realtime listener for bio updates
-        setupBioListener(user.uid);
       } else {
-        // No user - redirect to homepage or show message
-        profileCard.innerHTML = `
-          <h2>No user found</h2>
-          <p>Please sign in on the homepage first</p>
-        `;
+        // No user signed in
+        profileName.textContent = "Please sign in";
+        profileEmail.textContent = "";
       }
     });
-
-    // Set up realtime listener for bio updates
-    function setupBioListener(userId) {
-      const bioRef = database.ref('users/' + userId + '/bio');
-      
-      bioRef.on('value', (snapshot) => {
-        const bio = snapshot.val();
-        if (bio) {
-          profileBio.textContent = bio;
-        } else {
-          profileBio.textContent = 'No bio added yet';
-        }
-      });
-    }
 
     // Load profile data
     function loadProfile(user) {
+      // Set basic info from auth
       profileName.textContent = user.displayName || 'User';
-      profileEmail.textContent = user.email || 'No email';
+      profileEmail.textContent = user.email || '';
       profilePic.src = user.photoURL || 'https://via.placeholder.com/150';
+      
+      // Load additional profile data from database
+      database.ref('users/' + user.uid).once('value').then(snapshot => {
+        const userData = snapshot.val();
+        
+        if (!userData) {
+          // Create new profile if doesn't exist
+          return database.ref('users/' + user.uid).set({
+            name: user.displayName || 'User',
+            email: user.email || '',
+            photoURL: user.photoURL || 'https://via.placeholder.com/150'
+          });
+        }
+        
+        // Display existing profile data
+        if (userData.username) {
+          usernameText.textContent = '@' + userData.username;
+        }
+        
+        if (userData.bio) {
+          profileBioText.textContent = userData.bio;
+        }
+        
+      }).catch(error => {
+        console.error("Error loading profile:", error);
+      });
+      
+      // Set up realtime listeners
+      database.ref('users/' + user.uid + '/username').on('value', snapshot => {
+        const username = snapshot.val();
+        usernameText.textContent = username ? '@' + username : 'No username set';
+      });
+      
+      database.ref('users/' + user.uid + '/bio').on('value', snapshot => {
+        const bio = snapshot.val();
+        profileBioText.textContent = bio || 'No bio added yet';
+      });
     }
 
-    // Edit bio toggle
-    editBioBtn.addEventListener('click', () => {
-      profileBio.style.display = 'none';
-      bioTextarea.style.display = 'block';
-      bioTextarea.value = profileBio.textContent === 'No bio added yet' ? '' : profileBio.textContent;
-      editBioBtn.style.display = 'none';
-      saveBioBtn.style.display = 'block';
-    });
+    // Edit buttons event listeners
+    editBioBtn.addEventListener('click', () => startEditing('bio'));
+    editUsernameBtn.addEventListener('click', () => startEditing('username'));
 
-    // Save bio
-    saveBioBtn.addEventListener('click', () => {
-      const user = auth.currentUser;
-      if (user) {
-        const newBio = bioTextarea.value.trim();
-        
-        if (newBio === '') {
-          // If bio is empty, remove it from database
-          database.ref('users/' + user.uid + '/bio').remove()
-            .then(() => {
-              toggleBioEditView();
-            })
-            .catch(error => {
-              console.error("Error removing bio:", error);
-              alert("Failed to remove bio. Please try again.");
-            });
-        } else {
-          // Save new bio to database
-          database.ref('users/' + user.uid + '/bio').set(newBio)
-            .then(() => {
-              toggleBioEditView();
-            })
-            .catch(error => {
-              console.error("Error saving bio:", error);
-              alert("Failed to save bio. Please try again.");
-            });
-        }
+    // Start editing a field
+    function startEditing(field) {
+      if (isEditing) return;
+      
+      currentEditField = field;
+      
+      if (field === 'bio') {
+        originalValue = profileBioText.textContent;
+        profileBioText.style.display = 'none';
+        bioTextarea.style.display = 'block';
+        bioTextarea.value = originalValue === 'No bio added yet' ? '' : originalValue;
+        editBioBtn.style.display = 'none';
+      } else if (field === 'username') {
+        originalValue = usernameText.textContent.replace('@', '') || '';
+        usernameText.style.display = 'none';
+        usernameInput.style.display = 'block';
+        usernameInput.value = originalValue === 'No username set' ? '' : originalValue;
+        editUsernameBtn.style.display = 'none';
       }
-    });
+      
+      editActions.style.display = 'flex';
+    }
 
-    // Helper function to toggle between edit and view modes
-    function toggleBioEditView() {
-      profileBio.style.display = 'block';
-      bioTextarea.style.display = 'none';
-      editBioBtn.style.display = 'block';
-      saveBioBtn.style.display = 'none';
+    // Cancel editing
+    cancelEditBtn.addEventListener('click', cancelEditing);
+
+    function cancelEditing() {
+      if (currentEditField === 'bio') {
+        profileBioText.style.display = 'block';
+        bioTextarea.style.display = 'none';
+        editBioBtn.style.display = 'block';
+      } else if (currentEditField === 'username') {
+        usernameText.style.display = 'block';
+        usernameInput.style.display = 'none';
+        editUsernameBtn.style.display = 'block';
+      }
+      
+      currentEditField = null;
+      editActions.style.display = 'none';
+    }
+
+    // Save edits
+    saveEditBtn.addEventListener('click', saveEdits);
+
+    function saveEdits() {
+      if (!auth.currentUser) return;
+      
+      const userId = auth.currentUser.uid;
+      let newValue;
+      let dbPath;
+      
+      if (currentEditField === 'bio') {
+        newValue = bioTextarea.value.trim();
+        dbPath = 'bio';
+      } else if (currentEditField === 'username') {
+        newValue = usernameInput.value.trim();
+        
+        // Basic username validation
+        if (!newValue) {
+          alert("Username cannot be empty");
+          return;
+        }
+        
+        dbPath = 'username';
+      }
+      
+      // Save to database
+      database.ref('users/' + userId + '/' + dbPath).set(newValue || null)
+        .then(() => {
+          if (currentEditField === 'bio') {
+            profileBioText.style.display = 'block';
+            bioTextarea.style.display = 'none';
+            editBioBtn.style.display = 'block';
+          } else if (currentEditField === 'username') {
+            usernameText.style.display = 'block';
+            usernameInput.style.display = 'none';
+            editUsernameBtn.style.display = 'block';
+          }
+          
+          currentEditField = null;
+          editActions.style.display = 'none';
+        })
+        .catch(error => {
+          console.error("Error saving data:", error);
+          alert("Failed to save. Please try again.");
+        });
     }
   </script>
 </body>
