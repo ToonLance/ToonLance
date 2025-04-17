@@ -14,6 +14,7 @@
       --primary: #8a5cff;
       --light: #ffffff;
       --light-gray: #c5c5d6;
+      --dark-gray: #333344;
     }
     
     * {
@@ -58,6 +59,20 @@
       margin-bottom: 0.25rem;
     }
     
+    .profile-username {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    
+    .profile-link {
+      display: block;
+      color: var(--light-gray);
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+    
     .profile-email {
       color: var(--light-gray);
       margin-bottom: 1rem;
@@ -84,6 +99,16 @@
       margin-top: 1rem;
     }
     
+    .input-field {
+      width: 100%;
+      padding: 0.8rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      color: var(--light);
+      margin: 0.5rem 0;
+    }
+    
     .bio-textarea {
       width: 100%;
       min-height: 100px;
@@ -95,12 +120,43 @@
       margin: 1rem 0;
       resize: vertical;
     }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .copy-btn {
+      background: var(--dark-gray);
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    
+    .copy-btn:hover {
+      background: var(--primary);
+    }
   </style>
 </head>
 <body>
   <div class="profile-card" id="profile-card">
     <img id="profile-pic" class="profile-pic" alt="Profile">
     <h1 class="profile-name" id="profile-name">Loading...</h1>
+    <p class="profile-username" id="profile-username">
+      <span id="username-text">No username set</span>
+      <button id="edit-username-btn" class="copy-btn"><i class="fas fa-edit"></i></button>
+    </p>
+    <input type="text" id="username-input" class="input-field hidden" placeholder="Choose a username">
+    <button id="save-username-btn" class="edit-bio hidden">Save Username</button>
+    
+    <p class="profile-link" id="profile-link-container">
+      Profile link: <span id="profile-link">Not available</span>
+      <button id="copy-link-btn" class="copy-btn"><i class="fas fa-copy"></i></button>
+    </p>
+    
     <p class="profile-email" id="profile-email">Loading...</p>
     
     <div class="profile-bio">
@@ -116,7 +172,7 @@
   </div>
 
   <script>
-    // Firebase configuration - REPLACE WITH YOUR CONFIG
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
       authDomain: "testing-dba79.firebaseapp.com",
@@ -124,7 +180,7 @@
       storageBucket: "testing-dba79.appspot.com",
       messagingSenderId: "808371260131",
       appId: "1:808371260131:web:a59f409f532e617cba13d6",
-      databaseURL: "https://testing-dba79-default-rtdb.firebaseio.com/"  // Added databaseURL
+      databaseURL: "https://testing-dba79-default-rtdb.firebaseio.com/"
     };
 
     // Initialize Firebase
@@ -141,29 +197,92 @@
     const bioTextarea = document.getElementById('bio-textarea');
     const editBioBtn = document.getElementById('edit-bio-btn');
     const saveBioBtn = document.getElementById('save-bio-btn');
+    const usernameText = document.getElementById('username-text');
+    const usernameInput = document.getElementById('username-input');
+    const editUsernameBtn = document.getElementById('edit-username-btn');
+    const saveUsernameBtn = document.getElementById('save-username-btn');
+    const profileLink = document.getElementById('profile-link');
+    const copyLinkBtn = document.getElementById('copy-link-btn');
 
     // Check auth state
     auth.onAuthStateChanged(user => {
       if (user) {
-        // User is signed in (from homepage)
+        // User is signed in
         loadProfile(user);
         
-        // Set up realtime listener for bio updates
+        // Set up realtime listeners
         setupBioListener(user.uid);
+        setupUsernameListener(user.uid);
+        
+        // Check if we're viewing a profile by username
+        checkUsernameProfile();
       } else {
-        // No user - redirect to homepage or show message
-        profileCard.innerHTML = `
-          <h2>No user found</h2>
-          <p>Please sign in on the homepage first</p>
-        `;
+        // No user - check if we're viewing a public profile
+        checkUsernameProfile();
+        
+        // If not viewing a public profile, show login message
+        if (!window.location.pathname.includes('/u/')) {
+          profileCard.innerHTML = `
+            <h2>No user found</h2>
+            <p>Please sign in to view your profile</p>
+          `;
+        }
       }
     });
 
+    // Check if we're viewing a profile by username
+    function checkUsernameProfile() {
+      const path = window.location.pathname;
+      if (path.includes('/u/')) {
+        const username = path.split('/u/')[1];
+        loadPublicProfile(username);
+      }
+    }
+
+    // Load public profile by username
+    function loadPublicProfile(username) {
+      database.ref('usernames/' + username).once('value')
+        .then(snapshot => {
+          const userId = snapshot.val();
+          if (userId) {
+            // Load the public profile data
+            database.ref('users/' + userId).once('value')
+              .then(userSnapshot => {
+                const userData = userSnapshot.val();
+                if (userData) {
+                  // Display public profile
+                  profileName.textContent = userData.name || 'User';
+                  profilePic.src = userData.photoURL || 'https://via.placeholder.com/150';
+                  usernameText.textContent = '@' + username;
+                  editUsernameBtn.style.display = 'none';
+                  profileLink.textContent = window.location.href;
+                  profileLinkContainer.style.display = 'block';
+                  copyLinkBtn.style.display = 'none';
+                  
+                  if (userData.bio) {
+                    profileBio.textContent = userData.bio;
+                  } else {
+                    profileBio.textContent = 'No bio added yet';
+                  }
+                  
+                  // Hide edit buttons for public view
+                  editBioBtn.style.display = 'none';
+                  profileEmail.style.display = 'none';
+                }
+              });
+          } else {
+            profileCard.innerHTML = `<h2>Profile not found</h2>`;
+          }
+        })
+        .catch(error => {
+          console.error("Error loading public profile:", error);
+          profileCard.innerHTML = `<h2>Error loading profile</h2>`;
+        });
+    }
+
     // Set up realtime listener for bio updates
     function setupBioListener(userId) {
-      const bioRef = database.ref('users/' + userId + '/bio');
-      
-      bioRef.on('value', (snapshot) => {
+      database.ref('users/' + userId + '/bio').on('value', (snapshot) => {
         const bio = snapshot.val();
         if (bio) {
           profileBio.textContent = bio;
@@ -173,11 +292,48 @@
       });
     }
 
+    // Set up realtime listener for username updates
+    function setupUsernameListener(userId) {
+      database.ref('users/' + userId + '/username').on('value', (snapshot) => {
+        const username = snapshot.val();
+        if (username) {
+          usernameText.textContent = '@' + username;
+          profileLink.textContent = window.location.origin + '/u/' + username;
+          profileLinkContainer.style.display = 'block';
+        } else {
+          usernameText.textContent = 'No username set';
+          profileLinkContainer.style.display = 'none';
+        }
+      });
+      
+      // Also listen for name updates
+      database.ref('users/' + userId + '/name').on('value', (snapshot) => {
+        const name = snapshot.val();
+        if (name) {
+          profileName.textContent = name;
+        }
+      });
+    }
+
     // Load profile data
     function loadProfile(user) {
+      // Set basic info from auth
       profileName.textContent = user.displayName || 'User';
       profileEmail.textContent = user.email || 'No email';
       profilePic.src = user.photoURL || 'https://via.placeholder.com/150';
+      
+      // Save user data to database if not already there
+      const userRef = database.ref('users/' + user.uid);
+      userRef.once('value').then(snapshot => {
+        if (!snapshot.exists()) {
+          userRef.set({
+            name: user.displayName || 'User',
+            email: user.email || '',
+            photoURL: user.photoURL || 'https://via.placeholder.com/150',
+            uid: user.uid
+          });
+        }
+      });
     }
 
     // Edit bio toggle
@@ -219,12 +375,103 @@
       }
     });
 
-    // Helper function to toggle between edit and view modes
+    // Edit username
+    editUsernameBtn.addEventListener('click', () => {
+      const currentUsername = usernameText.textContent.replace('@', '') || '';
+      usernameText.classList.add('hidden');
+      editUsernameBtn.classList.add('hidden');
+      usernameInput.value = currentUsername === 'No username set' ? '' : currentUsername;
+      usernameInput.classList.remove('hidden');
+      saveUsernameBtn.classList.remove('hidden');
+    });
+
+    // Save username
+    saveUsernameBtn.addEventListener('click', () => {
+      const user = auth.currentUser;
+      if (user) {
+        const newUsername = usernameInput.value.trim().toLowerCase();
+        
+        if (!newUsername) {
+          alert("Username cannot be empty");
+          return;
+        }
+        
+        if (!/^[a-z0-9_]+$/.test(newUsername)) {
+          alert("Username can only contain letters, numbers and underscores");
+          return;
+        }
+        
+        if (newUsername.length < 3 || newUsername.length > 20) {
+          alert("Username must be between 3-20 characters");
+          return;
+        }
+        
+        // Check if username is available
+        database.ref('usernames/' + newUsername).once('value')
+          .then(snapshot => {
+            if (snapshot.exists() && snapshot.val() !== user.uid) {
+              alert("Username is already taken");
+            } else {
+              // Save the username
+              const updates = {};
+              updates['users/' + user.uid + '/username'] = newUsername;
+              updates['usernames/' + newUsername] = user.uid;
+              
+              // If user had a previous username, remove it
+              database.ref('users/' + user.uid + '/username').once('value')
+                .then(oldSnapshot => {
+                  const oldUsername = oldSnapshot.val();
+                  if (oldUsername && oldUsername !== newUsername) {
+                    updates['usernames/' + oldUsername] = null;
+                  }
+                  
+                  database.ref().update(updates)
+                    .then(() => {
+                      toggleUsernameEditView();
+                      window.history.pushState({}, '', '/u/' + newUsername);
+                    })
+                    .catch(error => {
+                      console.error("Error saving username:", error);
+                      alert("Failed to save username. Please try again.");
+                    });
+                });
+            }
+          });
+      }
+    });
+
+    // Copy profile link
+    copyLinkBtn.addEventListener('click', () => {
+      const link = profileLink.textContent;
+      if (link && link !== 'Not available') {
+        navigator.clipboard.writeText(link)
+          .then(() => {
+            const originalText = copyLinkBtn.innerHTML;
+            copyLinkBtn.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+              copyLinkBtn.innerHTML = originalText;
+            }, 2000);
+          })
+          .catch(err => {
+            console.error('Could not copy text: ', err);
+          });
+      }
+    });
+
+    // Helper function to toggle between edit and view modes for bio
     function toggleBioEditView() {
       profileBio.style.display = 'block';
       bioTextarea.style.display = 'none';
       editBioBtn.style.display = 'block';
       saveBioBtn.style.display = 'none';
+    }
+
+    // Helper function to toggle between edit and view modes for username
+    function toggleUsernameEditView() {
+      usernameText.classList.remove('hidden');
+      editUsernameBtn.classList.remove('hidden');
+      usernameInput.classList.add('hidden');
+      saveUsernameBtn.classList.add('hidden');
     }
   </script>
 </body>
