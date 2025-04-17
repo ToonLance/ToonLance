@@ -119,11 +119,12 @@
     // Firebase configuration - REPLACE WITH YOUR CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
-    authDomain: "testing-dba79.firebaseapp.com",
-    projectId: "testing-dba79",
-    storageBucket: "testing-dba79.firebasestorage.app",
-    messagingSenderId: "808371260131",
-    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+      authDomain: "testing-dba79.firebaseapp.com",
+      projectId: "testing-dba79",
+      storageBucket: "testing-dba79.appspot.com",
+      messagingSenderId: "808371260131",
+      appId: "1:808371260131:web:a59f409f532e617cba13d6",
+      databaseURL: "https://testing-dba79-default-rtdb.firebaseio.com/"  // Added databaseURL
     };
 
     // Initialize Firebase
@@ -146,6 +147,9 @@
       if (user) {
         // User is signed in (from homepage)
         loadProfile(user);
+        
+        // Set up realtime listener for bio updates
+        setupBioListener(user.uid);
       } else {
         // No user - redirect to homepage or show message
         profileCard.innerHTML = `
@@ -155,30 +159,32 @@
       }
     });
 
+    // Set up realtime listener for bio updates
+    function setupBioListener(userId) {
+      const bioRef = database.ref('users/' + userId + '/bio');
+      
+      bioRef.on('value', (snapshot) => {
+        const bio = snapshot.val();
+        if (bio) {
+          profileBio.textContent = bio;
+        } else {
+          profileBio.textContent = 'No bio added yet';
+        }
+      });
+    }
+
     // Load profile data
     function loadProfile(user) {
       profileName.textContent = user.displayName || 'User';
       profileEmail.textContent = user.email || 'No email';
       profilePic.src = user.photoURL || 'https://via.placeholder.com/150';
-      
-      // Load bio from database
-      database.ref('users/' + user.uid + '/bio').once('value')
-        .then(snapshot => {
-          const bio = snapshot.val();
-          if (bio) {
-            profileBio.textContent = bio;
-          }
-        })
-        .catch(error => {
-          console.error("Error loading bio:", error);
-        });
     }
 
     // Edit bio toggle
     editBioBtn.addEventListener('click', () => {
       profileBio.style.display = 'none';
       bioTextarea.style.display = 'block';
-      bioTextarea.value = profileBio.textContent;
+      bioTextarea.value = profileBio.textContent === 'No bio added yet' ? '' : profileBio.textContent;
       editBioBtn.style.display = 'none';
       saveBioBtn.style.display = 'block';
     });
@@ -187,22 +193,39 @@
     saveBioBtn.addEventListener('click', () => {
       const user = auth.currentUser;
       if (user) {
-        const newBio = bioTextarea.value;
+        const newBio = bioTextarea.value.trim();
         
-        database.ref('users/' + user.uid + '/bio').set(newBio)
-          .then(() => {
-            profileBio.textContent = newBio || 'No bio added yet';
-            profileBio.style.display = 'block';
-            bioTextarea.style.display = 'none';
-            editBioBtn.style.display = 'block';
-            saveBioBtn.style.display = 'none';
-          })
-          .catch(error => {
-            console.error("Error saving bio:", error);
-            alert("Failed to save bio. Please try again.");
-          });
+        if (newBio === '') {
+          // If bio is empty, remove it from database
+          database.ref('users/' + user.uid + '/bio').remove()
+            .then(() => {
+              toggleBioEditView();
+            })
+            .catch(error => {
+              console.error("Error removing bio:", error);
+              alert("Failed to remove bio. Please try again.");
+            });
+        } else {
+          // Save new bio to database
+          database.ref('users/' + user.uid + '/bio').set(newBio)
+            .then(() => {
+              toggleBioEditView();
+            })
+            .catch(error => {
+              console.error("Error saving bio:", error);
+              alert("Failed to save bio. Please try again.");
+            });
+        }
       }
     });
+
+    // Helper function to toggle between edit and view modes
+    function toggleBioEditView() {
+      profileBio.style.display = 'block';
+      bioTextarea.style.display = 'none';
+      editBioBtn.style.display = 'block';
+      saveBioBtn.style.display = 'none';
+    }
   </script>
 </body>
 </html>
