@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Firebase SDKs (consistent version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | ToonLance</title>
@@ -35,12 +37,17 @@
         </div>
     </header>
 
-    <section class="profile" id="profile">
-        <div class="container">
-            <h2 class="section-title">Your Profile</h2>
-            <div class="profile-details" id="profileDetails"></div>
-        </div>
-    </section>
+    <main class="profile-container">
+        <section class="profile-section" id="profile">
+            <div class="container">
+                <h1 class="section-title">Your Profile</h1>
+                <div class="profile-details" id="profileDetails">
+                    <!-- Profile content will be loaded dynamically -->
+                    <div class="loading-indicator">Loading profile...</div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Role Selection Modal -->
     <div class="modal" id="roleModal">
@@ -60,40 +67,99 @@
         </div>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    <!-- Scripts -->
     <script src="firebase.js"></script>
     <script src="nav.js"></script>
     <script>
-        // Load Profile
-        async function loadProfile() {
+        // Enhanced Profile Loader
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for auth state to be determined
+            auth.onAuthStateChanged(async user => {
+                if (!user) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                try {
+                    await loadProfile(user);
+                } catch (error) {
+                    console.error('Profile loading error:', error);
+                    showError('Failed to load profile. Please try again.');
+                }
+            });
+        });
+
+        /**
+         * Loads and displays user profile data
+         * @param {Object} user - Firebase user object
+         */
+        async function loadProfile(user) {
             const profileDetails = document.getElementById('profileDetails');
-            if (currentUser) {
-                const userDoc = await db.collection('users').doc(currentUser.uid).get();
-                const freelancerDoc = await db.collection('freelancers').doc(currentUser.uid).get();
-                profileDetails.innerHTML = `
-                    <h3>${currentUser.displayName}</h3>
-                    <p>Email: ${currentUser.email}</p>
-                    <p>Role: ${userDoc.exists ? userDoc.data().role : 'Not set'}</p>
+            
+            try {
+                // Fetch user data in parallel for better performance
+                const [userDoc, freelancerDoc] = await Promise.all([
+                    db.collection('users').doc(user.uid).get(),
+                    db.collection('freelancers').doc(user.uid).get()
+                ]);
+
+                // Basic profile template
+                let profileHTML = `
+                    <div class="profile-header">
+                        <h2>${user.displayName || 'Anonymous User'}</h2>
+                        <p class="profile-email">${user.email}</p>
+                        <p class="profile-role">Role: ${userDoc.exists ? capitalize(userDoc.data().role) : 'Not set'}</p>
                 `;
+
+                // Add freelancer-specific data if available
                 if (freelancerDoc.exists) {
                     const freelancer = freelancerDoc.data();
-                    profileDetails.innerHTML += `
-                        <p>Skills: ${freelancer.skills.join(', ')}</p>
-                        <p>Portfolio: <a href="${freelancer.portfolio}" target="_blank">${freelancer.portfolio}</a></p>
+                    profileHTML += `
+                        <div class="freelancer-details">
+                            <h3>Freelancer Information</h3>
+                            ${freelancer.skills?.length ? `
+                                <p><strong>Skills:</strong> ${freelancer.skills.join(', ')}</p>
+                            ` : ''}
+                            ${freelancer.portfolio ? `
+                                <p><strong>Portfolio:</strong> 
+                                    <a href="${ensureHttp(freelancer.portfolio)}" target="_blank" rel="noopener">
+                                        ${freelancer.portfolio}
+                                    </a>
+                                </p>
+                            ` : ''}
+                        </div>
                     `;
                 }
-            } else {
-                window.location.href = 'index.html';
+
+                profileHTML += `</div>`;
+                profileDetails.innerHTML = profileHTML;
+
+            } catch (error) {
+                profileDetails.innerHTML = `
+                    <div class="error-message">
+                        <p>Error loading profile data</p>
+                        <button onclick="window.location.reload()">Retry</button>
+                    </div>
+                `;
+                throw error;
             }
         }
 
-        // Initialize
-        auth.onAuthStateChanged(user => {
-            currentUser = user;
-            loadProfile();
-        });
+        // Helper functions
+        function capitalize(str) {
+            return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+        }
+
+        function ensureHttp(url) {
+            return url.startsWith('http') ? url : `https://${url}`;
+        }
+
+        function showError(message) {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'profile-error';
+            errorElement.textContent = message;
+            document.getElementById('profileDetails').appendChild(errorElement);
+        }
     </script>
 </body>
 </html>
