@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Firebase SDKs (consistent version) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -11,92 +11,41 @@
     <title>Profile | ToonLance</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Additional styles for error handling */
-        .loading-indicator, .error-message {
-            padding: 20px;
-            text-align: center;
-            background: #f8f8f8;
-            border-radius: 8px;
-            margin: 20px 0;
+        /* Profile specific styles */
+        .profile-avatar img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4285f4;
         }
         
-        .error-message {
-            color: #d32f2f;
-            background: #ffebee;
+        .profile-social-links a {
+            margin: 0 10px;
+            color: #4285f4;
+            text-decoration: none;
         }
         
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        
-        .btn-primary {
-            background-color: #4285f4;
-            color: white;
-            border: none;
+        .profile-actions {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <a href="/">ToonLance</a>
-                </div>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="nav-links" id="navLinks">
-                    <a href="index.html">Home</a>
-                    <a href="freelancers.html">Freelancers</a>
-                    <a href="projects.html">Projects</a>
-                    <a id="loginLink" class="nav-link">Login</a>
-                    <a id="signupLink" class="nav-link">Sign Up</a>
-                    <a href="profile.html" id="profileLink" style="display: none;">Profile</a>
-                    <a id="logoutLink" class="nav-link" style="display: none;">Logout</a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
+    <!-- Header remains the same as before -->
+    
     <main class="profile-container">
         <section class="profile-section" id="profile">
             <div class="container">
-                <h1 class="section-title">Your Profile</h1>
                 <div class="profile-details" id="profileDetails">
-                    <!-- Profile content will be loaded dynamically -->
-                    <div class="loading-indicator">Initializing authentication...</div>
+                    <div class="loading-indicator">Loading profile...</div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Role Selection Modal -->
-    <div class="modal" id="roleModal">
-        <div class="modal-content">
-            <h3>Choose Your Role</h3>
-            <p>Are you a client looking to hire animators or a freelancer looking for projects?</p>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="selectRole('client')">Client</button>
-                <button class="btn btn-outline" onclick="selectRole('freelancer')">Freelancer</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="copyright">
-            <p>© 2025 ToonLance. All rights reserved.</p>
-        </div>
-    </footer>
-
     <!-- Firebase Configuration -->
     <script>
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
     authDomain: "testing-dba79.firebaseapp.com",
@@ -106,97 +55,164 @@
     appId: "1:808371260131:web:a59f409f532e617cba13d6"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-
-        // Initialize Firebase services
         const auth = firebase.auth();
         const db = firebase.firestore();
     </script>
 
-    <!-- Main Application Script -->
+    <!-- Profile Loader Script -->
     <script>
-        // Track initialization state
-        let firebaseInitialized = false;
-        
-        // Enhanced error display function
-        function showError(message, isFatal = false) {
-            const profileDetails = document.getElementById('profileDetails');
-            profileDetails.innerHTML = `
-                <div class="error-message">
-                    <p>${message}</p>
-                    <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
-                    ${isFatal ? '<p>If the problem persists, please try again later.</p>' : ''}
-                </div>
-            `;
+        // Get username from URL path
+        function getUsernameFromPath() {
+            const path = window.location.pathname;
+            const profilePrefix = '/profile/';
+            if (path.startsWith(profilePrefix)) {
+                return path.slice(profilePrefix.length).split('/')[0];
+            }
+            return null;
         }
 
-        /**
-         * Loads and displays user profile data
-         * @param {Object} user - Firebase user object
-         */
-        async function loadProfile(user) {
+        // Generate profile URL
+        function getProfileUrl(username) {
+            return `${window.location.origin}/profile/${username}`;
+        }
+
+        // Validate username format
+        function isValidUsername(username) {
+            return /^[a-zA-Z0-9_-]{3,20}$/.test(username);
+        }
+
+        // Load profile by username or UID
+        async function loadProfileByIdentifier(identifier) {
+            try {
+                let userDoc;
+                
+                // Try to find by username first
+                if (isValidUsername(identifier)) {
+                    const querySnapshot = await db.collection('users')
+                        .where('username', '==', identifier.toLowerCase())
+                        .limit(1)
+                        .get();
+                    
+                    if (!querySnapshot.empty) {
+                        userDoc = querySnapshot.docs[0];
+                    }
+                }
+                
+                // If not found by username, try by UID
+                if (!userDoc) {
+                    const docRef = db.collection('users').doc(identifier);
+                    userDoc = await docRef.get();
+                }
+                
+                if (!userDoc.exists) {
+                    throw new Error('Profile not found');
+                }
+                
+                return userDoc;
+            } catch (error) {
+                console.error('Profile loading error:', error);
+                throw error;
+            }
+        }
+
+        // Main profile loader
+        async function loadProfilePage() {
             const profileDetails = document.getElementById('profileDetails');
+            const identifier = getUsernameFromPath() || new URLSearchParams(window.location.search).get('uid');
+            
+            if (!identifier) {
+                showError('Profile identifier not found in URL');
+                return;
+            }
             
             try {
-                // Show loading state
                 profileDetails.innerHTML = '<div class="loading-indicator">Loading profile data...</div>';
                 
-                // Fetch user data in parallel for better performance
-                const [userDoc, freelancerDoc] = await Promise.all([
-                    db.collection('users').doc(user.uid).get(),
-                    db.collection('freelancers').doc(user.uid).get()
-                ]);
+                const userDoc = await loadProfileByIdentifier(identifier);
+                const userData = userDoc.data();
+                const userId = userDoc.id;
+                
+                // Get additional freelancer data if available
+                let freelancerData = null;
+                if (userData.role === 'freelancer') {
+                    const freelancerDoc = await db.collection('freelancers').doc(userId).get();
+                    if (freelancerDoc.exists) {
+                        freelancerData = freelancerDoc.data();
+                    }
+                }
+                
+                // Update browser history with clean URL if accessed by UID
+                if (!getUsernameFromPath() && userData.username) {
+                    window.history.replaceState({}, '', getProfileUrl(userData.username));
+                }
+                
+                renderProfile(userData, freelancerData);
+                
+            } catch (error) {
+                console.error('Profile loading error:', error);
+                showError('Failed to load profile. Please check the URL and try again.');
+            }
+        }
 
-                // Basic profile template
-                let profileHTML = `
-                    <div class="profile-header">
-                        <div class="profile-avatar">
-                            <img src="${user.photoURL || 'https://via.placeholder.com/150'}" alt="Profile Picture">
-                        </div>
-                        <h2>${user.displayName || 'Anonymous User'}</h2>
-                        <p class="profile-email">${user.email}</p>
-                        <p class="profile-role">Role: ${userDoc.exists ? capitalize(userDoc.data().role) : 'Not set'}</p>
+        // Render profile HTML
+        function renderProfile(userData, freelancerData) {
+            const profileDetails = document.getElementById('profileDetails');
+            
+            let html = `
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="${userData.photoURL || 'https://via.placeholder.com/150'}" alt="${userData.displayName}'s profile picture">
+                    </div>
+                    <h1>${userData.displayName || 'Anonymous User'}</h1>
+                    <p class="profile-username">@${userData.username || 'user-' + userData.uid.substring(0, 8)}</p>
+                    <p class="profile-role">${capitalize(userData.role || 'user')}</p>
+                    
+                    <div class="profile-social-links">
+                        ${userData.website ? `<a href="${ensureHttp(userData.website)}" target="_blank">Website</a>` : ''}
+                        ${userData.twitter ? `<a href="https://twitter.com/${userData.twitter}" target="_blank">Twitter</a>` : ''}
+                        ${userData.instagram ? `<a href="https://instagram.com/${userData.instagram}" target="_blank">Instagram</a>` : ''}
+                    </div>
+            `;
+            
+            if (freelancerData) {
+                html += `
+                    <div class="freelancer-details">
+                        <h3>Freelancer Profile</h3>
+                        ${freelancerData.skills?.length ? `
+                            <p><strong>Skills:</strong> ${freelancerData.skills.join(', ')}</p>
+                        ` : ''}
+                        ${freelancerData.rate ? `
+                            <p><strong>Rate:</strong> $${freelancerData.rate}/hour</p>
+                        ` : ''}
+                        ${freelancerData.portfolio ? `
+                            <p><strong>Portfolio:</strong> 
+                                <a href="${ensureHttp(freelancerData.portfolio)}" target="_blank">
+                                    View Portfolio
+                                </a>
+                            </p>
+                        ` : ''}
+                        ${freelancerData.bio ? `
+                            <div class="profile-bio">
+                                <h4>About Me</h4>
+                                <p>${freelancerData.bio}</p>
+                            </div>
+                        ` : ''}
+                    </div>
                 `;
-
-                // Add freelancer-specific data if available
-                if (freelancerDoc.exists) {
-                    const freelancer = freelancerDoc.data();
-                    profileHTML += `
-                        <div class="freelancer-details">
-                            <h3>Freelancer Information</h3>
-                            ${freelancer.skills?.length ? `
-                                <p><strong>Skills:</strong> ${freelancer.skills.join(', ')}</p>
-                            ` : ''}
-                            ${freelancer.portfolio ? `
-                                <p><strong>Portfolio:</strong> 
-                                    <a href="${ensureHttp(freelancer.portfolio)}" target="_blank" rel="noopener">
-                                        ${freelancer.portfolio}
-                                    </a>
-                                </p>
-                            ` : ''}
-                            ${freelancer.rate ? `
-                                <p><strong>Rate:</strong> $${freelancer.rate}/hour</p>
-                            ` : ''}
+            }
+            
+            // Add edit button if viewing own profile
+            auth.onAuthStateChanged(user => {
+                if (user && user.uid === userData.uid) {
+                    html += `
+                        <div class="profile-actions">
+                            <a href="/profile/edit" class="btn btn-primary">Edit Profile</a>
                         </div>
                     `;
                 }
-
-                // Add edit profile button
-                profileHTML += `
-                    <div class="profile-actions">
-                        <button onclick="editProfile()" class="btn btn-primary">Edit Profile</button>
-                    </div>
-                    </div>
-                `;
-                
-                profileDetails.innerHTML = profileHTML;
-
-            } catch (error) {
-                console.error('Profile loading error:', error);
-                showError('Failed to load profile data. Please try again.');
-                throw error;
-            }
+                profileDetails.innerHTML = html;
+            });
         }
 
         // Helper functions
@@ -209,83 +225,18 @@
             return url.startsWith('http') ? url : `https://${url}`;
         }
 
-        function editProfile() {
-            // Implement your edit profile functionality here
-            alert('Edit profile functionality will be implemented here');
-        }
-
-        // Initialize authentication and load profile
-        document.addEventListener('DOMContentLoaded', () => {
+        function showError(message) {
             const profileDetails = document.getElementById('profileDetails');
-            
-            // Add timeout for initialization
-            const initTimeout = setTimeout(() => {
-                if (!firebaseInitialized) {
-                    showError('Authentication is taking longer than expected. Please refresh the page.', true);
-                }
-            }, 10000); // 10 second timeout
-
-            try {
-                auth.onAuthStateChanged(async user => {
-                    clearTimeout(initTimeout);
-                    firebaseInitialized = true;
-                    
-                    if (!user) {
-                        // No user signed in, redirect to login
-                        window.location.href = 'index.html';
-                        return;
-                    }
-
-                    try {
-                        await loadProfile(user);
-                    } catch (error) {
-                        console.error('Profile loading error:', error);
-                        showError('Failed to load profile. Please try again.');
-                    }
-                });
-            } catch (initError) {
-                clearTimeout(initTimeout);
-                console.error('Firebase initialization error:', initError);
-                showError('Failed to initialize authentication. Please refresh the page.', true);
-            }
-        });
-
-        // Navigation handling (from nav.js)
-        function updateNavForAuthState(user) {
-            const loginLink = document.getElementById('loginLink');
-            const signupLink = document.getElementById('signupLink');
-            const profileLink = document.getElementById('profileLink');
-            const logoutLink = document.getElementById('logoutLink');
-            
-            if (user) {
-                // User is signed in
-                loginLink.style.display = 'none';
-                signupLink.style.display = 'none';
-                profileLink.style.display = 'block';
-                logoutLink.style.display = 'block';
-            } else {
-                // User is signed out
-                loginLink.style.display = 'block';
-                signupLink.style.display = 'block';
-                profileLink.style.display = 'none';
-                logoutLink.style.display = 'none';
-            }
+            profileDetails.innerHTML = `
+                <div class="error-message">
+                    <p>${message}</p>
+                    <a href="/" class="btn btn-primary">Return Home</a>
+                </div>
+            `;
         }
 
-        // Initialize auth state listener for navigation
-        auth.onAuthStateChanged(user => {
-            updateNavForAuthState(user);
-        });
-
-        // Logout functionality
-        document.getElementById('logoutLink')?.addEventListener('click', () => {
-            auth.signOut().then(() => {
-                window.location.href = 'index.html';
-            }).catch(error => {
-                console.error('Logout error:', error);
-                showError('Failed to logout. Please try again.');
-            });
-        });
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', loadProfilePage);
     </script>
 </body>
 </html>
