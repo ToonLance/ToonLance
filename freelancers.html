@@ -1,0 +1,102 @@
+<!-- freelancers.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancers | ToonLance</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="/">ToonLance</a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html">Home</a>
+                    <a href="freelancers.html" class="active">Freelancers</a>
+                    <a href="projects.html">Projects</a>
+                    <a id="loginLink" class="nav-link">Login</a>
+                    <a id="signupLink" class="nav-link">Sign Up</a>
+                    <a href="profile.html" id="profileLink" style="display: none;">Profile</a>
+                    <a id="logoutLink" class="nav-link" style="display: none;">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="freelancers" id="freelancers">
+        <div class="container">
+            <h2 class="section-title">Top 2D Animators</h2>
+            <div class="freelancer-list" id="freelancerList"></div>
+        </div>
+    </section>
+
+    <!-- Role Selection Modal -->
+    <div class="modal" id="roleModal">
+        <div class="modal-content">
+            <h3>Choose Your Role</h3>
+            <p>Are you a client looking to hire animators or a freelancer looking for projects?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="selectRole('client')">Client</button>
+                <button class="btn btn-outline" onclick="selectRole('freelancer')">Freelancer</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copyright">
+            <p>© 2025 ToonLance. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="nav.js"></script>
+    <script>
+        // Load Freelancers
+        async function loadFreelancers() {
+            const freelancerList = document.getElementById('freelancerList');
+            freelancerList.innerHTML = '';
+            const snapshot = await db.collection('freelancers').get();
+            snapshot.forEach(doc => {
+                const freelancer = doc.data();
+                const card = document.createElement('div');
+                card.className = 'freelancer-card';
+                card.innerHTML = `
+                    <h3>${freelancer.name}</h3>
+                    <p>Skills: ${freelancer.skills.join(', ')}</p>
+                    <p><a href="${freelancer.portfolio}" target="_blank">View Portfolio</a></p>
+                    <button class="btn btn-primary" onclick="startChat('${doc.id}', '${freelancer.name}')">Message</button>
+                `;
+                freelancerList.appendChild(card);
+            });
+        }
+
+        // Start Chat
+        function startChat(recipientId, recipientName) {
+            if (!currentUser) {
+                alert('Please sign in to send messages.');
+                return;
+            }
+            localStorage.setItem('chatRecipient', JSON.stringify({ id: recipientId, name: recipientName }));
+            window.location.href = 'messaging.html';
+        }
+
+        // Initialize
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            loadFreelancers();
+        });
+    </script>
+</body>
+</html>

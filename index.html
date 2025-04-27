@@ -1,0 +1,94 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToonLance | Hire Top 2D Animation Freelancers</title>
+    <meta name="description" content="ToonLance connects clients with professional 2D animators. Hire freelancers or apply as an animator for quality motion graphics and character animation.">
+    <meta name="keywords" content="2D animation, hire animator, freelance animators, motion graphics, cartoon animation">
+    <link rel="canonical" href="https://toonlance.com">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="/">ToonLance</a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="freelancers.html">Freelancers</a>
+                    <a href="projects.html">Projects</a>
+                    <a id="loginLink" class="nav-link">Login</a>
+                    <a id="signupLink" class="nav-link">Sign Up</a>
+                    <a href="profile.html" id="profileLink" style="display: none;">Profile</a>
+                    <a id="logoutLink" class="nav-link" style="display: none;">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Hire Top 2D Animation Freelancers</h1>
+                    <p>ToonLance connects you with professional animation talent. Find, collaborate with, and hire freelancers all in one place.</p>
+                    <div class="hero-buttons">
+                        <a href="freelancers.html" class="btn btn-primary">Find Freelancers</a>
+                        <a href="projects.html" class="btn btn-outline">Find Projects</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="testimonial-container">
+                <h2>Client Testimonial</h2>
+                <p class="testimonial-text">"The people at ToonLance are some of the nicest and coolest people I have ever worked with. They focused on quality over quantity even at a competitive price when it comes to animation."</p>
+                <div class="client-info">
+                    <p class="client-name">Mike C. (Hoopla Toons)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="copyright">
+            <p>© 2025 ToonLance. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Role Selection Modal -->
+    <div class="modal" id="roleModal">
+        <div class="modal-content">
+            <h3>Choose Your Role</h3>
+            <p>Are you a client looking to hire animators or a freelancer looking for projects?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="selectRole('client')">Client</button>
+                <button class="btn btn-outline" onclick="selectRole('freelancer')">Freelancer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="nav.js"></script>
+</body>
+</html>
