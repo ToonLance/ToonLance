@@ -1,195 +1,237 @@
-// Check if Firebase SDK is loaded
-if (typeof firebase === 'undefined') {
-    console.error('Firebase SDK not loaded. Ensure Firebase CDN scripts are included and loaded before firebase.js.');
-    alert('Failed to load Firebase SDK. Please check your network or disable ad blockers.');
-    throw new Error('Firebase SDK not loaded');
-}
+// firebase.js - Enhanced Authentication System
+class ToonLanceAuth {
+  constructor() {
+    this.user = null;
+    this.auth = null;
+    this.db = null;
+    this.isInitialized = false;
+    this.init();
+  }
 
-// Firebase Configuration (Replace with your actual Firebase project config from Firebase Console)
-const firebaseConfig = {
-    apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
-    authDomain: "testing-dba79.firebaseapp.com",
-    projectId: "testing-dba79",
-    storageBucket: "testing-dba79.firebasestorage.app",
-    messagingSenderId: "808371260131",
-    appId: "1:808371260131:web:a59f409f532e617cba13d6"
-};
+  async init() {
+    try {
+      // Check if Firebase is loaded
+      if (typeof firebase === 'undefined') {
+        throw new Error('Firebase SDK not loaded. Please check your network connection.');
+      }
 
-// Validate Firebase Config
-const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
-const isConfigValid = requiredFields.every(field => 
-    firebaseConfig[field] && 
-    firebaseConfig[field] !== `your-${field.replace(/([A-Z])/g, '-$1').toLowerCase()}` &&
-    typeof firebaseConfig[field] === 'string' &&
-    firebaseConfig[field].trim() !== ''
-);
+      // Initialize Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+        authDomain: "testing-dba79.firebaseapp.com",
+        projectId: "testing-dba79",
+        storageBucket: "testing-dba79.firebasestorage.app",
+        messagingSenderId: "808371260131",
+        appId: "1:808371260131:web:a59f409f532e617cba13d6"
+      };
 
-if (!isConfigValid) {
-    const missingFields = requiredFields.filter(field => 
-        !firebaseConfig[field] || 
-        firebaseConfig[field] === `your-${field.replace(/([A-Z])/g, '-$1').toLowerCase()}` ||
-        typeof firebaseConfig[field] !== 'string' ||
-        firebaseConfig[field].trim() === ''
-    );
-    console.error('Invalid Firebase configuration. Missing or invalid fields:', missingFields.join(', '));
-    alert('Firebase configuration is invalid. Please update firebaseConfig with valid credentials from Firebase Console.');
-    throw new Error('Invalid Firebase configuration');
-}
+      firebase.initializeApp(firebaseConfig);
+      this.auth = firebase.auth();
+      this.db = firebase.firestore();
+      this.isInitialized = true;
 
-// Initialize Firebase with error handling
-try {
-    firebase.initializeApp(firebaseConfig);
-    console.log('Firebase initialized successfully');
-} catch (error) {
-    console.error('Firebase initialization error:', error);
-    alert('Failed to initialize Firebase: ' + error.message);
-    throw error;
-}
+      // Set up auth state listener
+      this.auth.onAuthStateChanged(async (user) => {
+        this.user = user;
+        this.updateAuthUI();
+        if (user) await this.handleUserRole(user);
+      });
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+    } catch (error) {
+      console.error('Initialization error:', error);
+      this.showToast('Failed to initialize authentication. Please refresh the page.', 'error');
+    }
+  }
 
-let currentUser = null;
+  // Enhanced Google Sign-In with multiple fallbacks
+  async signInWithGoogle() {
+    if (!this.isInitialized) {
+      this.showToast('Authentication system is still loading. Please wait...', 'warning');
+      return;
+    }
 
-// Firebase Auth State Listener
-auth.onAuthStateChanged(user => {
-    currentUser = user;
-    const loginLink = document.getElementById('loginLink');
-    const signupLink = document.getElementById('signupLink');
-    const profileLink = document.getElementById('profileLink');
-    const logoutLink = document.getElementById('logoutLink');
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      provider.setCustomParameters({ prompt: 'select_account' });
+
+      // Try popup first, fall back to redirect if needed
+      let result;
+      try {
+        result = await this.auth.signInWithPopup(provider);
+      } catch (popupError) {
+        console.warn('Popup failed, trying redirect:', popupError);
+        await this.auth.signInWithRedirect(provider);
+        return;
+      }
+
+      // Successful popup sign-in
+      this.user = result.user;
+      this.showToast(`Welcome ${this.user.displayName || ''}!`, 'success');
+      return this.user;
+
+    } catch (error) {
+      console.error('Google Sign-In Error:', error);
+      this.handleAuthError(error);
+      throw error;
+    }
+  }
+
+  // Comprehensive error handling
+  handleAuthError(error) {
+    let message = 'Failed to sign in. Please try again.';
     
-    if (user) {
-        console.log('User signed in:', user.email);
-        if (loginLink) loginLink.style.display = 'none';
-        if (signupLink) signupLink.style.display = 'none';
-        if (profileLink) profileLink.style.display = 'inline';
-        if (logoutLink) logoutLink.style.display = 'inline';
-        checkUserRole(user);
-    } else {
-        console.log('No user signed in');
-        if (loginLink) loginLink.style.display = 'inline';
-        if (signupLink) signupLink.style.display = 'inline';
-        if (profileLink) profileLink.style.display = 'none';
-        if (logoutLink) logoutLink.style.display = 'none';
+    switch (error.code) {
+      case 'auth/popup-closed-by-user':
+        message = 'Sign-in window was closed. Please try again.';
+        break;
+      case 'auth/account-exists-with-different-credential':
+        message = 'An account already exists with this email. Try a different sign-in method.';
+        break;
+      case 'auth/network-request-failed':
+        message = 'Network error. Please check your internet connection.';
+        break;
+      case 'auth/operation-not-allowed':
+        message = 'Google sign-in is not enabled. Please contact support.';
+        break;
+      case 'auth/cancelled-popup-request':
+      case 'auth/popup-blocked':
+        message = 'Sign-in popup was blocked. Please allow popups for this site.';
+        break;
     }
-});
 
-// Google Sign-In
-function signInWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-        .then(() => {
-            console.log('Sign-in successful, redirecting to profile.html');
-            window.location.href = 'profile.html';
-        })
-        .catch(error => {
-            console.error('Sign-in error:', error);
-            alert('Error signing in: ' + error.message);
-        });
-}
+    this.showToast(message, 'error');
+  }
 
-// Check User Role
-async function checkUserRole(user) {
+  // Role management
+  async handleUserRole(user) {
     try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const roleModal = document.getElementById('roleModal');
-        if (!userDoc.exists && roleModal) {
-            console.log('No user role found, showing role modal');
-            roleModal.style.display = 'flex';
-        } else if (userDoc.exists && userDoc.data().role === 'freelancer') {
-            console.log('Freelancer role detected, updating profile');
-            updateFreelancerProfile(user);
-        }
+      const userDoc = await this.db.collection('users').doc(user.uid).get();
+      
+      if (!userDoc.exists) {
+        this.showRoleModal();
+      } else if (userDoc.data().role === 'freelancer') {
+        await this.ensureFreelancerProfile(user);
+      }
     } catch (error) {
-        console.error('Error checking user role:', error);
-        alert('Error checking user role: ' + error.message);
+      console.error('Role handling error:', error);
+      this.showToast('Error loading your profile data', 'error');
     }
-}
+  }
 
-// Role Selection
-async function selectRole(role) {
-    if (currentUser) {
-        try {
-            await db.collection('users').doc(currentUser.uid).set({
-                email: currentUser.email,
-                name: currentUser.displayName,
-                role: role,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            const roleModal = document.getElementById('roleModal');
-            if (roleModal) {
-                roleModal.style.display = 'none';
-            }
-            if (role === 'freelancer') {
-                console.log('Freelancer role selected, updating profile');
-                updateFreelancerProfile(currentUser);
-            }
-            console.log('Role selected, redirecting to profile.html');
-            window.location.href = 'profile.html';
-        } catch (error) {
-            console.error('Error selecting role:', error);
-            alert('Error selecting role: ' + error.message);
-        }
-    }
-}
-
-// Update Freelancer Profile
-async function updateFreelancerProfile(user) {
+  async ensureFreelancerProfile(user) {
     try {
-        await db.collection('freelancers').doc(user.uid).set({
-            name: user.displayName,
-            email: user.email,
-            portfolio: 'https://example.com/portfolio',
-            skills: ['2D Animation', 'Motion Graphics'],
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-        console.log('Freelancer profile updated');
+      await this.db.collection('freelancers').doc(user.uid).set({
+        name: user.displayName || 'Anonymous Animator',
+        email: user.email,
+        lastActive: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
     } catch (error) {
-        console.error('Error updating freelancer profile:', error);
-        alert('Error updating freelancer profile: ' + error.message);
+      console.error('Freelancer profile error:', error);
     }
+  }
+
+  // UI Updates
+  updateAuthUI() {
+    const authLinks = {
+      loginLink: !this.user,
+      signupLink: !this.user,
+      profileLink: !!this.user,
+      logoutLink: !!this.user
+    };
+
+    Object.entries(authLinks).forEach(([id, shouldShow]) => {
+      const element = document.getElementById(id);
+      if (element) element.style.display = shouldShow ? 'inline-block' : 'none';
+    });
+
+    if (this.user && this.user.displayName) {
+      const profileLink = document.getElementById('profileLink');
+      if (profileLink) {
+        profileLink.textContent = this.user.displayName;
+        profileLink.title = `Logged in as ${this.user.displayName}`;
+      }
+    }
+  }
+
+  showRoleModal() {
+    const modal = document.getElementById('roleModal');
+    if (modal) modal.style.display = 'flex';
+  }
+
+  // Toast notification system
+  showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `auth-toast auth-toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add('fade-out');
+      setTimeout(() => toast.remove(), 500);
+    }, 5000);
+  }
+
+  // Sign out
+  async signOut() {
+    try {
+      await this.auth.signOut();
+      this.showToast('You have been signed out', 'success');
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error('Sign out error:', error);
+      this.showToast('Failed to sign out. Please try again.', 'error');
+    }
+  }
+
+  // Role selection
+  async selectRole(role) {
+    try {
+      if (!this.user) throw new Error('No authenticated user');
+      
+      await this.db.collection('users').doc(this.user.uid).set({
+        email: this.user.email,
+        name: this.user.displayName || 'New User',
+        role: role,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      if (role === 'freelancer') {
+        await this.ensureFreelancerProfile(this.user);
+      }
+
+      window.location.href = 'profile.html';
+    } catch (error) {
+      console.error('Role selection error:', error);
+      this.showToast('Failed to save your role selection', 'error');
+    }
+  }
 }
+
+// Initialize and expose the auth system
+const toonLanceAuth = new ToonLanceAuth();
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    const loginLink = document.getElementById('loginLink');
-    const signupLink = document.getElementById('signupLink');
-    const logoutLink = document.getElementById('logoutLink');
-    
-    if (loginLink) {
-        loginLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log('Login link clicked');
-            signInWithGoogle();
-        });
-    } else {
-        console.warn('Login link element not found');
+  // Auth link handlers
+  const handleAuthClick = async (e) => {
+    e.preventDefault();
+    try {
+      await toonLanceAuth.signInWithGoogle();
+    } catch (error) {
+      // Errors already handled by the auth system
     }
-    
-    if (signupLink) {
-        signupLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log('Sign Up link clicked');
-            signInWithGoogle();
-        });
-    } else {
-        console.warn('Sign Up link element not found');
-    }
-    
-    if (logoutLink) {
-        logoutLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log('Logout link clicked');
-            auth.signOut().then(() => {
-                console.log('Sign-out successful, redirecting to index.html');
-                window.location.href = 'index.html';
-            }).catch(error => {
-                console.error('Sign-out error:', error);
-                alert('Error signing out: ' + error.message);
-            });
-        });
-    } else {
-        console.warn('Logout link element not found');
-    }
+  };
+
+  document.getElementById('loginLink')?.addEventListener('click', handleAuthClick);
+  document.getElementById('signupLink')?.addEventListener('click', handleAuthClick);
+  
+  document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    toonLanceAuth.signOut();
+  });
 });
+
+// Global access for role selection
+window.selectRole = (role) => toonLanceAuth.selectRole(role);
