@@ -1,4 +1,3 @@
-<!-- profile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +10,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | ToonLance</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional styles for error handling */
+        .loading-indicator, .error-message {
+            padding: 20px;
+            text-align: center;
+            background: #f8f8f8;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .error-message {
+            color: #d32f2f;
+            background: #ffebee;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -43,7 +70,7 @@
                 <h1 class="section-title">Your Profile</h1>
                 <div class="profile-details" id="profileDetails">
                     <!-- Profile content will be loaded dynamically -->
-                    <div class="loading-indicator">Loading profile...</div>
+                    <div class="loading-indicator">Initializing authentication...</div>
                 </div>
             </div>
         </section>
@@ -67,27 +94,42 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="firebase.js"></script>
-    <script src="nav.js"></script>
+    <!-- Firebase Configuration -->
     <script>
-        // Enhanced Profile Loader
-        document.addEventListener('DOMContentLoaded', () => {
-            // Wait for auth state to be determined
-            auth.onAuthStateChanged(async user => {
-                if (!user) {
-                    window.location.href = 'index.html';
-                    return;
-                }
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+    authDomain: "testing-dba79.firebaseapp.com",
+    projectId: "testing-dba79",
+    storageBucket: "testing-dba79.firebasestorage.app",
+    messagingSenderId: "808371260131",
+    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+        };
 
-                try {
-                    await loadProfile(user);
-                } catch (error) {
-                    console.error('Profile loading error:', error);
-                    showError('Failed to load profile. Please try again.');
-                }
-            });
-        });
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase services
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+
+    <!-- Main Application Script -->
+    <script>
+        // Track initialization state
+        let firebaseInitialized = false;
+        
+        // Enhanced error display function
+        function showError(message, isFatal = false) {
+            const profileDetails = document.getElementById('profileDetails');
+            profileDetails.innerHTML = `
+                <div class="error-message">
+                    <p>${message}</p>
+                    <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
+                    ${isFatal ? '<p>If the problem persists, please try again later.</p>' : ''}
+                </div>
+            `;
+        }
 
         /**
          * Loads and displays user profile data
@@ -97,6 +139,9 @@
             const profileDetails = document.getElementById('profileDetails');
             
             try {
+                // Show loading state
+                profileDetails.innerHTML = '<div class="loading-indicator">Loading profile data...</div>';
+                
                 // Fetch user data in parallel for better performance
                 const [userDoc, freelancerDoc] = await Promise.all([
                     db.collection('users').doc(user.uid).get(),
@@ -106,6 +151,9 @@
                 // Basic profile template
                 let profileHTML = `
                     <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="${user.photoURL || 'https://via.placeholder.com/150'}" alt="Profile Picture">
+                        </div>
                         <h2>${user.displayName || 'Anonymous User'}</h2>
                         <p class="profile-email">${user.email}</p>
                         <p class="profile-role">Role: ${userDoc.exists ? capitalize(userDoc.data().role) : 'Not set'}</p>
@@ -127,20 +175,26 @@
                                     </a>
                                 </p>
                             ` : ''}
+                            ${freelancer.rate ? `
+                                <p><strong>Rate:</strong> $${freelancer.rate}/hour</p>
+                            ` : ''}
                         </div>
                     `;
                 }
 
-                profileHTML += `</div>`;
+                // Add edit profile button
+                profileHTML += `
+                    <div class="profile-actions">
+                        <button onclick="editProfile()" class="btn btn-primary">Edit Profile</button>
+                    </div>
+                    </div>
+                `;
+                
                 profileDetails.innerHTML = profileHTML;
 
             } catch (error) {
-                profileDetails.innerHTML = `
-                    <div class="error-message">
-                        <p>Error loading profile data</p>
-                        <button onclick="window.location.reload()">Retry</button>
-                    </div>
-                `;
+                console.error('Profile loading error:', error);
+                showError('Failed to load profile data. Please try again.');
                 throw error;
             }
         }
@@ -151,15 +205,87 @@
         }
 
         function ensureHttp(url) {
+            if (!url) return '#';
             return url.startsWith('http') ? url : `https://${url}`;
         }
 
-        function showError(message) {
-            const errorElement = document.createElement('div');
-            errorElement.className = 'profile-error';
-            errorElement.textContent = message;
-            document.getElementById('profileDetails').appendChild(errorElement);
+        function editProfile() {
+            // Implement your edit profile functionality here
+            alert('Edit profile functionality will be implemented here');
         }
+
+        // Initialize authentication and load profile
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileDetails = document.getElementById('profileDetails');
+            
+            // Add timeout for initialization
+            const initTimeout = setTimeout(() => {
+                if (!firebaseInitialized) {
+                    showError('Authentication is taking longer than expected. Please refresh the page.', true);
+                }
+            }, 10000); // 10 second timeout
+
+            try {
+                auth.onAuthStateChanged(async user => {
+                    clearTimeout(initTimeout);
+                    firebaseInitialized = true;
+                    
+                    if (!user) {
+                        // No user signed in, redirect to login
+                        window.location.href = 'index.html';
+                        return;
+                    }
+
+                    try {
+                        await loadProfile(user);
+                    } catch (error) {
+                        console.error('Profile loading error:', error);
+                        showError('Failed to load profile. Please try again.');
+                    }
+                });
+            } catch (initError) {
+                clearTimeout(initTimeout);
+                console.error('Firebase initialization error:', initError);
+                showError('Failed to initialize authentication. Please refresh the page.', true);
+            }
+        });
+
+        // Navigation handling (from nav.js)
+        function updateNavForAuthState(user) {
+            const loginLink = document.getElementById('loginLink');
+            const signupLink = document.getElementById('signupLink');
+            const profileLink = document.getElementById('profileLink');
+            const logoutLink = document.getElementById('logoutLink');
+            
+            if (user) {
+                // User is signed in
+                loginLink.style.display = 'none';
+                signupLink.style.display = 'none';
+                profileLink.style.display = 'block';
+                logoutLink.style.display = 'block';
+            } else {
+                // User is signed out
+                loginLink.style.display = 'block';
+                signupLink.style.display = 'block';
+                profileLink.style.display = 'none';
+                logoutLink.style.display = 'none';
+            }
+        }
+
+        // Initialize auth state listener for navigation
+        auth.onAuthStateChanged(user => {
+            updateNavForAuthState(user);
+        });
+
+        // Logout functionality
+        document.getElementById('logoutLink')?.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch(error => {
+                console.error('Logout error:', error);
+                showError('Failed to logout. Please try again.');
+            });
+        });
     </script>
 </body>
 </html>
