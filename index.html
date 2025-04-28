@@ -1,25 +1,18 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToonLance | Hire Top 2D Animation Freelancers</title>
     <meta name="description" content="ToonLance connects clients with professional 2D animators. Hire freelancers or apply as an animator for quality motion graphics and character animation.">
-    <meta name="keywords" content="2D animation, hire animator, freelance animators, motion graphics, cartoon animation">
-    <link rel="canonical" href="https://toonlance.com">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
             <nav>
                 <div class="logo">
-                    <a href="">ToonLance</a>
+                    <a href="/">ToonLance</a>
                 </div>
                 <div class="hamburger">
                     <span></span>
@@ -39,47 +32,92 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
+    <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
                     <h1>Hire Top 2D Animation Freelancers</h1>
-                    <p>ToonLance connects you with professional animation talent. Find, collaborate with, and hire freelancers all in one place.</p>
+                    <p>Find the perfect animator for your project from our vetted community of 2D animation professionals.</p>
                     <div class="hero-buttons">
-                        <a href="freelancers.html" class="btn btn-primary">Find Freelancers</a>
-                        <a href="projects.html" class="btn btn-outline">Find Projects</a>
+                        <a href="freelancers.html" class="btn btn-primary">Browse Freelancers</a>
+                        <a href="projects.html" class="btn btn-outline">View Projects</a>
+                    </div>
+                </div>
+                <div class="hero-animation">
+                    <div class="animation-placeholder"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose ToonLance</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Specialized Talent</h3>
+                    <p>Exclusively for 2D animation professionals and studios</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Matching</h3>
+                    <p>Connect with animators that match your project needs</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Platform</h3>
+                    <p>Protected payments and project management tools</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Our Community Says</h2>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Found the perfect animator for our explainer video series. The quality exceeded our expectations."</p>
+                <div class="client-info">
+                    <p class="client-name">Sarah K., Animation Studio</p>
+                    <div class="rating">★★★★★</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">ToonLance</div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>For Clients</h4>
+                        <a href="freelancers.html">Find Freelancers</a>
+                        <a href="#">How It Works</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>For Animators</h4>
+                        <a href="projects.html">Find Projects</a>
+                        <a href="#">Create Profile</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#">About</a>
+                        <a href="#">Contact</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials" id="testimonials">
-        <div class="container">
-            <div class="testimonial-container">
-                <h2>Client Testimonial</h2>
-                <p class="testimonial-text">"The people at ToonLance are some of the nicest and coolest people I have ever worked with. They focused on quality over quantity even at a competitive price when it comes to animation."</p>
-                <div class="client-info">
-                    <p class="client-name">Mike C. (Hoopla Toons)</p>
-                </div>
+            <div class="copyright">
+                <p>© 2023 ToonLance. All rights reserved.</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="copyright">
-            <p>© 2025 ToonLance. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Role Selection Modal -->
     <div class="modal" id="roleModal">
         <div class="modal-content">
-            <h3>Choose Your Role</h3>
-            <p>Are you a client looking to hire animators or a freelancer looking for projects?</p>
+            <h3>Join As</h3>
+            <p>Are you looking to hire animators or find animation work?</p>
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="selectRole('client')">Client</button>
                 <button class="btn btn-outline" onclick="selectRole('freelancer')">Freelancer</button>
@@ -87,11 +125,15 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-    <script src="firebase.js"></script>
-    <script src="nav.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/nav.js"></script>
 </body>
 </html>
