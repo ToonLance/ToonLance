@@ -2,384 +2,322 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freelance Platform</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>FreelanceHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
     <style>
-        .hidden { display: none; }
-        .job-card { transition: transform 0.2s; }
-        .job-card:hover { transform: scale(1.02); }
-        .fade-in { animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        :root {
+            --bg: #000;
+            --card-bg: #111;
+            --text: #fff;
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        section {
+            display: none;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+        .active { display: block; }
+        button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover { background: #444; }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: #222;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 4px;
+        }
+        .message {
+            background: #222;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .my-message { background: #2d2d2d; margin-left: 20%; }
+        .their-message { background: #333; margin-right: 20%; }
+        #message-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .project-card {
+            background: #222;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-blue-600 text-white p-4 sticky top-0 z-10">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Freelance Platform</h1>
-            <div id="nav-links">
-                <a href="#" id="home-link" class="px-4">Home</a>
-                <a href="#" id="dashboard-link" class="px-4 hidden">Dashboard</a>
-                <a href="#" id="logout-link" class="px-4 hidden">Logout</a>
-                <a href="#" id="login-link" class="px-4">Login with Google</a>
-            </div>
+<body>
+    <header>
+        <h1>FreelanceHub</h1>
+        <div id="auth-buttons">
+            <button onclick="showSection('login')">Login</button>
+            <button onclick="showSection('register')">Register</button>
         </div>
-    </nav>
-
-    <div class="container mx-auto mt-8 px-4">
-        <!-- Job Posting Section -->
-        <div id="job-post-section" class="hidden mb-8">
-            <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-                <h2 class="text-2xl font-bold mb-4">Post a Job</h2>
-                <div class="space-y-4">
-                    <input id="job-title" type="text" class="w-full p-2 border rounded" placeholder="Job Title" required>
-                    <textarea id="job-description" class="w-full p-2 border rounded" placeholder="Job Description" required></textarea>
-                    <input id="job-budget" type="number" class="w-full p-2 border rounded" placeholder="Budget ($)" required>
-                    <input id="job-skills" type="text" class="w-full p-2 border rounded" placeholder="Skills (comma-separated)">
-                    <button id="post-job-btn" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Post Job</button>
-                </div>
-            </div>
+        <div id="user-menu" style="display:none;">
+            <span id="user-email"></span>
+            <button onclick="showSection('dashboard')">Dashboard</button>
+            <button onclick="logout()">Logout</button>
         </div>
+    </header>
 
-        <!-- Bid Submission Section -->
-        <div id="bid-section" class="hidden mb-8">
-            <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-                <h2 class="text-2xl font-bold mb-4">Place a Bid</h2>
-                <div class="space-y-4">
-                    <input id="bid-amount" type="number" class="w-full p-2 border rounded" placeholder="Bid Amount ($)" required>
-                    <textarea id="bid-proposal" class="w-full p-2 border rounded" placeholder="Your Proposal" required></textarea>
-                    <button id="submit-bid-btn" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Submit Bid</button>
-                </div>
-            </div>
-        </div>
+    <!-- Auth Sections -->
+    <section id="login" class="active">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="loginError" style="color:red;"></p>
+    </section>
 
-        <!-- Dashboard Section -->
-        <div id="dashboard-section" class="hidden mb-8">
-            <h2 class="text-2xl font-bold mb-4">Your Dashboard</h2>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <h3 class="text-xl font-semibold mb-2">Your Jobs</h3>
-                <div id="user-jobs" class="space-y-4"></div>
-                <h3 class="text-xl font-semibold mt-6 mb-2">Your Bids</h3>
-                <div id="user-bids" class="space-y-4"></div>
-            </div>
-        </div>
+    <section id="register">
+        <h2>Register</h2>
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Password">
+        <select id="regRole">
+            <option value="client">Client</option>
+            <option value="freelancer">Freelancer</option>
+        </select>
+        <button onclick="register()">Register</button>
+        <p id="regError" style="color:red;"></p>
+    </section>
 
-        <!-- Jobs Section -->
-        <div id="jobs-section">
-            <h2 class="text-2xl font-bold mb-4">Available Jobs</h2>
-            <div id="jobs-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-    </div>
+    <!-- Main App Sections -->
+    <section id="dashboard">
+        <h2>Dashboard</h2>
+        <div id="dashboard-content"></div>
+    </section>
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+    <section id="profile">
+        <h2>My Profile</h2>
+        <input type="text" id="profileName" placeholder="Name">
+        <textarea id="profileBio" placeholder="Bio"></textarea>
+        <button onclick="saveProfile()">Save Profile</button>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <button onclick="showSection('new-project')">New Project</button>
+        <div id="projects-list"></div>
+    </section>
+
+    <section id="new-project">
+        <h2>New Project</h2>
+        <input type="text" id="projectTitle" placeholder="Title">
+        <textarea id="projectDesc" placeholder="Description"></textarea>
+        <input type="number" id="projectBudget" placeholder="Budget">
+        <button onclick="postProject()">Post Project</button>
+    </section>
+
+    <section id="messages">
+        <h2>Messages</h2>
+        <div id="message-container"></div>
+        <input type="text" id="message-input" placeholder="Type message...">
+        <input type="file" id="file-upload" hidden>
+        <button onclick="document.getElementById('file-upload').click()">📎</button>
+        <button onclick="sendMessage()">Send</button>
+    </section>
+
+<script>
+// Firebase Config
+const firebaseConfig = {
+    apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
     authDomain: "testing-dba79.firebaseapp.com",
     projectId: "testing-dba79",
     storageBucket: "testing-dba79.firebasestorage.app",
     messagingSenderId: "808371260131",
     appId: "1:808371260131:web:a59f409f532e617cba13d6"
-        };
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+let currentUser = null;
+let currentProjectId = null;
 
-        // DOM Elements
-        const navLinks = document.getElementById('nav-links');
-        const loginLink = document.getElementById('login-link');
-        const logoutLink = document.getElementById('logout-link');
-        const dashboardLink = document.getElementById('dashboard-link');
-        const jobPostSection = document.getElementById('job-post-section');
-        const bidSection = document.getElementById('bid-section');
-        const dashboardSection = document.getElementById('dashboard-section');
-        const jobsSection = document.getElementById('jobs-section');
-        const jobsList = document.getElementById('jobs-list');
-        const userJobs = document.getElementById('user-jobs');
-        const userBids = document.getElementById('user-bids');
-        const postJobBtn = document.getElementById('post-job-btn');
-        const submitBidBtn = document.getElementById('submit-bid-btn');
+// Auth State Listener
+auth.onAuthStateChanged(user => {
+    currentUser = user;
+    if (user) {
+        document.getElementById('auth-buttons').style.display = 'none';
+        document.getElementById('user-menu').style.display = 'block';
+        document.getElementById('user-email').textContent = user.email;
+        showSection('dashboard');
+        loadDashboard();
+    } else {
+        document.getElementById('auth-buttons').style.display = 'block';
+        document.getElementById('user-menu').style.display = 'none';
+        showSection('login');
+    }
+});
 
-        let currentUser = null;
-        let currentJobId = null;
+// Auth Functions
+function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    auth.signInWithEmailAndPassword(email, password)
+        .catch(error => document.getElementById('loginError').textContent = error.message);
+}
 
-        // Google Auth Provider
-        const provider = new firebase.auth.GoogleAuthProvider();
+function register() {
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+    const role = document.getElementById('regRole').value;
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(cred => db.collection('users').doc(cred.user.uid).set({ email, role }))
+        .catch(error => document.getElementById('regError').textContent = error.message);
+}
 
-        // Authentication State Listener
-        auth.onAuthStateChanged(user => {
-            currentUser = user;
-            if (user) {
-                loginLink.classList.add('hidden');
-                logoutLink.classList.remove('hidden');
-                dashboardLink.classList.remove('hidden');
-                jobPostSection.classList.remove('hidden');
-                updateUserProfile(user);
-                loadUserData();
-            } else {
-                loginLink.classList.remove('hidden');
-                logoutLink.classList.add('hidden');
-                dashboardLink.classList.add('hidden');
-                jobPostSection.classList.add('hidden');
-                bidSection.classList.add('hidden');
-                dashboardSection.classList.add('hidden');
-                jobsSection.classList.remove('hidden');
-            }
-            loadJobs();
+function logout() {
+    auth.signOut();
+}
+
+// UI Functions
+function showSection(sectionId) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+}
+
+// Dashboard
+function loadDashboard() {
+    const role = currentUser.role;
+    const content = document.getElementById('dashboard-content');
+    
+    if (role === 'client') {
+        content.innerHTML = `
+            <button onclick="showSection('new-project')">Post New Project</button>
+            <button onclick="loadMyProjects()">My Projects</button>
+        `;
+    } else {
+        content.innerHTML = `
+            <button onclick="loadProjects()">Browse Projects</button>
+            <button onclick="loadMyBids()">My Bids</button>
+        `;
+    }
+}
+
+// Project Functions
+function postProject() {
+    const project = {
+        title: document.getElementById('projectTitle').value,
+        description: document.getElementById('projectDesc').value,
+        budget: document.getElementById('projectBudget').value,
+        client: currentUser.uid,
+        createdAt: new Date()
+    };
+    db.collection('projects').add(project)
+        .then(() => showSection('projects'));
+}
+
+function loadProjects() {
+    db.collection('projects').get().then(snapshot => {
+        const list = document.getElementById('projects-list');
+        list.innerHTML = '';
+        snapshot.forEach(doc => {
+            const project = doc.data();
+            list.innerHTML += `
+                <div class="project-card">
+                    <h3>${project.title}</h3>
+                    <p>${project.description}</p>
+                    <p>Budget: $${project.budget}</p>
+                    <button onclick="bidProject('${doc.id}')">Bid</button>
+                    <button onclick="openMessages('${doc.id}')">Message</button>
+                </div>
+            `;
         });
+        showSection('projects');
+    });
+}
 
-        // Update User Profile in Firestore
-        async function updateUserProfile(user) {
-            const userRef = db.collection('users').doc(user.uid);
-            await userRef.set({
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-                role: 'freelancer', // Default role, can be updated via UI
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-        }
+// Messaging
+let messagesUnsubscribe = null;
 
-        // Google Login
-        loginLink.addEventListener('click', async e => {
-            e.preventDefault();
-            try {
-                await auth.signInWithPopup(provider);
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Failed to login: ' + error.message);
-            }
+function openMessages(projectId) {
+    currentProjectId = projectId;
+    if (messagesUnsubscribe) messagesUnsubscribe();
+    
+    messagesUnsubscribe = db.collection('projects').doc(projectId)
+        .collection('messages')
+        .orderBy('createdAt')
+        .onSnapshot(snapshot => {
+            const container = document.getElementById('message-container');
+            container.innerHTML = '';
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                const isMe = msg.sender === currentUser.uid;
+                container.innerHTML += `
+                    <div class="message ${isMe ? 'my-message' : 'their-message'}">
+                        ${msg.text || ''}
+                        ${msg.file ? `<img src="${msg.file}" width="100">` : ''}
+                        <small>${new Date(msg.createdAt?.toDate()).toLocaleTimeString()}</small>
+                    </div>
+                `;
+            });
+            container.scrollTop = container.scrollHeight;
         });
+    
+    showSection('messages');
+}
 
-        // Logout
-        logoutLink.addEventListener('click', async e => {
-            e.preventDefault();
-            try {
-                await auth.signOut();
-                alert('Logged out successfully');
-            } catch (error) {
-                console.error('Logout error:', error);
-                alert('Failed to logout: ' + error.message);
-            }
-        });
+async function sendMessage() {
+    const input = document.getElementById('message-input');
+    const file = document.getElementById('file-upload').files[0];
+    let fileUrl = '';
 
-        // Load Available Jobs
-        async function loadJobs() {
-            jobsList.innerHTML = '<p class="text-center">Loading...</p>';
-            try {
-                const snapshot = await db.collection('jobs')
-                    .where('status', '==', 'open')
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                jobsList.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const job = { id: doc.id, ...doc.data() };
-                    const jobCard = document.createElement('div');
-                    jobCard.className = 'job-card bg-white p-4 rounded-lg shadow fade-in';
-                    jobCard.innerHTML = `
-                        <h3 class="text-lg font-semibold">${job.title}</h3>
-                        <p class="text-gray-600">${job.description.substring(0, 100)}...</p>
-                        <p class="text-blue-600 font-bold">Budget: $${job.budget}</p>
-                        <p class="text-sm text-gray-500">Skills: ${job.skills.join(', ')}</p>
-                        <p class="text-sm text-gray-500">Posted by: ${job.clientName}</p>
-                        <button class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 view-bids-btn" data-jobid="${job.id}">
-                            View Bids
-                        </button>
-                        ${currentUser && currentUser.uid !== job.clientId ? 
-                            `<button class="mt-2 ml-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 place-bid-btn" data-jobid="${job.id}">
-                                Place Bid
-                            </button>` : ''}
-                    `;
-                    jobsList.appendChild(jobCard);
-                });
+    if (file) {
+        const storageRef = storage.ref(`messages/${currentProjectId}/${file.name}`);
+        await storageRef.put(file);
+        fileUrl = await storageRef.getDownloadURL();
+    }
 
-                // Add event listeners for bid buttons
-                document.querySelectorAll('.place-bid-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        currentJobId = btn.dataset.jobid;
-                        bidSection.classList.remove('hidden');
-                        jobsSection.classList.add('hidden');
-                    });
-                });
+    db.collection('projects').doc(currentProjectId).collection('messages').add({
+        text: input.value,
+        file: fileUrl,
+        sender: currentUser.uid,
+        createdAt: new Date()
+    });
 
-                // Add event listeners for view bids buttons
-                document.querySelectorAll('.view-bids-btn').forEach(btn => {
-                    btn.addEventListener('click', async () => {
-                        const jobId = btn.dataset.jobid;
-                        await loadBids(jobId);
-                    });
-                });
-            } catch (error) {
-                console.error('Error loading jobs:', error);
-                jobsList.innerHTML = '<p class="text-center text-red-500">Error loading jobs</p>';
-            }
-        }
+    input.value = '';
+    document.getElementById('file-upload').value = '';
+}
 
-        // Load Bids for a Job
-        async function loadBids(jobId) {
-            jobsList.innerHTML = '<p class="text-center">Loading bids...</p>';
-            try {
-                const snapshot = await db.collection('bids')
-                    .where('jobId', '==', jobId)
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                jobsList.innerHTML = '<button class="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 back-to-jobs">Back to Jobs</button>';
-                snapshot.forEach(doc => {
-                    const bid = { id: doc.id, ...doc.data() };
-                    const bidCard = document.createElement('div');
-                    bidCard.className = 'bg-white p-4 rounded-lg shadow fade-in';
-                    bidCard.innerHTML = `
-                        <p><strong>Bidder:</strong> ${bid.freelancerName}</p>
-                        <p><strong>Amount:</strong> $${bid.amount}</p>
-                        <p><strong>Proposal:</strong> ${bid.proposal}</p>
-                        <p><strong>Status:</strong> ${bid.status}</p>
-                    `;
-                    jobsList.appendChild(bidCard);
-                });
-                document.querySelector('.back-to-jobs').addEventListener('click', loadJobs);
-            } catch (error) {
-                console.error('Error loading bids:', error);
-                jobsList.innerHTML = '<p class="text-center text-red-500">Error loading bids</p>';
-            }
-        }
-
-        // Post a Job
-        postJobBtn.addEventListener('click', async () => {
-            if (!currentUser) return alert('Please login to post a job');
-            const title = document.getElementById('job-title').value;
-            const description = document.getElementById('job-description').value;
-            const budget = parseFloat(document.getElementById('job-budget').value);
-            const skills = document.getElementById('job-skills').value.split(',').map(s => s.trim()).filter(s => s);
-            
-            if (!title || !description || !budget) {
-                return alert('Please fill all required fields');
-            }
-
-            try {
-                await db.collection('jobs').add({
-                    title,
-                    description,
-                    budget,
-                    skills,
-                    clientId: currentUser.uid,
-                    clientName: currentUser.displayName || currentUser.email,
-                    status: 'open',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert('Job posted successfully');
-                document.getElementById('job-title').value = '';
-                document.getElementById('job-description').value = '';
-                document.getElementById('job-budget').value = '';
-                document.getElementById('job-skills').value = '';
-                loadJobs();
-            } catch (error) {
-                console.error('Error posting job:', error);
-                alert('Failed to post job: ' + error.message);
-            }
-        });
-
-        // Submit a Bid
-        submitBidBtn.addEventListener('click', async () => {
-            if (!currentUser) return alert('Please login to place a bid');
-            const amount = parseFloat(document.getElementById('bid-amount').value);
-            const proposal = document.getElementById('bid-proposal').value;
-
-            if (!amount || !proposal) {
-                return alert('Please fill all required fields');
-            }
-
-            try {
-                await db.collection('bids').add({
-                    jobId: currentJobId,
-                    freelancerId: currentUser.uid,
-                    freelancerName: currentUser.displayName || currentUser.email,
-                    amount,
-                    proposal,
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert('Bid placed successfully');
-                document.getElementById('bid-amount').value = '';
-                document.getElementById('bid-proposal').value = '';
-                bidSection.classList.add('hidden');
-                jobsSection.classList.remove('hidden');
-                loadJobs();
-            } catch (error) {
-                console.error('Error placing bid:', error);
-                alert('Failed to place bid: ' + error.message);
-            }
-        });
-
-        // Load User Data (Dashboard)
-        async function loadUserData() {
-            if (!currentUser) return;
-            try {
-                // Load user's jobs
-                userJobs.innerHTML = '<p>Loading...</p>';
-                const jobSnapshot = await db.collection('jobs')
-                    .where('clientId', '==', currentUser.uid)
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                userJobs.innerHTML = '';
-                jobSnapshot.forEach(doc => {
-                    const job = { id: doc.id, ...doc.data() };
-                    const jobCard = document.createElement('div');
-                    jobCard.className = 'bg-gray-50 p-4 rounded-lg';
-                    jobCard.innerHTML = `
-                        <h4 class="font-semibold">${job.title}</h4>
-                        <p>Budget: $${job.budget}</p>
-                        <p>Status: ${job.status}</p>
-                    `;
-                    userJobs.appendChild(jobCard);
-                });
-
-                // Load user's bids
-                userBids.innerHTML = '<p>Loading...</p>';
-                const bidSnapshot = await db.collection('bids')
-                    .where('freelancerId', '==', currentUser.uid)
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                userBids.innerHTML = '';
-                bidSnapshot.forEach(doc => {
-                    const bid = { id: doc.id, ...doc.data() };
-                    const bidCard = document.createElement('div');
-                    bidCard.className = 'bg-gray-50 p-4 rounded-lg';
-                    bidCard.innerHTML = `
-                        <p><strong>Job ID:</strong> ${bid.jobId}</p>
-                        <p><strong>Amount:</strong> $${bid.amount}</p>
-                        <p><strong>Status:</strong> ${bid.status}</p>
-                    `;
-                    userBids.appendChild(bidCard);
-                });
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                userJobs.innerHTML = '<p class="text-red-500">Error loading jobs</p>';
-                userBids.innerHTML = '<p class="text-red-500">Error loading bids</p>';
-            }
-        }
-
-        // Dashboard Link
-        dashboardLink.addEventListener('click', e => {
-            e.preventDefault();
-            dashboardSection.classList.remove('hidden');
-            jobsSection.classList.add('hidden');
-            bidSection.classList.add('hidden');
-            loadUserData();
-        });
-
-        // Home Link
-        document.getElementById('home-link').addEventListener('click', e => {
-            e.preventDefault();
-            dashboardSection.classList.add('hidden');
-            jobsSection.classList.remove('hidden');
-            bidSection.classList.add('hidden');
-            loadJobs();
-        });
-    </script>
+// Initialize
+showSection('login');
+</script>
 </body>
 </html>
