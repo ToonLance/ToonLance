@@ -3,139 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Profile | ToonLance</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Profile - AnimHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="container">
+            <h1>AnimHub</h1>
             <nav>
-                <div class="logo">
-                    <a href="/">ToonLance</a>
-                </div>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="nav-links" id="navLinks">
-                    <a href="index.html">Home</a>
-                    <a href="freelancers.html">Freelancers</a>
-                    <a href="projects.html">Projects</a>
-                    <a id="loginLink" class="nav-link">Login</a>
-                    <a id="signupLink" class="nav-link">Sign Up</a>
-                    <a href="profile.html" id="profileLink" style="display: none;">Profile</a>
-                    <a id="logoutLink" class="nav-link" style="display: none;">Logout</a>
-                </div>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="find.html">Find Animators</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="profile.html" class="active">Profile</a></li>
+                    <li><a href="#" id="logout-btn">Logout</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-    <main class="profile-container">
-        <div class="container">
-            <div class="profile-header">
-                <h1>Your Profile</h1>
-                <button id="editProfileBtn" class="btn btn-outline">Edit Profile</button>
+    <main class="container">
+        <div class="profile-header">
+            <h2>Your Profile</h2>
+            <button id="edit-profile-btn" class="btn">Edit Profile</button>
+        </div>
+        
+        <div class="profile-view" id="profile-view">
+            <div class="profile-info">
+                <h3 id="profile-username">Username</h3>
+                <p id="profile-role">Role: Animator</p>
+                <p id="profile-email">Email: user@example.com</p>
+                <div id="profile-portfolio">
+                    <h4>Portfolio</h4>
+                    <a id="portfolio-link" href="#" target="_blank">View Portfolio</a>
+                </div>
             </div>
             
-            <div class="profile-grid">
-                <section class="profile-card">
-                    <div class="card-header">
-                        <h2>Basic Information</h2>
+            <div class="profile-stats">
+                <h3>Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat">
+                        <h4>Completed Projects</h4>
+                        <p id="completed-projects">0</p>
                     </div>
-                    <div class="card-body" id="basicInfoContent">
-                        <div class="loading-indicator">Loading profile...</div>
+                    <div class="stat">
+                        <h4>Earnings</h4>
+                        <p id="total-earnings">$0</p>
                     </div>
-                </section>
-                
-                <section class="profile-card" id="freelancerCard" style="display: none;">
-                    <div class="card-header">
-                        <h2>Freelancer Profile</h2>
+                    <div class="stat">
+                        <h4>Rating</h4>
+                        <p id="user-rating">Not rated yet</p>
                     </div>
-                    <div class="card-body" id="freelancerContent"></div>
-                </section>
-                
-                <section class="profile-card" id="portfolioCard" style="display: none;">
-                    <div class="card-header">
-                        <h2>Portfolio</h2>
-                        <button id="addPortfolioBtn" class="btn btn-primary">Add Project</button>
-                    </div>
-                    <div class="card-body">
-                        <div class="portfolio-grid" id="portfolioGrid"></div>
-                    </div>
-                </section>
+                </div>
             </div>
+        </div>
+        
+        <div class="profile-edit" id="profile-edit" style="display: none;">
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="edit-username">Username</label>
+                    <input type="text" id="edit-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-portfolio">Portfolio Link (Animators only)</label>
+                    <input type="url" id="edit-portfolio" placeholder="https://">
+                </div>
+                <div class="form-group">
+                    <label for="edit-bio">Bio</label>
+                    <textarea id="edit-bio" rows="4"></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn">Save Changes</button>
+                    <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
         </div>
     </main>
 
-    <!-- Edit Profile Modal -->
-    <div class="modal" id="editProfileModal">
-        <div class="modal-content">
-            <h2>Edit Profile</h2>
-            <form id="profileForm">
-                <div class="form-group">
-                    <label for="displayName">Display Name</label>
-                    <input type="text" id="displayName" required>
-                </div>
-                
-                <div id="freelancerFields" style="display: none;">
-                    <div class="form-group">
-                        <label for="skills">Skills (comma separated)</label>
-                        <input type="text" id="skills" placeholder="e.g., Character Animation, Motion Graphics">
-                    </div>
-                    <div class="form-group">
-                        <label for="rate">Hourly Rate ($)</label>
-                        <input type="number" id="rate" min="0" step="5">
-                    </div>
-                    <div class="form-group">
-                        <label for="portfolioLink">Portfolio URL</label>
-                        <input type="url" id="portfolioLink">
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline" onclick="closeModal('editProfileModal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Portfolio Modal -->
-    <div class="modal" id="addPortfolioModal">
-        <div class="modal-content">
-            <h2>Add Portfolio Project</h2>
-            <form id="portfolioForm">
-                <div class="form-group">
-                    <label for="projectTitle">Project Title</label>
-                    <input type="text" id="projectTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="projectDescription">Description</label>
-                    <textarea id="projectDescription" rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="projectLink">Project URL</label>
-                    <input type="url" id="projectLink">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline" onclick="closeModal('addPortfolioModal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Project</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-    <script src="js/firebase.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
     <script src="js/profile.js"></script>
 </body>
 </html>

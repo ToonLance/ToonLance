@@ -3,137 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToonLance | Hire Top 2D Animation Freelancers</title>
-    <meta name="description" content="ToonLance connects clients with professional 2D animators. Hire freelancers or apply as an animator for quality motion graphics and character animation.">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>FreelanceHub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar-brand { font-weight: bold; }
+        .card { margin-bottom: 20px; }
+        .profile-section, .jobs-section, .messages-section { display: none; }
+        .show { display: block; }
+        .auth-section { max-width: 400px; margin: 50px auto; }
+        .job-card:hover { transform: scale(1.02); transition: transform 0.2s; }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <a href="/">ToonLance</a>
-                </div>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="nav-links" id="navLinks">
-                    <a href="index.html" class="active">Home</a>
-                    <a href="freelancers.html">Freelancers</a>
-                    <a href="projects.html">Projects</a>
-                    <a id="loginLink" class="nav-link">Login</a>
-                    <a id="signupLink" class="nav-link">Sign Up</a>
-                    <a href="profile.html" id="profileLink" style="display: none;">Profile</a>
-                    <a id="logoutLink" class="nav-link" style="display: none;">Logout</a>
-                </div>
-            </nav>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FreelanceHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('jobs')">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('profile')">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('messages')">Messages</a></li>
+                    <li class="nav-item"><button class="btn btn-outline-danger" id="logoutBtn" style="display: none;">Logout</button></li>
+                </ul>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Hire Top 2D Animation Freelancers</h1>
-                    <p>Find the perfect animator for your project from our vetted community of 2D animation professionals.</p>
-                    <div class="hero-buttons">
-                        <a href="freelancers.html" class="btn btn-primary">Browse Freelancers</a>
-                        <a href="projects.html" class="btn btn-outline">View Projects</a>
+    <!-- Authentication Section -->
+    <div class="auth-section" id="authSection">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center">Login / Sign Up</h3>
+                <form id="authForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
                     </div>
-                </div>
-                <div class="hero-animation">
-                    <div class="animation-placeholder"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="features">
-        <div class="container">
-            <h2>Why Choose ToonLance</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3>Specialized Talent</h3>
-                    <p>Exclusively for 2D animation professionals and studios</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Fast Matching</h3>
-                    <p>Connect with animators that match your project needs</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Secure Platform</h3>
-                    <p>Protected payments and project management tools</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="testimonials">
-        <div class="container">
-            <h2>What Our Community Says</h2>
-            <div class="testimonial-card">
-                <p class="testimonial-text">"Found the perfect animator for our explainer video series. The quality exceeded our expectations."</p>
-                <div class="client-info">
-                    <p class="client-name">Sarah K., Animation Studio</p>
-                    <div class="rating">★★★★★</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">ToonLance</div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>For Clients</h4>
-                        <a href="freelancers.html">Find Freelancers</a>
-                        <a href="#">How It Works</a>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
                     </div>
-                    <div class="footer-column">
-                        <h4>For Animators</h4>
-                        <a href="projects.html">Find Projects</a>
-                        <a href="#">Create Profile</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <a href="#">About</a>
-                        <a href="#">Contact</a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2023 ToonLance. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <div class="modal" id="roleModal">
-        <div class="modal-content">
-            <h3>Join As</h3>
-            <p>Are you looking to hire animators or find animation work?</p>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="selectRole('client')">Client</button>
-                <button class="btn btn-outline" onclick="selectRole('freelancer')">Freelancer</button>
+                    <button type="button" class="btn btn-primary w-100 mb-2" onclick="handleEmailAuth('signup')">Sign Up</button>
+                    <button type="button" class="btn btn-success w-100 mb-2" onclick="handleEmailAuth('login')">Login</button>
+                    <button type="button" class="btn btn-danger w-100" onclick="signInWithGoogle()">Sign in with Google</button>
+                </form>
+                <p class="text-center mt-3" id="authMessage"></p>
             </div>
         </div>
     </div>
 
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+    <!-- Profile Section -->
+    <div class="container profile-section" id="profileSection">
+        <h2 class="my-4">Your Profile</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Profile Information</h5>
+                <form id="profileForm">
+                    <div class="mb-3">
+                        <label for="displayName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="displayName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="skills" class="form-label">Skills (comma-separated)</label>
+                        <input type="text" class="form-control" id="skills">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-    <script src="js/firebase.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/nav.js"></script>
+    <!-- Jobs Section -->
+    <div class="container jobs-section" id="jobsSection">
+        <h2 class="my-4">Available Jobs</h2>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Post a Job</h5>
+                <form id="jobForm">
+                    <div class="mb-3">
+                        <label for="jobTitle" class="form-label">Job Title</label>
+                        <input type="text" class="form-control" id="jobTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="jobDescription" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobBudget" class="form-label">Budget ($)</label>
+                        <input type="number" class="form-control" id="jobBudget" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post Job</button>
+                </form>
+            </div>
+        </div>
+        <div id="jobsList"></div>
+    </div>
+
+    <!-- Messages Section -->
+    <div class="container messages-section" id="messagesSection">
+        <h2 class="my-4">Messages</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Send Message</h5>
+                <form id="messageForm">
+                    <div class="mb-3">
+                        <label for="recipient" class="form-label">Recipient Email</label>
+                        <input type="email" class="form-control" id="recipient" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="messageContent" class="form-label">Message</label>
+                        <textarea class="form-control" id="messageContent" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
+        <div id="messagesList" class="mt-4"></div>
+    </div>
+
+    <!-- Bootstrap JS and Firebase Configuration -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+    authDomain: "testing-dba79.firebaseapp.com",
+    projectId: "testing-dba79",
+    storageBucket: "testing-dba79.firebasestorage.app",
+    messagingSenderId: "808371260131",
+    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Authentication State Listener
+        auth.onAuthStateChanged(user => {
+            const authSection = document.getElementById('authSection');
+            const profileSection = document.getElementById('profileSection');
+            const jobsSection = document.getElementById('jobsSection');
+            const messagesSection = document.getElementById('messagesSection');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (user) {
+                authSection.style.display = 'none';
+                profileSection.classList.add('show');
+                jobsSection.classList.add('show');
+                messagesSection.classList.add('show');
+                logoutBtn.style.display = 'block';
+                loadProfile(user);
+                loadJobs();
+                loadMessages(user.email);
+            } else {
+                authSection.style.display = 'block';
+                profileSection.classList.remove('show');
+                jobsSection.classList.remove('show');
+                messagesSection.classList.remove('show');
+                logoutBtn.style.display = 'none';
+            }
+        });
+
+        // Email Authentication
+        async function handleEmailAuth(action) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const authMessage = document.getElementById('authMessage');
+
+            try {
+                if (action === 'signup') {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                    authMessage.textContent = 'Sign up successful! You are now logged in.';
+                } else {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    authMessage.textContent = 'Login successful!';
+                }
+            } catch (error) {
+                authMessage.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Google Sign-In
+        async function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                await auth.signInWithPopup(provider);
+                document.getElementById('authMessage').textContent = 'Google Sign-In successful!';
+            } catch (error) {
+                document.getElementById('authMessage').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                document.getElementById('authMessage').textContent = 'Logged out successfully!';
+            });
+        });
+
+        // Profile Management
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (user) {
+                const displayName = document.getElementById('displayName').value;
+                const skills = document.getElementById('skills').value;
+                await db.collection('users').doc(user.uid).set({
+                    displayName,
+                    skills: skills.split(',').map(s => s.trim()),
+                    email: user.email
+                });
+                alert('Profile updated!');
+            }
+        });
+
+        async function loadProfile(user) {
+            const doc = await db.collection('users').doc(user.uid).get();
+            if (doc.exists) {
+                document.getElementById('displayName').value = doc.data().displayName || '';
+                document.getElementById('skills').value = doc.data().skills ? doc.data().skills.join(', ') : '';
+            }
+        }
+
+        // Job Management
+        document.getElementById('jobForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (user) {
+                const jobTitle = document.getElementById('jobTitle').value;
+                const jobDescription = document.getElementById('jobDescription').value;
+                const jobBudget = document.getElementById('jobBudget').value;
+                await db.collection('jobs').add({
+                    title: jobTitle,
+                    description: jobDescription,
+                    budget: parseFloat(jobBudget),
+                    postedBy: user.email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('jobForm').reset();
+                loadJobs();
+            }
+        });
+
+        async function loadJobs() {
+            const jobsList = document.getElementById('jobsList');
+            jobsList.innerHTML = '';
+            const snapshot = await db.collection('jobs').orderBy('createdAt', 'desc').get();
+            snapshot.forEach(doc => {
+                const job = doc.data();
+                const jobCard = `
+                    <div class="card job-card">
+                        <div class="card-body">
+                            <h5 class="card-title">${job.title}</h5>
+                            <p class="card-text">${job.description}</p>
+                            <p class="card-text"><strong>Budget:</strong> $${job.budget}</p>
+                            <p class="card-text"><small>Posted by: ${job.postedBy}</small></p>
+                        </div>
+                    </div>
+                `;
+                jobsList.innerHTML += jobCard;
+            });
+        }
+
+        // Messaging
+        document.getElementById('messageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (user) {
+                const recipient = document.getElementById('recipient').value;
+                const content = document.getElementById('messageContent').value;
+                await db.collection('messages').add({
+                    sender: user.email,
+                    recipient,
+                    content,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('messageForm').reset();
+                loadMessages(user.email);
+            }
+        });
+
+        async function loadMessages(userEmail) {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.innerHTML = '';
+            const snapshot = await db.collection('messages')
+                .where('recipient', '==', userEmail)
+                .orderBy('createdAt', 'desc')
+                .get();
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                const msgCard = `
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text"><strong>From:</strong> ${msg.sender}</p>
+                            <p class="card-text">${msg.content}</p>
+                        </div>
+                    </div>
+                `;
+                messagesList.innerHTML += msgCard;
+            });
+        }
+
+        // Section Navigation
+        function showSection(section) {
+            const sections = ['jobs', 'profile', 'messages'];
+            sections.forEach(s => {
+                document.getElementById(`${s}Section`).classList.remove('show');
+            });
+            document.getElementById(`${section}Section`).classList.add('show');
+        }
+    </script>
 </body>
 </html>
