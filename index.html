@@ -2,322 +2,920 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FreelanceHub</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Toonlance - Connect with top freelancers or post projects. Minimalist black-and-white platform for remote work.">
+    <meta name="keywords" content="freelance, remote work, freelancers, projects, toonlance">
+    <meta name="author" content="Toonlance">
+    <meta property="og:title" content="Toonlance - Hire Freelancers or Post Projects">
+    <meta property="og:description" content="Connect with top freelancers or post projects on Toonlance, a sleek black-and-white platform for remote work.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://toonlance.com">
+    <title>Toonlance</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #000;
-            --card-bg: #111;
-            --text: #fff;
-            --primary: #4CAF50;
-            --secondary: #2196F3;
+        /* Mobile Menu Styles (only affects mobile) */
+        /* Mobile Responsive Navbar (without affecting desktop) */
+        @media (max-width: 767px) {
+          /* Hide desktop navigation */
+          #auth-buttons,
+          #user-menu {
+            display: none !important;
+          }
+
+          /* Show mobile menu button */
+          #mobile-menu-btn {
+            display: block;
+          }
+
+          /* Mobile menu styling */
+          #mobile-menu {
+            width: 80%;
+            border: none !important; /* Removes borders */
+            box-shadow: none !important; /* Removes shadows if any */
+          }
+
+          /* Mobile menu items styling */
+          #mobile-auth-buttons button,
+          #mobile-user-menu button {
+            border: none !important;
+            background: transparent !important;
+            padding: 12px 0 !important;
+            width: 100%;
+            text-align: left;
+          }
+
+          /* Remove hover effects on mobile */
+          .nav-item:hover {
+            opacity: 1 !important;
+          }
+
+          /* Close button styling */
+          #mobile-menu-close {
+            border: none !important;
+            background: transparent !important;
+            padding: 20px !important;
+          }
+        }
+
+        /* Desktop view remains completely unchanged */
+        @media (min-width: 768px) {
+          #mobile-menu-btn,
+          #mobile-menu {
+            display: none !important;
+          }
+        }
+        nav button{
+            padding: 10px;
         }
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
         }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #333;
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
         }
-        section {
-            display: none;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 8px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .active { display: block; }
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .bounce {
+            animation: bounce 0.3s ease;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .modal-visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
         button {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover { background: #444; }
-        input, textarea, select {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            background: #222;
-            border: 1px solid #333;
-            color: white;
-            border-radius: 4px;
-        }
-        .message {
-            background: #222;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 4px;
-        }
-        .my-message { background: #2d2d2d; margin-left: 20%; }
-        .their-message { background: #333; margin-right: 20%; }
-        #message-container {
-            height: 400px;
-            overflow-y: auto;
-            border: 1px solid #333;
-            padding: 10px;
-            margin: 10px 0;
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            transition: background-color 0.2s ease, color 0.2s ease;
             border-radius: 8px;
+        }
+        button:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        input, textarea, select {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            transition: outline-color 0.2s ease;
+            border-radius: 6px;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid #fff;
+        }
+        .nav-item {
+            transition: opacity 0.2s ease;
+        }
+        .nav-item:hover {
+            opacity: 0.7;
         }
         .project-card {
-            background: #222;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
+            transition: transform 0.2s ease;
+            border: 1px solid #fff;
         }
+        .project-card:hover {
+            transform: translateY(-6px);
+        }
+        .feature-card {
+            transition: transform 0.2s ease;
+            border: 1px solid #fff;
+        }
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+        .feature-card:hover .feature-icon {
+            animation: bounce 0.3s ease;
+        }
+        .portfolio-link {
+            transition: text-decoration-thickness 0.2s ease;
+        }
+        .portfolio-link:hover {
+            text-decoration-thickness: 2px;
+        }
+        
     </style>
 </head>
 <body>
-    <header>
-        <h1>FreelanceHub</h1>
-        <div id="auth-buttons">
-            <button onclick="showSection('login')">Login</button>
-            <button onclick="showSection('register')">Register</button>
-        </div>
-        <div id="user-menu" style="display:none;">
-            <span id="user-email"></span>
-            <button onclick="showSection('dashboard')">Dashboard</button>
-            <button onclick="logout()">Logout</button>
+
+    <!-- Navbar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black">
+        <nav role="navigation" class="container mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+            <h1 class="text-3xl sm:text-2xl font-bold tracking-tight" style="font-family: 'Poppins', sans-serif;" aria-label="Toonlance Logo">Toonlance</h1>
+            <div class="hidden md:flex space-x-8" id="auth-buttons">
+                <button onclick="showSection('home')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
+                <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
+            </div>
+            <div class="hidden md:flex space-x-8" id="user-menu" style="display: none;">
+                <span id="user-email" class="flex items-center text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
+                <button onclick="showSection('dashboard')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
+                <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="fixed inset-y-0 right-0 bg-black transform translate-x-full transition-transform duration-300 md:hidden">
+            <div class="flex justify-end p-6">
+                <button id="mobile-menu-close" class="focus:outline-none" aria-label="Close Menu">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="mobile-auth-buttons" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in">
+                <button onclick="showSection('home')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
+                <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
+            </div>
+            <div id="mobile-user-menu" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in hidden">
+                <span id="mobile-user-email" class="text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
+                <button onclick="showSection('dashboard')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
+                <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
+            </div>
         </div>
     </header>
 
-    <!-- Auth Sections -->
-    <section id="login" class="active">
-        <h2>Login</h2>
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginPassword" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <p id="loginError" style="color:red;"></p>
-    </section>
-
-    <section id="register">
-        <h2>Register</h2>
-        <input type="email" id="regEmail" placeholder="Email">
-        <input type="password" id="regPassword" placeholder="Password">
-        <select id="regRole">
-            <option value="client">Client</option>
-            <option value="freelancer">Freelancer</option>
-        </select>
-        <button onclick="register()">Register</button>
-        <p id="regError" style="color:red;"></p>
-    </section>
-
-    <!-- Main App Sections -->
-    <section id="dashboard">
-        <h2>Dashboard</h2>
-        <div id="dashboard-content"></div>
-    </section>
-
-    <section id="profile">
-        <h2>My Profile</h2>
-        <input type="text" id="profileName" placeholder="Name">
-        <textarea id="profileBio" placeholder="Bio"></textarea>
-        <button onclick="saveProfile()">Save Profile</button>
-    </section>
-
-    <section id="projects">
-        <h2>Projects</h2>
-        <button onclick="showSection('new-project')">New Project</button>
-        <div id="projects-list"></div>
-    </section>
-
-    <section id="new-project">
-        <h2>New Project</h2>
-        <input type="text" id="projectTitle" placeholder="Title">
-        <textarea id="projectDesc" placeholder="Description"></textarea>
-        <input type="number" id="projectBudget" placeholder="Budget">
-        <button onclick="postProject()">Post Project</button>
-    </section>
-
-    <section id="messages">
-        <h2>Messages</h2>
-        <div id="message-container"></div>
-        <input type="text" id="message-input" placeholder="Type message...">
-        <input type="file" id="file-upload" hidden>
-        <button onclick="document.getElementById('file-upload').click()">📎</button>
-        <button onclick="sendMessage()">Send</button>
-    </section>
-
-<script>
-// Firebase Config
-const firebaseConfig = {
-    apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
-    authDomain: "testing-dba79.firebaseapp.com",
-    projectId: "testing-dba79",
-    storageBucket: "testing-dba79.firebasestorage.app",
-    messagingSenderId: "808371260131",
-    appId: "1:808371260131:web:a59f409f532e617cba13d6"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-let currentUser = null;
-let currentProjectId = null;
-
-// Auth State Listener
-auth.onAuthStateChanged(user => {
-    currentUser = user;
-    if (user) {
-        document.getElementById('auth-buttons').style.display = 'none';
-        document.getElementById('user-menu').style.display = 'block';
-        document.getElementById('user-email').textContent = user.email;
-        showSection('dashboard');
-        loadDashboard();
-    } else {
-        document.getElementById('auth-buttons').style.display = 'block';
-        document.getElementById('user-menu').style.display = 'none';
-        showSection('login');
-    }
-});
-
-// Auth Functions
-function login() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    auth.signInWithEmailAndPassword(email, password)
-        .catch(error => document.getElementById('loginError').textContent = error.message);
-}
-
-function register() {
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
-    const role = document.getElementById('regRole').value;
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(cred => db.collection('users').doc(cred.user.uid).set({ email, role }))
-        .catch(error => document.getElementById('regError').textContent = error.message);
-}
-
-function logout() {
-    auth.signOut();
-}
-
-// UI Functions
-function showSection(sectionId) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-}
-
-// Dashboard
-function loadDashboard() {
-    const role = currentUser.role;
-    const content = document.getElementById('dashboard-content');
-    
-    if (role === 'client') {
-        content.innerHTML = `
-            <button onclick="showSection('new-project')">Post New Project</button>
-            <button onclick="loadMyProjects()">My Projects</button>
-        `;
-    } else {
-        content.innerHTML = `
-            <button onclick="loadProjects()">Browse Projects</button>
-            <button onclick="loadMyBids()">My Bids</button>
-        `;
-    }
-}
-
-// Project Functions
-function postProject() {
-    const project = {
-        title: document.getElementById('projectTitle').value,
-        description: document.getElementById('projectDesc').value,
-        budget: document.getElementById('projectBudget').value,
-        client: currentUser.uid,
-        createdAt: new Date()
-    };
-    db.collection('projects').add(project)
-        .then(() => showSection('projects'));
-}
-
-function loadProjects() {
-    db.collection('projects').get().then(snapshot => {
-        const list = document.getElementById('projects-list');
-        list.innerHTML = '';
-        snapshot.forEach(doc => {
-            const project = doc.data();
-            list.innerHTML += `
-                <div class="project-card">
-                    <h3>${project.title}</h3>
-                    <p>${project.description}</p>
-                    <p>Budget: $${project.budget}</p>
-                    <button onclick="bidProject('${doc.id}')">Bid</button>
-                    <button onclick="openMessages('${doc.id}')">Message</button>
+    <!-- Home Section -->
+    <section id="home" class="py-24">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-5xl md:text-7xl font-bold mb-8 fade-in-up" style="font-family: 'Montserrat', sans-serif;">Build Your Vision with Toonlance</h2>
+            <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto fade-in-up" style="font-family: 'Montserrat', sans-serif;">
+                Connect with top freelancers or post projects to bring your ideas to life.
+            </p>
+            <div class="flex justify-center space-x-6 mb-16 fade-in-up">
+                <button onclick="showSection('register')" class="px-8 py-4 text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Get Started">Get Started</button>
+                <button onclick="showSection('projects')" class="px-8 py-4 text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Explore Projects">Explore Projects</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
+                    <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Hire Top Talent</h3>
+                    <p style="font-family: 'Montserrat', sans-serif;">Discover skilled freelancers for design, development, and more.</p>
                 </div>
-            `;
+                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
+                    <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Launch Projects</h3>
+                    <p style="font-family: 'Montserrat', sans-serif;">Post your ideas and attract global talent to bring them to life.</p>
+                </div>
+                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
+                    <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Collaborate Easily</h3>
+                    <p style="font-family: 'Montserrat', sans-serif;">Seamless messaging to keep your projects on track.</p>
+                </div>
+            </div>
+            <div class="text-center mb-16 fade-in-up">
+                <h3 class="text-3xl md:text-5xl font-bold mb-6" style="font-family: 'Montserrat', sans-serif;">Why Toonlance?</h3>
+                <p class="text-lg md:text-xl max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
+                    Toonlance is your platform for seamless freelance collaboration. Connect, create, succeed.
+                </p>
+            </div>
+            <div class="fade-in-up">
+                <button onclick="showSection('freelancers')" class="px-10 py-5 text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Discover Freelancers">Discover Freelancers</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Freelancers Section -->
+    <section id="freelancers" class="hidden py-24">
+        <div class="container mx-auto px-6 fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Meet Our Freelancers</h2>
+            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
+                Explore talented professionals ready to transform your ideas into reality.
+            </p>
+            <div id="freelancers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
+            <p id="no-freelancers" class="text-center mt-12 hidden" style="font-family: 'Montserrat', sans-serif;">No freelancers found. Be the first to join!</p>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login" class="hidden py-24">
+        <div class="container mx-auto px-6 max-w-md fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <button id="loginBtn" onclick="login()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
+            <p id="loginError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+        </div>
+    </section>
+
+    <!-- Register Section -->
+    <section id="register" class="hidden py-24">
+        <div class="container mx-auto px-6 max-w-md fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Join Toonlance</h2>
+            <input type="email" id="regEmail" placeholder="Email" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <input type="text" id="regName" placeholder="Name" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <input type="password" id="regPassword" placeholder="Password (min 6 characters)" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <input type="text" id="regDiscordId" placeholder="Discord ID (optional)" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
+            <select id="regRole" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true" onchange="togglePortfolioInput()">
+                <option value="client">Client</option>
+                <option value="freelancer">Freelancer</option>
+            </select>
+            <input type="url" id="regPortfolio" placeholder="Portfolio Link (e.g., https://yourportfolio.com)" class="w-full p-4 mb-8 rounded-lg hidden" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <textarea id="regBio" placeholder="Bio (max 500 characters)" class="w-full p-4 mb-8 rounded-lg hidden" style="font-family: 'Montserrat', sans-serif;" maxlength="500" aria-required="true"></textarea>
+            <button id="registerBtn" onclick="register()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
+            <p id="regError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="hidden py-24">
+        <div class="container mx-auto px-6 fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Your Creative Hub</h2>
+            <p class="mb-12 text-lg text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">Manage projects, connect with talent, or dive into new opportunities.</p>
+            <div class="flex justify-center space-x-6">
+                <button onclick="showSection('projects')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="View Projects">View Projects</button>
+                <button onclick="showSection('freelancers')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">Browse Freelancers</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="hidden py-24">
+        <div class="container mx-auto px-6 fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Explore Projects</h2>
+            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
+                Discover opportunities or post your own to attract top freelancers.
+            </p>
+            <div class="mb-12">
+                <button onclick="togglePostProjectForm()" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Toggle Post Project Form">Post a Project</button>
+                <div id="post-project-form" class="hidden p-8 bg-black rounded-lg mt-6">
+                    <input type="text" id="projectTitle" placeholder="Project Title" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                    <textarea id="projectDesc" placeholder="Project Description" class="w-full p-4 mb-8 rounded-lg h-36" style="font-family: 'Montserrat', sans-serif;" aria-required="true"></textarea>
+                    <input type="number" id="projectBudget" placeholder="Budget in USD" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                    <button id="postProjectBtn" onclick="postProject()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Post Project">Post Project</button>
+                </div>
+            </div>
+            <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
+            <p id="no-projects" class="text-center mt-12 hidden" style="font-family: 'Montserrat', sans-serif;">No projects found. Post one now!</p>
+        </div>
+    </section>
+
+    <!-- Messages Section -->
+    <section id="messages" class="hidden py-24">
+        <div class="container mx-auto px-6 fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Messages</h2>
+            <div id="message-container" class="p-6 bg-black rounded-lg h-96 overflow-y-auto mb-8"></div>
+            <div class="flex space-x-4">
+                <input type="text" id="message-input" placeholder="Type a message..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
+                <input type="url" id="message-link" placeholder="Share a link..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
+                <button id="sendMessageBtn" onclick="sendMessage()" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Send Message">Send</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apply Modal -->
+    <div id="applyModal" class="modal modal-hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div class="p-8 bg-black rounded-lg max-w-md w-full">
+            <h3 class="text-3xl font-bold mb-6" style="font-family: 'Montserrat', sans-serif;">Apply for Project</h3>
+            <input type="url" id="portfolioLink" placeholder="Portfolio Link" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <div class="flex justify-end space-x-4">
+                <button onclick="closeApplyModal()" class="px-6 py-3 rounded-lg text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Cancel">Cancel</button>
+                <button id="applyBtn" onclick="submitApplication()" class="px-6 py-3 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Apply">Apply</button>
+            </div>
+            <p id="applyError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle Functionality
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+          document.getElementById('mobile-menu').classList.add('open');
+          document.body.classList.add('menu-open');
         });
-        showSection('projects');
-    });
-}
 
-// Messaging
-let messagesUnsubscribe = null;
-
-function openMessages(projectId) {
-    currentProjectId = projectId;
-    if (messagesUnsubscribe) messagesUnsubscribe();
-    
-    messagesUnsubscribe = db.collection('projects').doc(projectId)
-        .collection('messages')
-        .orderBy('createdAt')
-        .onSnapshot(snapshot => {
-            const container = document.getElementById('message-container');
-            container.innerHTML = '';
-            snapshot.forEach(doc => {
-                const msg = doc.data();
-                const isMe = msg.sender === currentUser.uid;
-                container.innerHTML += `
-                    <div class="message ${isMe ? 'my-message' : 'their-message'}">
-                        ${msg.text || ''}
-                        ${msg.file ? `<img src="${msg.file}" width="100">` : ''}
-                        <small>${new Date(msg.createdAt?.toDate()).toLocaleTimeString()}</small>
-                    </div>
-                `;
-            });
-            container.scrollTop = container.scrollHeight;
+        document.getElementById('mobile-menu-close').addEventListener('click', function() {
+          document.getElementById('mobile-menu').classList.remove('open');
+          document.body.classList.remove('menu-open');
         });
-    
-    showSection('messages');
-}
 
-async function sendMessage() {
-    const input = document.getElementById('message-input');
-    const file = document.getElementById('file-upload').files[0];
-    let fileUrl = '';
+        // Close menu when clicking a nav link
+        document.querySelectorAll('#mobile-auth-buttons button, #mobile-user-menu button').forEach(button => {
+          button.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.body.classList.remove('menu-open');
+          });
+        });
 
-    if (file) {
-        const storageRef = storage.ref(`messages/${currentProjectId}/${file.name}`);
-        await storageRef.put(file);
-        fileUrl = await storageRef.getDownloadURL();
-    }
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          const mobileMenu = document.getElementById('mobile-menu');
+          const menuBtn = document.getElementById('mobile-menu-btn');
+          
+          if (!mobileMenu.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+            mobileMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
+          }
+        });
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+            authDomain: "testing-dba79.firebaseapp.com",
+            projectId: "testing-dba79",
+            storageBucket: "testing-dba79.appspot.com",
+            messagingSenderId: "808371260131",
+            appId: "1:808371260131:web:a59f409f532e617cba13d6"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-    db.collection('projects').doc(currentProjectId).collection('messages').add({
-        text: input.value,
-        file: fileUrl,
-        sender: currentUser.uid,
-        createdAt: new Date()
-    });
+        let currentUser = null;
+        let currentProjectId = null;
+        let messagesUnsubscribe = null;
+        let isSubmitting = false;
 
-    input.value = '';
-    document.getElementById('file-upload').value = '';
-}
+        // Global Error Handler
+        function handleError(error, context) {
+            console.error(`Error in ${context}:`, error);
+            logEvent('error', { context, message: error.message });
+            return null;
+        }
 
-// Initialize
-showSection('login');
-</script>
+        // Input Sanitization
+        const sanitizeInput = (input) => {
+            const div = document.createElement('div');
+            div.textContent = input?.toString() || '';
+            return div.innerHTML;
+        };
+
+        // Validation Functions
+        const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const isValidPassword = (password) => password.length >= 6;
+        const isValidUrl = (url) => {
+            try {
+                new URL(url);
+                return url.startsWith('https://') || url.startsWith('http://');
+            } catch {
+                return false;
+            }
+        };
+        const isValidName = (name) => name.trim().length > 0 && name.length <= 100;
+        const isValidTitle = (title) => title.trim().length > 0 && title.length <= 200;
+        const isValidDescription = (desc) => desc.trim().length > 0 && desc.length <= 5000;
+        const isValidBio = (bio) => bio.trim().length > 0 && bio.length <= 500;
+
+        // Logging for Analytics
+        const logEvent = (event, data) => {
+            console.log(`[Analytics] ${event}`, { timestamp: new Date().toISOString(), ...data });
+        };
+
+        // Toggle Portfolio Input
+        function togglePortfolioInput() {
+            const role = document.getElementById('regRole').value;
+            const portfolioInput = document.getElementById('regPortfolio');
+            const bioInput = document.getElementById('regBio');
+            portfolioInput.classList.toggle('hidden', role !== 'freelancer');
+            bioInput.classList.toggle('hidden', role !== 'freelancer');
+        }
+
+        // Toggle Post Project Form
+        function togglePostProjectForm() {
+            const form = document.getElementById('post-project-form');
+            form.classList.toggle('hidden');
+            logEvent('toggle_post_project_form', { isVisible: !form.classList.contains('hidden') });
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.remove('translate-x-full');
+            document.getElementById('mobile-menu').classList.add('slide-in');
+            logEvent('mobile_menu_opened');
+        });
+        document.getElementById('mobile-menu-close').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.add('translate-x-full');
+            document.getElementById('mobile-menu').classList.remove('slide-in');
+            logEvent('mobile_menu_closed');
+        });
+
+        // Auth State Listener
+        auth.onAuthStateChanged(user => {
+            try {
+                currentUser = user;
+                if (user) {
+                    document.getElementById('auth-buttons').style.display = 'none';
+                    document.getElementById('user-menu').style.display = 'flex';
+                    document.getElementById('mobile-auth-buttons').classList.add('hidden');
+                    document.getElementById('mobile-user-menu').classList.remove('hidden');
+                    document.getElementById('user-email').textContent = sanitizeInput(user.email);
+                    document.getElementById('mobile-user-email').textContent = sanitizeInput(user.email);
+                    showSection('dashboard');
+                    loadProjects();
+                    logEvent('user_login', { uid: user.uid });
+                } else {
+                    document.getElementById('auth-buttons').style.display = 'flex';
+                    document.getElementById('user-menu').style.display = 'none';
+                    document.getElementById('mobile-auth-buttons').classList.remove('hidden');
+                    document.getElementById('mobile-user-menu').classList.add('hidden');
+                    showSection('home');
+                    logEvent('user_logout');
+                }
+            } catch (error) {
+                handleError(error, 'auth_state_change');
+            }
+        });
+
+        // Show Section
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById('mobile-menu').classList.add('translate-x-full');
+            document.getElementById('mobile-menu').classList.remove('slide-in');
+            if (id === 'freelancers') loadFreelancers();
+            if (id === 'projects') loadProjects();
+            logEvent('section_viewed', { section: id });
+        }
+
+        // Login
+        async function login() {
+            if (isSubmitting) return;
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+            const btn = document.getElementById('loginBtn');
+
+            if (!isValidEmail(email)) {
+                errorEl.textContent = 'Please enter a valid email.';
+                return;
+            }
+            if (!isValidPassword(password)) {
+                errorEl.textContent = 'Password must be at least 6 characters.';
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            errorEl.textContent = '';
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showSection('freelancers');
+                logEvent('login_success', { email });
+            } catch (error) {
+                errorEl.textContent = error.code === 'auth/user-not-found' ? 'No user found with this email.' : error.message;
+                logEvent('login_error', { error: error.message });
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Register
+        async function register() {
+            if (isSubmitting) return;
+            const email = document.getElementById('regEmail').value.trim();
+            const name = document.getElementById('regName').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const discordId = document.getElementById('regDiscordId').value.trim();
+            const role = document.getElementById('regRole').value;
+            const portfolioLink = document.getElementById('regPortfolio').value.trim();
+            const bio = document.getElementById('regBio').value.trim();
+            const errorEl = document.getElementById('regError');
+            const btn = document.getElementById('registerBtn');
+
+            if (!isValidEmail(email)) {
+                errorEl.textContent = 'Please enter a valid email.';
+                return;
+            }
+            if (!isValidName(name)) {
+                errorEl.textContent = 'Name is required and must be 1-100 characters.';
+                return;
+            }
+            if (!isValidPassword(password)) {
+                errorEl.textContent = 'Password must be at least 6 characters.';
+                return;
+            }
+            if (role === 'freelancer' && !isValidUrl(portfolioLink)) {
+                errorEl.textContent = 'Please enter a valid portfolio URL (e.g., https://yourportfolio.com).';
+                return;
+            }
+            if (role === 'freelancer' && !isValidBio(bio)) {
+                errorEl.textContent = 'Bio is required and must be 1-500 characters.';
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            errorEl.textContent = '';
+            try {
+                const cred = await auth.createUserWithEmailAndPassword(email, password);
+                const userData = {
+                    email: sanitizeInput(email),
+                    name: sanitizeInput(name),
+                    role,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                if (discordId) {
+                    userData.discordId = sanitizeInput(discordId);
+                }
+                if (role === 'freelancer') {
+                    userData.portfolioLink = sanitizeInput(portfolioLink);
+                    userData.bio = sanitizeInput(bio);
+                    await db.collection('freelancers').doc(cred.user.uid).set({
+                        userId: cred.user.uid,
+                        name: sanitizeInput(name),
+                        portfolioLink: sanitizeInput(portfolioLink),
+                        bio: sanitizeInput(bio),
+                        discordId: discordId ? sanitizeInput(discordId) : null,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                await db.collection('users').doc(cred.user.uid).set(userData);
+                showSection('freelancers');
+                logEvent('register_success', { email, role, isFreelancer: role === 'freelancer', hasDiscord: !!discordId });
+            } catch (error) {
+                errorEl.textContent = error.code === 'auth/email-already-in-use' ? 'Email already registered.' : error.message;
+                logEvent('register_error', { error: error.message });
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Logout
+        async function logout() {
+            try {
+                await auth.signOut();
+                logEvent('logout_success');
+            } catch (error) {
+                handleError(error, 'logout');
+            }
+        }
+
+        // Load Freelancers
+        async function loadFreelancers() {
+            try {
+                const snapshot = await db.collection('freelancers')
+                    .orderBy('createdAt', 'desc')
+                    .limit(50)
+                    .get();
+                const list = document.getElementById('freelancers-list');
+                const noFreelancers = document.getElementById('no-freelancers');
+                list.innerHTML = '';
+                if (snapshot.empty) {
+                    noFreelancers.classList.remove('hidden');
+                } else {
+                    noFreelancers.classList.add('hidden');
+                    snapshot.forEach(doc => {
+                        const freelancer = doc.data();
+                        list.innerHTML += `
+                            <div class="p-6 bg-black rounded-lg project-card fade-in-up">
+                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(freelancer.name)}</h3>
+                                <p class="mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(freelancer.bio)}</p>
+                                <a href="${sanitizeInput(freelancer.portfolioLink)}" target="_blank" rel="noopener noreferrer" class="text-lg text-white underline portfolio-link" style="font-family: 'Montserrat', sans-serif;">View Portfolio</a>
+                            </div>
+                        `;
+                    });
+                }
+                logEvent('freelancers_loaded', { count: snapshot.size });
+            } catch (error) {
+                handleError(error, 'load_freelancers');
+                document.getElementById('no-freelancers').textContent = 'Error loading freelancers. Please try again.';
+                document.getElementById('no-freelancers').classList.remove('hidden');
+            }
+        }
+
+        // Post Project
+        async function postProject() {
+            if (isSubmitting) return;
+            const title = document.getElementById('projectTitle').value.trim();
+            const description = document.getElementById('projectDesc').value.trim();
+            const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
+            const btn = document.getElementById('postProjectBtn');
+
+            if (!isValidTitle(title)) {
+                alert('Project title is required and must be 1-200 characters.');
+                return;
+            }
+            if (!isValidDescription(description)) {
+                alert('Project description is required and must be 1-5000 characters.');
+                return;
+            }
+            if (budget <= 0) {
+                alert('Please enter a valid budget greater than 0.');
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            try {
+                await db.collection('projects').add({
+                    title: sanitizeInput(title),
+                    description: sanitizeInput(description),
+                    budget,
+                    client: currentUser.uid,
+                    status: 'open',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('projectTitle').value = '';
+                document.getElementById('projectDesc').value = '';
+                document.getElementById('projectBudget').value = '';
+                togglePostProjectForm();
+                loadProjects();
+                logEvent('project_posted', { title, budget });
+            } catch (error) {
+                handleError(error, 'post_project');
+                alert('Error posting project: ' + error.message);
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Load Projects
+        async function loadProjects() {
+            try {
+                const snapshot = await db.collection('projects')
+                    .orderBy('createdAt', 'desc')
+                    .limit(50)
+                    .get();
+                const list = document.getElementById('projects-list');
+                const noProjects = document.getElementById('no-projects');
+                list.innerHTML = '';
+                if (snapshot.empty) {
+                    noProjects.classList.remove('hidden');
+                } else {
+                    noProjects.classList.add('hidden');
+                    snapshot.forEach(doc => {
+                        const project = doc.data();
+                        const isClient = currentUser && currentUser.uid === project.client;
+                        const truncatedDesc = project.description.length > 100 ? sanitizeInput(project.description).substring(0, 100) + '...' : sanitizeInput(project.description);
+                        list.innerHTML += `
+                            <div class="p-6 bg-black rounded-lg project-card fade-in-up">
+                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(project.title)}</h3>
+                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;">${truncatedDesc}</p>
+                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Budget:</strong> $${project.budget}</p>
+                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Status:</strong> ${sanitizeInput(project.status)}</p>
+                                <div class="flex space-x-4">
+                                    <button onclick="openMessages('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Message about ${project.title}">Message</button>
+                                    ${!isClient ? `<button onclick="openApplyModal('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Apply for ${project.title}">Apply</button>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                logEvent('projects_loaded', { count: snapshot.size });
+            } catch (error) {
+                handleError(error, 'load_projects');
+                document.getElementById('no-projects').textContent = 'Error loading projects. Please try again.';
+                document.getElementById('no-projects').classList.remove('hidden');
+            }
+        }
+
+        // Apply Modal
+        async function openApplyModal(projectId) {
+            if (!currentUser) {
+                showSection('register');
+                logEvent('apply_unauthenticated_redirect', { projectId });
+                return;
+            }
+            currentProjectId = projectId;
+            const portfolioInput = document.getElementById('portfolioLink');
+            const errorEl = document.getElementById('applyError');
+            portfolioInput.value = '';
+            errorEl.textContent = '';
+
+            try {
+                const freelancerDoc = await db.collection('freelancers').doc(currentUser.uid).get();
+                if (freelancerDoc.exists) {
+                    const portfolioLink = freelancerDoc.data().portfolioLink;
+                    if (portfolioLink) {
+                        portfolioInput.value = sanitizeInput(portfolioLink);
+                    }
+                }
+            } catch (error) {
+                handleError(error, 'fetch_freelancer_portfolio');
+            }
+
+            document.getElementById('applyModal').classList.remove('modal-hidden');
+            document.getElementById('applyModal').classList.add('modal-visible');
+        }
+
+        function closeApplyModal() {
+            document.getElementById('applyModal').classList.remove('modal-visible');
+            document.getElementById('applyModal').classList.add('modal-hidden');
+        }
+
+        async function submitApplication() {
+            if (isSubmitting) return;
+            const portfolioLink = document.getElementById('portfolioLink').value.trim();
+            const errorEl = document.getElementById('applyError');
+            const btn = document.getElementById('applyBtn');
+
+            if (!isValidUrl(portfolioLink)) {
+                errorEl.textContent = 'Please enter a valid URL (e.g., https://yourportfolio.com).';
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            errorEl.textContent = '';
+            try {
+                const batch = db.batch();
+                const applicationRef = db.collection('projects').doc(currentProjectId).collection('applications').doc();
+                batch.set(applicationRef, {
+                    applicant: currentUser.uid,
+                    portfolioLink: sanitizeInput(portfolioLink),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                const messageRef = db.collection('projects').doc(currentProjectId).collection('messages').doc();
+                batch.set(messageRef, {
+                    text: `I have applied for this project. Here is my portfolio: ${sanitizeInput(portfolioLink)}`,
+                    link: sanitizeInput(portfolioLink),
+                    sender: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                await batch.commit();
+                closeApplyModal();
+                openMessages(currentProjectId);
+                logEvent('application_submitted', { projectId: currentProjectId, portfolioLink });
+            } catch (error) {
+                errorEl.textContent = 'Error submitting application: ' + error.message;
+                logEvent('application_error', { error: error.message });
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Open Messages
+        function openMessages(projectId) {
+            currentProjectId = projectId;
+            if (messagesUnsubscribe) messagesUnsubscribe();
+            messagesUnsubscribe = db.collection('projects').doc(projectId).collection('messages')
+                .orderBy('createdAt')
+                .limit(100)
+                .onSnapshot(snapshot => {
+                    const container = document.getElementById('message-container');
+                    container.innerHTML = '';
+                    snapshot.forEach(doc => {
+                        const msg = doc.data();
+                        const isSender = msg.sender === currentUser.uid;
+                        container.innerHTML += `
+                            <div class="p-4 bg-black rounded-lg mb-3 max-w-md ${isSender ? 'ml-auto' : 'mr-auto'} fade-in">
+                                ${msg.text ? `<p style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.text)}</p>` : ''}
+                                ${msg.link ? `<a href="${sanitizeInput(msg.link)}" target="_blank" rel="noopener noreferrer" class="text-white underline" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.link)}</a>` : ''}
+                                <p class="text-xs mt-2" style="font-family: 'Montserrat', sans-serif;">${new Date(msg.createdAt?.toDate()).toLocaleString()}</p>
+                            </div>
+                        `;
+                    });
+                    container.scrollTop = container.scrollHeight;
+                }, error => {
+                    handleError(error, 'load_messages');
+                });
+            showSection('messages');
+            logEvent('messages_opened', { projectId });
+        }
+
+        // Send Message
+        async function sendMessage() {
+            if (isSubmitting) return;
+            const text = document.getElementById('message-input').value.trim();
+            const link = document.getElementById('message-link').value.trim();
+            const btn = document.getElementById('sendMessageBtn');
+
+            if (!text && !link) {
+                alert('Please enter a message or a link.');
+                return;
+            }
+            if (link && !isValidUrl(link)) {
+                alert('Please enter a valid URL (e.g., https://yourportfolio.com).');
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            try {
+                await db.collection('projects').doc(currentProjectId).collection('messages').add({
+                    text: text ? sanitizeInput(text) : '',
+                    link: link ? sanitizeInput(link) : '',
+                    sender: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('message-input').value = '';
+                document.getElementById('message-link').value = '';
+                logEvent('message_sent', { projectId: currentProjectId, hasLink: !!link });
+            } catch (error) {
+                handleError(error, 'send_message');
+                alert('Error sending message: ' + error.message);
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Initialize
+        showSection('home');
+        logEvent('app_initialized');
+    </script>
 </body>
 </html>
