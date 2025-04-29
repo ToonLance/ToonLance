@@ -14,6 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -189,7 +190,9 @@
         .portfolio-link:hover {
             text-decoration-thickness: 2px;
         }
-        
+        .g-recaptcha {
+            margin-bottom: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -305,6 +308,7 @@
             <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Login</h2>
             <input type="email" id="loginEmail" placeholder="Email" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
             <input type="password" id="loginPassword" placeholder="Password" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+            <div class="g-recaptcha mb-8" data-sitekey="6LdYfCgrAAAAAKREQRJJyeYDh_kfOZcBvs7jX"></div>
             <button id="loginBtn" onclick="login()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
             <p id="loginError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
         </div>
@@ -324,6 +328,7 @@
             </select>
             <input type="url" id="regPortfolio" placeholder="Portfolio Link (e.g., https://yourportfolio.com)" class="w-full p-4 mb-8 rounded-lg hidden" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
             <textarea id="regBio" placeholder="Bio (max 500 characters)" class="w-full p-4 mb-8 rounded-lg hidden" style="font-family: 'Montserrat', sans-serif;" maxlength="500" aria-required="true"></textarea>
+            <div class="g-recaptcha mb-8" data-sitekey="6LdYfCgrAAAAAKREQRJJyeYDh_kfOZcBvs7jX"></div>
             <button id="registerBtn" onclick="register()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             <p id="regError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
         </div>
@@ -465,6 +470,31 @@
         const isValidDescription = (desc) => desc.trim().length > 0 && desc.length <= 5000;
         const isValidBio = (bio) => bio.trim().length > 0 && bio.length <= 500;
 
+        // CAPTCHA Validation
+        async function verifyCaptcha(action) {
+            const response = grecaptcha.getResponse();
+            if (!response) {
+                throw new Error('Please complete the CAPTCHA.');
+            }
+            // In a production environment, verify the CAPTCHA response with your backend
+            // Example: Send response to your server for verification
+            try {
+                const res = await fetch('YOUR_BACKEND_CAPTCHA_VERIFICATION_ENDPOINT', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ response })
+                });
+                const data = await res.json();
+                if (!data.success) {
+                    throw new Error('CAPTCHA verification failed.');
+                }
+                logEvent('captcha_verified', { action });
+                return true;
+            } catch (error) {
+                throw new Error('CAPTCHA verification error: ' + error.message);
+            }
+        }
+
         // Logging for Analytics
         const logEvent = (event, data) => {
             console.log(`[Analytics] ${event}`, { timestamp: new Date().toISOString(), ...data });
@@ -533,6 +563,9 @@
             document.getElementById('mobile-menu').classList.remove('slide-in');
             if (id === 'freelancers') loadFreelancers();
             if (id === 'projects') loadProjects();
+            if (id === 'login' || id === 'register') {
+                grecaptcha.reset();
+            }
             logEvent('section_viewed', { section: id });
         }
 
@@ -557,6 +590,7 @@
             btn.classList.add('loading');
             errorEl.textContent = '';
             try {
+                await verifyCaptcha('login');
                 await auth.signInWithEmailAndPassword(email, password);
                 showSection('freelancers');
                 logEvent('login_success', { email });
@@ -566,6 +600,7 @@
             } finally {
                 isSubmitting = false;
                 btn.classList.remove('loading');
+                grecaptcha.reset();
             }
         }
 
@@ -607,6 +642,7 @@
             btn.classList.add('loading');
             errorEl.textContent = '';
             try {
+                await verifyCaptcha('register');
                 const cred = await auth.createUserWithEmailAndPassword(email, password);
                 const userData = {
                     email: sanitizeInput(email),
@@ -638,6 +674,7 @@
             } finally {
                 isSubmitting = false;
                 btn.classList.remove('loading');
+                grecaptcha.reset();
             }
         }
 
