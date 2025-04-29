@@ -18,19 +18,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <style>
         /* Mobile Menu Styles (only affects mobile) */
+        /* Mobile Responsive Navbar (without affecting desktop) */
         @media (max-width: 767px) {
+          /* Hide desktop navigation */
           #auth-buttons,
           #user-menu {
             display: none !important;
           }
+
+          /* Show mobile menu button */
           #mobile-menu-btn {
             display: block;
           }
+
+          /* Mobile menu styling */
           #mobile-menu {
             width: 80%;
-            border: none !important;
-            box-shadow: none !important;
+            border: none !important; /* Removes borders */
+            box-shadow: none !important; /* Removes shadows if any */
           }
+
+          /* Mobile menu items styling */
           #mobile-auth-buttons button,
           #mobile-user-menu button {
             border: none !important;
@@ -39,22 +47,28 @@
             width: 100%;
             text-align: left;
           }
+
+          /* Remove hover effects on mobile */
           .nav-item:hover {
             opacity: 1 !important;
           }
+
+          /* Close button styling */
           #mobile-menu-close {
             border: none !important;
             background: transparent !important;
             padding: 20px !important;
           }
         }
+
+        /* Desktop view remains completely unchanged */
         @media (min-width: 768px) {
           #mobile-menu-btn,
           #mobile-menu {
             display: none !important;
           }
         }
-        nav button {
+        nav button{
             padding: 10px;
         }
         body {
@@ -175,24 +189,7 @@
         .portfolio-link:hover {
             text-decoration-thickness: 2px;
         }
-        .private-chat-card {
-            transition: transform 0.2s ease;
-            border: 1px solid #fff;
-        }
-        .private-chat-card:hover {
-            transform: translateY(-6px);
-        }
-        .applications-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .application-item {
-            border-bottom: 1px solid #fff;
-            padding: 12px 0;
-        }
-        .application-item:last-child {
-            border-bottom: none;
-        }
+        
     </style>
 </head>
 <body>
@@ -212,7 +209,6 @@
                 <button onclick="showSection('dashboard')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
                 <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('private-chats')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Private Chats">Private Chats</button>
                 <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
             <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
@@ -240,7 +236,6 @@
                 <button onclick="showSection('dashboard')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
                 <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('private-chats')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Private Chats">Private Chats</button>
                 <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
         </div>
@@ -342,7 +337,6 @@
             <div class="flex justify-center space-x-6">
                 <button onclick="showSection('projects')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="View Projects">View Projects</button>
                 <button onclick="showSection('freelancers')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">Browse Freelancers</button>
-                <button onclick="showSection('private-chats')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="View Private Chats">Private Chats</button>
             </div>
         </div>
     </section>
@@ -381,18 +375,6 @@
         </div>
     </section>
 
-    <!-- Private Chats Section -->
-    <section id="private-chats" class="hidden py-24">
-        <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Private Chats</h2>
-            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                Connect directly with clients or freelancers for your projects.
-            </p>
-            <div id="private-chats-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
-            <p id="no-private-chats" class="text-center mt-12 hidden" style="font-family: 'Montserrat', sans-serif;">No private chats available.</p>
-        </div>
-    </section>
-
     <!-- Apply Modal -->
     <div id="applyModal" class="modal modal-hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
         <div class="p-8 bg-black rounded-lg max-w-md w-full">
@@ -406,26 +388,43 @@
         </div>
     </div>
 
-    <!-- Applications Modal -->
-    <div id="applicationsModal" class="modal modal-hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-        <div class="p-8 bg-black rounded-lg max-w-lg w-full">
-            <h3 class="text-3xl font-bold mb-6" style="font-family: 'Montserrat', sans-serif;">Project Applications</h3>
-            <div id="applications-list" class="mb-6 applications-list"></div>
-            <div class="flex justify-end">
-                <button onclick="closeApplicationsModal()" class="px-6 py-3 rounded-lg text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Close">Close</button>
-            </div>
-            <p id="applicationsError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
-        </div>
-    </div>
-
     <script>
+        // Mobile Menu Toggle Functionality
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+          document.getElementById('mobile-menu').classList.add('open');
+          document.body.classList.add('menu-open');
+        });
+
+        document.getElementById('mobile-menu-close').addEventListener('click', function() {
+          document.getElementById('mobile-menu').classList.remove('open');
+          document.body.classList.remove('menu-open');
+        });
+
+        // Close menu when clicking a nav link
+        document.querySelectorAll('#mobile-auth-buttons button, #mobile-user-menu button').forEach(button => {
+          button.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.body.classList.remove('menu-open');
+          });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          const mobileMenu = document.getElementById('mobile-menu');
+          const menuBtn = document.getElementById('mobile-menu-btn');
+          
+          if (!mobileMenu.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+            mobileMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
+          }
+        });
         const firebaseConfig = {
             apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
-    authDomain: "testing-dba79.firebaseapp.com",
-    projectId: "testing-dba79",
-    storageBucket: "testing-dba79.firebasestorage.app",
-    messagingSenderId: "808371260131",
-    appId: "1:808371260131:web:a59f409f532e617cba13d6"
+            authDomain: "testing-dba79.firebaseapp.com",
+            projectId: "testing-dba79",
+            storageBucket: "testing-dba79.appspot.com",
+            messagingSenderId: "808371260131",
+            appId: "1:808371260131:web:a59f409f532e617cba13d6"
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -534,7 +533,6 @@
             document.getElementById('mobile-menu').classList.remove('slide-in');
             if (id === 'freelancers') loadFreelancers();
             if (id === 'projects') loadProjects();
-            if (id === 'private-chats') loadPrivateChats();
             logEvent('section_viewed', { section: id });
         }
 
@@ -560,7 +558,7 @@
             errorEl.textContent = '';
             try {
                 await auth.signInWithEmailAndPassword(email, password);
-                showSection('dashboard');
+                showSection('freelancers');
                 logEvent('login_success', { email });
             } catch (error) {
                 errorEl.textContent = error.code === 'auth/user-not-found' ? 'No user found with this email.' : error.message;
@@ -632,7 +630,7 @@
                     });
                 }
                 await db.collection('users').doc(cred.user.uid).set(userData);
-                showSection('dashboard');
+                showSection('freelancers');
                 logEvent('register_success', { email, role, isFreelancer: role === 'freelancer', hasDiscord: !!discordId });
             } catch (error) {
                 errorEl.textContent = error.code === 'auth/email-already-in-use' ? 'Email already registered.' : error.message;
@@ -686,68 +684,23 @@
             }
         }
 
-        // Load Projects
-        async function loadProjects() {
-            try {
-                const snapshot = await db.collection('projects')
-                    .orderBy('createdAt', 'desc')
-                    .limit(50)
-                    .get();
-                const list = document.getElementById('projects-list');
-                const noProjects = document.getElementById('no-projects');
-                list.innerHTML = '';
-                if (snapshot.empty) {
-                    noProjects.classList.remove('hidden');
-                } else {
-                    noProjects.classList.add('hidden');
-                    for (const doc of snapshot.docs) {
-                        const project = doc.data();
-                        const userDoc = await db.collection('users').doc(project.clientId).get();
-                        const client = userDoc.data();
-                        const isClient = currentUser && project.clientId === currentUser.uid;
-                        const truncatedDesc = project.description.length > 100
-                            ? sanitizeInput(project.description.substring(0, 100)) + '...'
-                            : sanitizeInput(project.description);
-                        list.innerHTML += `
-                            <div class="p-6 bg-black rounded-lg project-card fade-in-up">
-                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(project.title)}</h3>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;">${truncatedDesc}</p>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Budget:</strong> $${project.budget}</p>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Client:</strong> ${sanitizeInput(client.name)}</p>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Status:</strong> ${sanitizeInput(project.status)}</p>
-                                <div class="flex space-x-4">
-                                    <button onclick="openMessages('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Message about ${project.title}">Message</button>
-                                    ${!isClient ? `<button onclick="openApplyModal('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Apply for ${project.title}">Apply</button>` : `<button onclick="openApplicationsModal('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="View Applications for ${project.title}">View Applications</button>`}
-                                </div>
-                            </div>
-                        `;
-                    }
-                }
-                logEvent('projects_loaded', { count: snapshot.size });
-            } catch (error) {
-                handleError(error, 'load_projects');
-                document.getElementById('no-projects').textContent = 'Error loading projects. Please try again.';
-                document.getElementById('no-projects').classList.remove('hidden');
-            }
-        }
-
         // Post Project
         async function postProject() {
-            if (isSubmitting || !currentUser) return;
+            if (isSubmitting) return;
             const title = document.getElementById('projectTitle').value.trim();
-            const desc = document.getElementById('projectDesc').value.trim();
-            const budget = parseFloat(document.getElementById('projectBudget').value);
+            const description = document.getElementById('projectDesc').value.trim();
+            const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
             const btn = document.getElementById('postProjectBtn');
 
             if (!isValidTitle(title)) {
-                alert('Title is required and must be 1-200 characters.');
+                alert('Project title is required and must be 1-200 characters.');
                 return;
             }
-            if (!isValidDescription(desc)) {
-                alert('Description is required and must be 1-5000 characters.');
+            if (!isValidDescription(description)) {
+                alert('Project description is required and must be 1-5000 characters.');
                 return;
             }
-            if (isNaN(budget) || budget <= 0) {
+            if (budget <= 0) {
                 alert('Please enter a valid budget greater than 0.');
                 return;
             }
@@ -757,9 +710,9 @@
             try {
                 await db.collection('projects').add({
                     title: sanitizeInput(title),
-                    description: sanitizeInput(desc),
+                    description: sanitizeInput(description),
                     budget,
-                    clientId: currentUser.uid,
+                    client: currentUser.uid,
                     status: 'open',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
@@ -778,25 +731,131 @@
             }
         }
 
-        // Open Messages
-        async function openMessages(projectId) {
+        // Load Projects
+        async function loadProjects() {
+            try {
+                const snapshot = await db.collection('projects')
+                    .orderBy('createdAt', 'desc')
+                    .limit(50)
+                    .get();
+                const list = document.getElementById('projects-list');
+                const noProjects = document.getElementById('no-projects');
+                list.innerHTML = '';
+                if (snapshot.empty) {
+                    noProjects.classList.remove('hidden');
+                } else {
+                    noProjects.classList.add('hidden');
+                    snapshot.forEach(doc => {
+                        const project = doc.data();
+                        const isClient = currentUser && currentUser.uid === project.client;
+                        const truncatedDesc = project.description.length > 100 ? sanitizeInput(project.description).substring(0, 100) + '...' : sanitizeInput(project.description);
+                        list.innerHTML += `
+                            <div class="p-6 bg-black rounded-lg project-card fade-in-up">
+                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(project.title)}</h3>
+                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;">${truncatedDesc}</p>
+                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Budget:</strong> $${project.budget}</p>
+                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Status:</strong> ${sanitizeInput(project.status)}</p>
+                                <div class="flex space-x-4">
+                                    <button onclick="openMessages('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Message about ${project.title}">Message</button>
+                                    ${!isClient ? `<button onclick="openApplyModal('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Apply for ${project.title}">Apply</button>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                logEvent('projects_loaded', { count: snapshot.size });
+            } catch (error) {
+                handleError(error, 'load_projects');
+                document.getElementById('no-projects').textContent = 'Error loading projects. Please try again.';
+                document.getElementById('no-projects').classList.remove('hidden');
+            }
+        }
+
+        // Apply Modal
+        async function openApplyModal(projectId) {
             if (!currentUser) {
                 showSection('register');
-                logEvent('messages_unauthenticated_redirect', { projectId });
+                logEvent('apply_unauthenticated_redirect', { projectId });
                 return;
             }
             currentProjectId = projectId;
-            isPrivateChat = false;
+            const portfolioInput = document.getElementById('portfolioLink');
+            const errorEl = document.getElementById('applyError');
+            portfolioInput.value = '';
+            errorEl.textContent = '';
+
+            try {
+                const freelancerDoc = await db.collection('freelancers').doc(currentUser.uid).get();
+                if (freelancerDoc.exists) {
+                    const portfolioLink = freelancerDoc.data().portfolioLink;
+                    if (portfolioLink) {
+                        portfolioInput.value = sanitizeInput(portfolioLink);
+                    }
+                }
+            } catch (error) {
+                handleError(error, 'fetch_freelancer_portfolio');
+            }
+
+            document.getElementById('applyModal').classList.remove('modal-hidden');
+            document.getElementById('applyModal').classList.add('modal-visible');
+        }
+
+        function closeApplyModal() {
+            document.getElementById('applyModal').classList.remove('modal-visible');
+            document.getElementById('applyModal').classList.add('modal-hidden');
+        }
+
+        async function submitApplication() {
+            if (isSubmitting) return;
+            const portfolioLink = document.getElementById('portfolioLink').value.trim();
+            const errorEl = document.getElementById('applyError');
+            const btn = document.getElementById('applyBtn');
+
+            if (!isValidUrl(portfolioLink)) {
+                errorEl.textContent = 'Please enter a valid URL (e.g., https://yourportfolio.com).';
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            errorEl.textContent = '';
+            try {
+                const batch = db.batch();
+                const applicationRef = db.collection('projects').doc(currentProjectId).collection('applications').doc();
+                batch.set(applicationRef, {
+                    applicant: currentUser.uid,
+                    portfolioLink: sanitizeInput(portfolioLink),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                const messageRef = db.collection('projects').doc(currentProjectId).collection('messages').doc();
+                batch.set(messageRef, {
+                    text: `I have applied for this project. Here is my portfolio: ${sanitizeInput(portfolioLink)}`,
+                    link: sanitizeInput(portfolioLink),
+                    sender: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                await batch.commit();
+                closeApplyModal();
+                openMessages(currentProjectId);
+                logEvent('application_submitted', { projectId: currentProjectId, portfolioLink });
+            } catch (error) {
+                errorEl.textContent = 'Error submitting application: ' + error.message;
+                logEvent('application_error', { error: error.message });
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Open Messages
+        function openMessages(projectId) {
+            currentProjectId = projectId;
             if (messagesUnsubscribe) messagesUnsubscribe();
-            const projectDoc = await db.collection('projects').doc(projectId).get();
-            const project = projectDoc.data();
-            const container = document.getElementById('message-container');
-            container.innerHTML = '';
-            document.getElementById('message-container').previousElementSibling.textContent = `Messages: ${sanitizeInput(project.title)}`;
             messagesUnsubscribe = db.collection('projects').doc(projectId).collection('messages')
                 .orderBy('createdAt')
                 .limit(100)
                 .onSnapshot(snapshot => {
+                    const container = document.getElementById('message-container');
                     container.innerHTML = '';
                     snapshot.forEach(doc => {
                         const msg = doc.data();
@@ -836,19 +895,15 @@
             isSubmitting = true;
             btn.classList.add('loading');
             try {
-                if (isPrivateChat) {
-                    await sendPrivateMessage(currentProjectId);
-                } else {
-                    await db.collection('projects').doc(currentProjectId).collection('messages').add({
-                        text: text ? sanitizeInput(text) : '',
-                        link: link ? sanitizeInput(link) : '',
-                        sender: currentUser.uid,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    document.getElementById('message-input').value = '';
-                    document.getElementById('message-link').value = '';
-                    logEvent('message_sent', { projectId: currentProjectId, hasLink: !!link });
-                }
+                await db.collection('projects').doc(currentProjectId).collection('messages').add({
+                    text: text ? sanitizeInput(text) : '',
+                    link: link ? sanitizeInput(link) : '',
+                    sender: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('message-input').value = '';
+                document.getElementById('message-link').value = '';
+                logEvent('message_sent', { projectId: currentProjectId, hasLink: !!link });
             } catch (error) {
                 handleError(error, 'send_message');
                 alert('Error sending message: ' + error.message);
@@ -858,246 +913,9 @@
             }
         }
 
-        // Apply Modal
-        function openApplyModal(projectId) {
-            if (!currentUser) {
-                showSection('register');
-                logEvent('apply_unauthenticated_redirect', { projectId });
-                return;
-            }
-            currentProjectId = projectId;
-            document.getElementById('applyModal').classList.remove('modal-hidden');
-            document.getElementById('applyModal').classList.add('modal-visible');
-            document.getElementById('portfolioLink').value = '';
-            document.getElementById('applyError').textContent = '';
-            logEvent('apply_modal_opened', { projectId });
-        }
-
-        function closeApplyModal() {
-            document.getElementById('applyModal').classList.remove('modal-visible');
-            document.getElementById('applyModal').classList.add('modal-hidden');
-        }
-
-        async function submitApplication() {
-            if (isSubmitting) return;
-            const portfolioLink = document.getElementById('portfolioLink').value.trim();
-            const errorEl = document.getElementById('applyError');
-            const btn = document.getElementById('applyBtn');
-
-            if (!isValidUrl(portfolioLink)) {
-                errorEl.textContent = 'Please enter a valid portfolio URL (e.g., https://yourportfolio.com).';
-                return;
-            }
-
-            isSubmitting = true;
-            btn.classList.add('loading');
-            errorEl.textContent = '';
-            try {
-                await db.collection('projects').doc(currentProjectId).collection('applications').add({
-                    applicant: currentUser.uid,
-                    portfolioLink: sanitizeInput(portfolioLink),
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                closeApplyModal();
-                logEvent('application_submitted', { projectId: currentProjectId });
-            } catch (error) {
-                handleError(error, 'submit_application');
-                errorEl.textContent = 'Error submitting application: ' + error.message;
-            } finally {
-                isSubmitting = false;
-                btn.classList.remove('loading');
-            }
-        }
-
-        // Private Chats Functionality
-        async function loadPrivateChats() {
-            try {
-                const snapshot = await db.collection('privateChats')
-                    .where('participants', 'array-contains', currentUser.uid)
-                    .orderBy('createdAt', 'desc')
-                    .limit(50)
-                    .get();
-                const list = document.getElementById('private-chats-list');
-                const noChats = document.getElementById('no-private-chats');
-                list.innerHTML = '';
-                if (snapshot.empty) {
-                    noChats.classList.remove('hidden');
-                } else {
-                    noChats.classList.add('hidden');
-                    snapshot.forEach(doc => {
-                        const chat = doc.data();
-                        const otherParticipant = chat.participants.find(p => p !== currentUser.uid);
-                        const projectTitle = chat.projectTitle;
-                        list.innerHTML += `
-                            <div class="p-6 bg-black rounded-lg private-chat-card fade-in-up">
-                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">Chat for ${sanitizeInput(projectTitle)}</h3>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;">With: ${sanitizeInput(chat.participantNames[otherParticipant])}</p>
-                                <button onclick="openPrivateChat('${doc.id}', '${projectTitle}')" class="px-6 py-3 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Open Chat for ${projectTitle}">Open Chat</button>
-                            </div>
-                        `;
-                    });
-                }
-                logEvent('private_chats_loaded', { count: snapshot.size });
-            } catch (error) {
-                handleError(error, 'load_private_chats');
-                document.getElementById('no-private-chats').textContent = 'Error loading private chats. Please try again.';
-                document.getElementById('no-private-chats').classList.remove('hidden');
-            }
-        }
-
-        async function openPrivateChat(chatId, projectTitle) {
-            if (!currentUser) {
-                showSection('register');
-                logEvent('private_chat_unauthenticated_redirect', { chatId });
-                return;
-            }
-            currentProjectId = chatId;
-            isPrivateChat = true;
-            if (messagesUnsubscribe) messagesUnsubscribe();
-            const container = document.getElementById('message-container');
-            container.innerHTML = '';
-            document.getElementById('message-container').previousElementSibling.textContent = `Private Chat: ${sanitizeInput(projectTitle)}`;
-            messagesUnsubscribe = db.collection('privateChats').doc(chatId).collection('messages')
-                .orderBy('createdAt')
-                .limit(100)
-                .onSnapshot(snapshot => {
-                    container.innerHTML = '';
-                    snapshot.forEach(doc => {
-                        const msg = doc.data();
-                        const isSender = msg.sender === currentUser.uid;
-                        container.innerHTML += `
-                            <div class="p-4 bg-black rounded-lg mb-3 max-w-md ${isSender ? 'ml-auto' : 'mr-auto'} fade-in">
-                                ${msg.text ? `<p style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.text)}</p>` : ''}
-                                ${msg.link ? `<a href="${sanitizeInput(msg.link)}" target="_blank" rel="noopener noreferrer" class="text-white underline" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.link)}</a>` : ''}
-                                <p class="text-xs mt-2" style="font-family: 'Montserrat', sans-serif;">${new Date(msg.createdAt?.toDate()).toLocaleString()}</p>
-                            </div>
-                        `;
-                    });
-                    container.scrollTop = container.scrollHeight;
-                }, error => {
-                    handleError(error, 'load_private_messages');
-                });
-            showSection('messages');
-            logEvent('private_chat_opened', { chatId });
-        }
-
-        async function sendPrivateMessage(chatId) {
-            const text = document.getElementById('message-input').value.trim();
-            const link = document.getElementById('message-link').value.trim();
-            const btn = document.getElementById('sendMessageBtn');
-
-            if (!text && !link) {
-                alert('Please enter a message or a link.');
-                return;
-            }
-            if (link && !isValidUrl(link)) {
-                alert('Please enter a valid URL (e.g., https://yourportfolio.com).');
-                return;
-            }
-
-            try {
-                await db.collection('privateChats').doc(chatId).collection('messages').add({
-                    text: text ? sanitizeInput(text) : '',
-                    link: link ? sanitizeInput(link) : '',
-                    sender: currentUser.uid,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                document.getElementById('message-input').value = '';
-                document.getElementById('message-link').value = '';
-                logEvent('private_message_sent', { chatId, hasLink: !!link });
-            } catch (error) {
-                handleError(error, 'send_private_message');
-                alert('Error sending message: ' + error.message);
-            }
-        }
-
-        // Applications Modal
-        async function openApplicationsModal(projectId) {
-            if (!currentUser) {
-                showSection('register');
-                logEvent('applications_unauthenticated_redirect', { projectId });
-                return;
-            }
-            currentProjectId = projectId;
-            const list = document.getElementById('applications-list');
-            const errorEl = document.getElementById('applicationsError');
-            list.innerHTML = '';
-            errorEl.textContent = '';
-
-            try {
-                const snapshot = await db.collection('projects').doc(projectId).collection('applications')
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                if (snapshot.empty) {
-                    list.innerHTML = '<p style="font-family: \'Montserrat\', sans-serif;">No applications yet.</p>';
-                } else {
-                    for (const doc of snapshot.docs) {
-                        const app = doc.data();
-                        const userDoc = await db.collection('users').doc(app.applicant).get();
-                        const user = userDoc.data();
-                        list.innerHTML += `
-                            <div class="application-item">
-                                <p style="font-family: 'Montserrat', sans-serif;"><strong>${sanitizeInput(user.name)}</strong></p>
-                                <a href="${sanitizeInput(app.portfolioLink)}" target="_blank" rel="noopener noreferrer" class="text-white underline" style="font-family: 'Montserrat', sans-serif;">Portfolio</a>
-                                <button onclick="approveApplication('${projectId}', '${doc.id}', '${app.applicant}', '${user.name}')" class="px-4 py-2 mt-2 rounded-lg text-sm font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Approve ${user.name}'s application">Approve</button>
-                            </div>
-                        `;
-                    }
-                }
-                document.getElementById('applicationsModal').classList.remove('modal-hidden');
-                document.getElementById('applicationsModal').classList.add('modal-visible');
-                logEvent('applications_modal_opened', { projectId });
-            } catch (error) {
-                handleError(error, 'load_applications');
-                errorEl.textContent = 'Error loading applications: ' + error.message;
-            }
-        }
-
-        function closeApplicationsModal() {
-            document.getElementById('applicationsModal').classList.remove('modal-visible');
-            document.getElementById('applicationsModal').classList.add('modal-hidden');
-        }
-
-        async function approveApplication(projectId, applicationId, freelancerId, freelancerName) {
-            if (isSubmitting) return;
-            isSubmitting = true;
-            try {
-                const projectDoc = await db.collection('projects').doc(projectId).get();
-                const project = projectDoc.data();
-                const clientDoc = await db.collection('users').doc(currentUser.uid).get();
-                const clientName = clientDoc.data().name;
-
-                const chatRef = db.collection('privateChats').doc();
-                await chatRef.set({
-                    participants: [currentUser.uid, freelancerId],
-                    participantNames: {
-                        [currentUser.uid]: sanitizeInput(clientName),
-                        [freelancerId]: sanitizeInput(freelancerName)
-                    },
-                    projectId,
-                    projectTitle: sanitizeInput(project.title),
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                await db.collection('projects').doc(projectId).collection('applications').doc(applicationId).update({
-                    status: 'approved'
-                });
-
-                closeApplicationsModal();
-                loadPrivateChats();
-                showSection('private-chats');
-                logEvent('application_approved', { projectId, freelancerId });
-            } catch (error) {
-                handleError(error, 'approve_application');
-                document.getElementById('applicationsError').textContent = 'Error approving application: ' + error.message;
-            } finally {
-                isSubmitting = false;
-            }
-        }
-
         // Initialize
         showSection('home');
+        logEvent('app_initialized');
     </script>
 </body>
 </html>
