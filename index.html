@@ -173,6 +173,16 @@
         .cf-turnstile {
             margin-bottom: 2rem;
         }
+        /* Calculator Styles */
+        .calculator-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #fff;
+            background: linear-gradient(145deg, #111, #000);
+        }
+        .calculator-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -183,6 +193,7 @@
             <div class="hidden md:flex space-x-8" id="auth-buttons">
                 <button onclick="showSection('home')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
                 <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
@@ -191,6 +202,7 @@
                 <button onclick="showSection('dashboard')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
                 <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
             <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
@@ -210,6 +222,7 @@
             <div id="mobile-auth-buttons" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in">
                 <button onclick="showSection('home')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
                 <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
@@ -218,6 +231,7 @@
                 <button onclick="showSection('dashboard')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
                 <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
         </div>
@@ -355,6 +369,51 @@
                 <input type="text" id="message-input" placeholder="Type a message..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
                 <input type="url" id="message-link" placeholder="Share a link..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
                 <button id="sendMessageBtn" onclick="sendMessage()" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Send Message">Send</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="hidden py-24">
+        <div class="container mx-auto px-6 fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Financial Tools</h2>
+            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
+                Calculate PayPal fees and estimate taxes for your freelance projects.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- PayPal Fee Calculator -->
+                <div class="calculator-card p-8 rounded-lg fade-in-up">
+                    <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">PayPal Fee Calculator</h3>
+                    <div class="mb-6">
+                        <label for="paypalAmount" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Transaction Amount (USD)</label>
+                        <input type="number" id="paypalAmount" placeholder="Enter amount" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                    </div>
+                    <div class="mb-6">
+                        <label for="paypalCountry" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Country</label>
+                        <select id="paypalCountry" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
+                            <option value="US">United States</option>
+                            <option value="International">International</option>
+                        </select>
+                    </div>
+                    <button onclick="calculatePaypalFees()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Calculate PayPal Fees">Calculate</button>
+                    <div id="paypalResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
+                    <p id="paypalError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+                </div>
+                <!-- Tax Calculator -->
+                <div class="calculator-card p-8 rounded-lg fade-in-up" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">Tax Calculator</h3>
+                    <div class="mb-6">
+                        <label for="taxIncome" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Annual Income (USD)</label>
+                        <input type="number" id="taxIncome" placeholder="Enter income" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                    </div>
+                    <div class="mb-6">
+                        <label for="taxRate" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Tax Rate (%)</label>
+                        <input type="number" id="taxRate" placeholder="Enter tax rate" min="0" max="100" step="0.1" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                    </div>
+                    <button onclick="calculateTax()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Calculate Tax">Calculate</button>
+                    <div id="taxResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
+                    <p id="taxError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+                </div>
             </div>
         </div>
     </section>
@@ -532,6 +591,74 @@
                 }
             }
             logEvent('section_viewed', { section: id });
+        }
+
+        // PayPal Fee Calculator
+        function calculatePaypalFees() {
+            const amount = parseFloat(document.getElementById('paypalAmount').value);
+            const country = document.getElementById('paypalCountry').value;
+            const resultEl = document.getElementById('paypalResult');
+            const errorEl = document.getElementById('paypalError');
+
+            errorEl.textContent = '';
+            resultEl.textContent = '';
+
+            if (isNaN(amount) || amount <= 0) {
+                errorEl.textContent = 'Please enter a valid transaction amount.';
+                return;
+            }
+
+            // PayPal fee structure (as of 2023)
+            const usFee = 0.029; // 2.9% for US
+            const usFixed = 0.49; // $0.49 fixed fee for US
+            const intlFee = 0.044; // 4.4% for international
+            const intlFixed = 0.49; // $0.49 fixed fee for international
+
+            let fee, netAmount;
+            if (country === 'US') {
+                fee = (amount * usFee) + usFixed;
+                netAmount = amount - fee;
+            } else {
+                fee = (amount * intlFee) + intlFixed;
+                netAmount = amount - fee;
+            }
+
+            resultEl.innerHTML = `
+                <p><strong>Transaction Amount:</strong> $${amount.toFixed(2)}</p>
+                <p><strong>PayPal Fee:</strong> $${fee.toFixed(2)}</p>
+                <p><strong>Net Amount:</strong> $${netAmount.toFixed(2)}</p>
+            `;
+            logEvent('paypal_fee_calculated', { amount, country, fee, netAmount });
+        }
+
+        // Tax Calculator
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('taxIncome').value);
+            const taxRate = parseFloat(document.getElementById('taxRate').value);
+            const resultEl = document.getElementById('taxResult');
+            const errorEl = document.getElementById('taxError');
+
+            errorEl.textContent = '';
+            resultEl.textContent = '';
+
+            if (isNaN(income) || income < 0) {
+                errorEl.textContent = 'Please enter a valid income amount.';
+                return;
+            }
+            if (isNaN(taxRate) || taxRate < 0 || taxRate > 100) {
+                errorEl.textContent = 'Please enter a valid tax rate (0-100%).';
+                return;
+            }
+
+            const taxAmount = income * (taxRate / 100);
+            const netIncome = income - taxAmount;
+
+            resultEl.innerHTML = `
+                <p><strong>Annual Income:</strong> $${income.toFixed(2)}</p>
+                <p><strong>Tax Amount (${taxRate}%):</strong> $${taxAmount.toFixed(2)}</p>
+                <p><strong>Net Income:</strong> $${netIncome.toFixed(2)}</p>
+            `;
+            logEvent('tax_calculated', { income, taxRate, taxAmount, netIncome });
         }
 
         // Login
