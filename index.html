@@ -378,7 +378,7 @@
         <div class="container mx-auto px-6 fade-in-up">
             <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Financial Tools</h2>
             <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                Calculate PayPal fees and estimate taxes for your freelance projects.
+                Calculate PayPal fees and convert USD to other currencies for your freelance projects.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- PayPal Fee Calculator -->
@@ -399,20 +399,27 @@
                     <div id="paypalResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
                     <p id="paypalError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
                 </div>
-                <!-- Tax Calculator -->
+                <!-- PayPal Currency Converter -->
                 <div class="calculator-card p-8 rounded-lg fade-in-up" style="animation-delay: 0.2s;">
-                    <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">Tax Calculator</h3>
+                    <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">PayPal Currency Converter</h3>
                     <div class="mb-6">
-                        <label for="taxIncome" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Annual Income (USD)</label>
-                        <input type="number" id="taxIncome" placeholder="Enter income" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                        <label for="convertAmount" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Amount (USD)</label>
+                        <input type="number" id="convertAmount" placeholder="Enter amount" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
                     </div>
                     <div class="mb-6">
-                        <label for="taxRate" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Tax Rate (%)</label>
-                        <input type="number" id="taxRate" placeholder="Enter tax rate" min="0" max="100" step="0.1" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                        <label for="convertCurrency" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Target Currency</label>
+                        <select id="convertCurrency" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
+                            <option value="EUR">Euro (EUR)</option>
+                            <option value="GBP">British Pound (GBP)</option>
+                            <option value="CAD">Canadian Dollar (CAD)</option>
+                            <option value="AUD">Australian Dollar (AUD)</option>
+                            <option value="JPY">Japanese Yen (JPY)</option>
+                            <option value="INR">Indian Rupee (INR)</option>
+                        </select>
                     </div>
-                    <button onclick="calculateTax()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Calculate Tax">Calculate</button>
-                    <div id="taxResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
-                    <p id="taxError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+                    <button onclick="convertCurrency()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Convert Currency">Convert</button>
+                    <div id="convertResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
+                    <p id="convertError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
                 </div>
             </div>
         </div>
@@ -631,34 +638,46 @@
             logEvent('paypal_fee_calculated', { amount, country, fee, netAmount });
         }
 
-        // Tax Calculator
-        function calculateTax() {
-            const income = parseFloat(document.getElementById('taxIncome').value);
-            const taxRate = parseFloat(document.getElementById('taxRate').value);
-            const resultEl = document.getElementById('taxResult');
-            const errorEl = document.getElementById('taxError');
+        // PayPal Currency Converter
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById('convertAmount').value);
+            const currency = document.getElementById('convertCurrency').value;
+            const resultEl = document.getElementById('convertResult');
+            const errorEl = document.getElementById('convertError');
 
             errorEl.textContent = '';
             resultEl.textContent = '';
 
-            if (isNaN(income) || income < 0) {
-                errorEl.textContent = 'Please enter a valid income amount.';
-                return;
-            }
-            if (isNaN(taxRate) || taxRate < 0 || taxRate > 100) {
-                errorEl.textContent = 'Please enter a valid tax rate (0-100%).';
+            if (isNaN(amount) || amount <= 0) {
+                errorEl.textContent = 'Please enter a valid amount.';
                 return;
             }
 
-            const taxAmount = income * (taxRate / 100);
-            const netIncome = income - taxAmount;
+            // Simplified exchange rates for PayPal transactions (as of April 2025, for demo purposes)
+            const exchangeRates = {
+                EUR: 0.95, // 1 USD = 0.95 EUR
+                GBP: 0.80, // 1 USD = 0.80 GBP
+                CAD: 1.35, // 1 USD = 1.35 CAD
+                AUD: 1.50, // 1 USD = 1.50 AUD
+                JPY: 150.00, // 1 USD = 150.00 JPY
+                INR: 84.00 // 1 USD = 84.00 INR
+            };
+
+            const convertedAmount = amount * exchangeRates[currency];
+            const currencySymbols = {
+                EUR: '€',
+                GBP: '£',
+                CAD: 'C$',
+                AUD: 'A$',
+                JPY: '¥',
+                INR: '₹'
+            };
 
             resultEl.innerHTML = `
-                <p><strong>Annual Income:</strong> $${income.toFixed(2)}</p>
-                <p><strong>Tax Amount (${taxRate}%):</strong> $${taxAmount.toFixed(2)}</p>
-                <p><strong>Net Income:</strong> $${netIncome.toFixed(2)}</p>
+                <p><strong>Amount in USD:</strong> $${amount.toFixed(2)}</p>
+                <p><strong>Converted Amount:</strong> ${currencySymbols[currency]}${convertedAmount.toFixed(2)} ${currency}</p>
             `;
-            logEvent('tax_calculated', { income, taxRate, taxAmount, netIncome });
+            logEvent('currency_converted', { amount, currency, convertedAmount });
         }
 
         // Login
