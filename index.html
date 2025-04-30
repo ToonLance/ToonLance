@@ -173,6 +173,7 @@
         .cf-turnstile {
             margin-bottom: 2rem;
         }
+        /* Calculator Styles */
         .calculator-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #fff;
@@ -181,22 +182,6 @@
         .calculator-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
-        }
-        .activity-feed {
-            max-height: 300px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #fff #000;
-        }
-        .activity-feed::-webkit-scrollbar {
-            width: 8px;
-        }
-        .activity-feed::-webkit-scrollbar-track {
-            background: #000;
-        }
-        .activity-feed::-webkit-scrollbar-thumb {
-            background: #fff;
-            border-radius: 4px;
         }
     </style>
 </head>
@@ -346,50 +331,10 @@
     <section id="dashboard" class="hidden py-24">
         <div class="container mx-auto px-6 fade-in-up">
             <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Your Creative Hub</h2>
-            <p id="welcome-message" class="mb-8 text-2xl text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
-                    <h3 id="stat-projects" class="text-3xl font-bold mb-2" style="font-family: 'Montserrat', sans-serif;">0</h3>
-                    <p style="font-family: 'Montserrat', sans-serif;">Active Projects</p>
-                </div>
-                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
-                    <h3 id="stat-messages" class="text-3xl font-bold mb-2" style="font-family: 'Montserrat', sans-serif;">0</h3>
-                    <p style="font-family: 'Montserrat', sans-serif;">Messages</p>
-                </div>
-                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
-                    <h3 id="stat-views" class="text-3xl font-bold mb-2" style="font-family: 'Montserrat', sans-serif;">0</h3>
-                    <p style="font-family: 'Montserrat', sans-serif;">Profile Views</p>
-                </div>
-            </div>
-            <div class="flex flex-wrap justify-center gap-4 mb-12">
-                <button onclick="togglePostProjectForm()" class="px-8 py-4 rounded-lg text-lg font-semibold flex items-center" style="font-family: 'Montserrat', sans-serif;" aria-label="Post a Project">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Post Project
-                </button>
-                <button onclick="updateProfile()" class="px-8 py-4 rounded-lg text-lg font-semibold flex items-center" style="font-family: 'Montserrat', sans-serif;" aria-label="Update Profile">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                    Update Profile
-                </button>
-                <button onclick="showSection('freelancers')" class="px-8 py-4 rounded-lg text-lg font-semibold flex items-center" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                    Browse Freelancers
-                </button>
-                <button onclick="showSection('messages')" class="px-8 py-4 rounded-lg text-lg font-semibold flex items-center" style="font-family: 'Montserrat', sans-serif;" aria-label="Send Message">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
-                    Send Message
-                </button>
-            </div>
-            <div class="mb-12">
-                <h3 class="text-2xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Recent Activity</h3>
-                <div id="activity-feed" class="activity-feed p-4 bg-black rounded-lg border border-white fade-in-up"></div>
+            <p class="mb-12 text-lg text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">Manage projects, connect with talent, or dive into new opportunities.</p>
+            <div class="flex justify-center space-x-6">
+                <button onclick="showSection('projects')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="View Projects">View Projects</button>
+                <button onclick="showSection('freelancers')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">Browse Freelancers</button>
             </div>
         </div>
     </section>
@@ -538,7 +483,6 @@
         let currentProjectId = null;
         let messagesUnsubscribe = null;
         let isSubmitting = false;
-        let activityUnsubscribe = null;
 
         // Global Error Handler
         function handleError(error, context) {
@@ -585,91 +529,6 @@
             console.log(`[Analytics] ${event}`, { timestamp: new Date().toISOString(), ...data });
         };
 
-        // Log Activity to Firestore
-        async function logActivity(type, details, projectId = null) {
-            if (!currentUser) return;
-            try {
-                await db.collection('activity_logs').add({
-                    userId: currentUser.uid,
-                    type,
-                    details: sanitizeInput(details),
-                    projectId,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) {
-                handleError(error, 'log_activity');
-            }
-        }
-
-        // Load Dashboard Data
-        async function loadUserDashboard() {
-            if (!currentUser) return;
-            try {
-                const userDoc = await db.collection('users').doc(currentUser.uid).get();
-                if (!userDoc.exists) return;
-                const userData = userDoc.data();
-                const welcomeEl = document.getElementById('welcome-message');
-                welcomeEl.textContent = `Welcome back, ${sanitizeInput(userData.name)}!`;
-
-                const isFreelancer = userData.role === 'freelancer';
-                const projectsQuery = isFreelancer
-                    ? db.collection('projects').where('applications.applicant', 'array-contains', currentUser.uid)
-                    : db.collection('projects').where('client', '==', currentUser.uid);
-                const projectsSnapshot = await projectsQuery.get();
-                const projectsCount = projectsSnapshot.size;
-
-                const messagesQuery = db.collectionGroup('messages').where('sender', '!=', currentUser.uid);
-                const messagesSnapshot = await messagesQuery.get();
-                const messagesCount = messagesSnapshot.size;
-
-                const viewsQuery = db.collection('freelancers').doc(currentUser.uid);
-                const viewsDoc = await viewsQuery.get();
-                const profileViews = viewsDoc.exists ? (viewsDoc.data().profileViews || 0) : 0;
-
-                document.getElementById('stat-projects').textContent = projectsCount;
-                document.getElementById('stat-messages').textContent = messagesCount;
-                document.getElementById('stat-views').textContent = profileViews;
-
-                logEvent('dashboard_loaded', { userId: currentUser.uid, projects: projectsCount, messages: messagesCount, views: profileViews });
-            } catch (error) {
-                handleError(error, 'load_user_dashboard');
-            }
-        }
-
-        // Load Activity Feed
-        function loadActivityFeed() {
-            if (!currentUser) return;
-            if (activityUnsubscribe) activityUnsubscribe();
-            activityUnsubscribe = db.collection('activity_logs')
-                .where('userId', '==', currentUser.uid)
-                .orderBy('timestamp', 'desc')
-                .limit(5)
-                .onSnapshot(snapshot => {
-                    const feed = document.getElementById('activity-feed');
-                    feed.innerHTML = '';
-                    if (snapshot.empty) {
-                        feed.innerHTML = '<p style="font-family: \'Montserrat\', sans-serif;">No recent activity.</p>';
-                        return;
-                    }
-                    snapshot.forEach(doc => {
-                        const activity = doc.data();
-                        const time = activity.timestamp ? new Date(activity.timestamp.toDate()).toLocaleString() : 'Just now';
-                        const action = activity.projectId
-                            ? `<a href="#" onclick="openMessages('${activity.projectId}')" class="underline" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(activity.details)}</a>`
-                            : sanitizeInput(activity.details);
-                        feed.innerHTML += `
-                            <div class="p-3 border-b border-gray-700 last:border-b-0 fade-in-up">
-                                <p style="font-family: 'Montserrat', sans-serif;">${action}</p>
-                                <p class="text-sm text-gray-400" style="font-family: 'Montserrat', sans-serif;">${time}</p>
-                            </div>
-                        `;
-                    });
-                }, error => {
-                    handleError(error, 'load_activity_feed');
-                    document.getElementById('activity-feed').innerHTML = '<p style="font-family: \'Montserrat\', sans-serif;">Error loading activity.</p>';
-                });
-        }
-
         // Toggle Portfolio Input
         function togglePortfolioInput() {
             const role = document.getElementById('regRole').value;
@@ -710,8 +569,6 @@
                     document.getElementById('user-email').textContent = sanitizeInput(user.email);
                     document.getElementById('mobile-user-email').textContent = sanitizeInput(user.email);
                     showSection('dashboard');
-                    loadUserDashboard();
-                    loadActivityFeed();
                     loadProjects();
                     logEvent('user_login', { uid: user.uid });
                 } else {
@@ -720,7 +577,6 @@
                     document.getElementById('mobile-auth-buttons').classList.remove('hidden');
                     document.getElementById('mobile-user-menu').classList.add('hidden');
                     showSection('home');
-                    if (activityUnsubscribe) activityUnsubscribe();
                     logEvent('user_logout');
                 }
             } catch (error) {
@@ -736,22 +592,12 @@
             document.getElementById('mobile-menu').classList.remove('slide-in');
             if (id === 'freelancers') loadFreelancers();
             if (id === 'projects') loadProjects();
-            if (id === 'dashboard') {
-                loadUserDashboard();
-                loadActivityFeed();
-            }
             if (id === 'login' || id === 'register') {
                 if (typeof turnstile !== 'undefined') {
                     turnstile.reset();
                 }
             }
             logEvent('section_viewed', { section: id });
-        }
-
-        // Placeholder for Profile Update
-        function updateProfile() {
-            alert('Profile update feature coming soon!');
-            logEvent('update_profile_clicked');
         }
 
         // PayPal Fee Calculator
@@ -769,10 +615,11 @@
                 return;
             }
 
-            const usFee = 0.029;
-            const usFixed = 0.49;
-            const intlFee = 0.044;
-            const intlFixed = 0.49;
+            // PayPal fee structure (as of 2023)
+            const usFee = 0.029; // 2.9% for US
+            const usFixed = 0.49; // $0.49 fixed fee for US
+            const intlFee = 0.044; // 4.4% for international
+            const intlFixed = 0.49; // $0.49 fixed fee for international
 
             let fee, netAmount;
             if (country === 'US') {
@@ -806,13 +653,14 @@
                 return;
             }
 
+            // Simplified exchange rates for PayPal transactions (as of April 2025, for demo purposes)
             const exchangeRates = {
-                EUR: 0.95,
-                GBP: 0.80,
-                CAD: 1.35,
-                AUD: 1.50,
-                JPY: 150.00,
-                INR: 84.00
+                EUR: 0.95, // 1 USD = 0.95 EUR
+                GBP: 0.80, // 1 USD = 0.80 GBP
+                CAD: 1.35, // 1 USD = 1.35 CAD
+                AUD: 1.50, // 1 USD = 1.50 AUD
+                JPY: 150.00, // 1 USD = 150.00 JPY
+                INR: 84.00 // 1 USD = 84.00 INR
             };
 
             const convertedAmount = amount * exchangeRates[currency];
@@ -855,8 +703,7 @@
             try {
                 await checkTurnstile('login');
                 await auth.signInWithEmailAndPassword(email, password);
-                showSection('dashboard');
-                logActivity('login', 'Logged in successfully');
+                showSection('freelancers');
                 logEvent('login_success', { email });
             } catch (error) {
                 errorEl.textContent = error.code === 'auth/user-not-found' ? 'No user found with this email.' : error.message;
@@ -928,13 +775,11 @@
                         portfolioLink: sanitizeInput(portfolioLink),
                         bio: sanitizeInput(bio),
                         discordId: discordId ? sanitizeInput(discordId) : null,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        profileViews: 0
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
                 await db.collection('users').doc(cred.user.uid).set(userData);
-                logActivity('register', `Registered as ${role}`);
-                showSection('dashboard');
+                showSection('freelancers');
                 logEvent('register_success', { email, role, isFreelancer: role === 'freelancer', hasDiscord: !!discordId });
             } catch (error) {
                 errorEl.textContent = error.code === 'auth/email-already-in-use' ? 'Email already registered.' : error.message;
@@ -952,7 +797,6 @@
         async function logout() {
             try {
                 await auth.signOut();
-                logActivity('logout', 'Logged out');
                 logEvent('logout_success');
             } catch (error) {
                 handleError(error, 'logout');
@@ -975,12 +819,6 @@
                     noFreelancers.classList.add('hidden');
                     snapshot.forEach(doc => {
                         const freelancer = doc.data();
-                        if (currentUser && currentUser.uid !== freelancer.userId) {
-                            db.collection('freelancers').doc(freelancer.userId).update({
-                                profileViews: firebase.firestore.FieldValue.increment(1)
-                            });
-                            logActivity('profile_viewed', `Viewed ${freelancer.name}'s profile`, null);
-                        }
                         list.innerHTML += `
                             <div class="p-6 bg-black rounded-lg project-card fade-in-up">
                                 <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(freelancer.name)}</h3>
@@ -1022,7 +860,7 @@
             isSubmitting = true;
             btn.classList.add('loading');
             try {
-                const projectRef = await db.collection('projects').add({
+                await db.collection('projects').add({
                     title: sanitizeInput(title),
                     description: sanitizeInput(description),
                     budget,
@@ -1035,7 +873,6 @@
                 document.getElementById('projectBudget').value = '';
                 togglePostProjectForm();
                 loadProjects();
-                logActivity('project_posted', `Posted project: ${title}`, projectRef.id);
                 logEvent('project_posted', { title, budget });
             } catch (error) {
                 handleError(error, 'post_project');
@@ -1150,7 +987,6 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 await batch.commit();
-                logActivity('application_submitted', `Applied to project`, currentProjectId);
                 closeApplyModal();
                 openMessages(currentProjectId);
                 logEvent('application_submitted', { projectId: currentProjectId, portfolioLink });
@@ -1217,7 +1053,6 @@
                     sender: currentUser.uid,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                logActivity('message_sent', `Sent a message`, currentProjectId);
                 document.getElementById('message-input').value = '';
                 document.getElementById('message-link').value = '';
                 logEvent('message_sent', { projectId: currentProjectId, hasLink: !!link });
