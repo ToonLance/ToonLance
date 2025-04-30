@@ -19,40 +19,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <style>
         @media (max-width: 767px) {
-          #auth-buttons,
-          #user-menu {
-            display: none !important;
-          }
-          #mobile-menu-btn {
-            display: block;
-          }
-          #mobile-menu {
-            width: 80%;
-            border: none !important;
-            box-shadow: none !important;
-          }
-          #mobile-auth-buttons button,
-          #mobile-user-menu button {
-            border: none !important;
-            background: transparent !important;
-            padding: 12px 0 !important;
-            width: 100%;
-            text-align: left;
-          }
-          .nav-item:hover {
-            opacity: 1 !important;
-          }
-          #mobile-menu-close {
-            border: none !important;
-            background: transparent !important;
-            padding: 20px !important;
-          }
+            #auth-buttons,
+            #user-menu {
+                display: none !important;
+            }
+            #mobile-menu-btn {
+                display: block;
+            }
+            #mobile-menu {
+                width: 80%;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            #mobile-auth-buttons button,
+            #mobile-user-menu button {
+                border: none !important;
+                background: transparent !important;
+                padding: 12px 0 !important;
+                width: 100%;
+                text-align: left;
+            }
+            .nav-item:hover {
+                opacity: 1 !important;
+            }
+            #mobile-menu-close {
+                border: none !important;
+                background: transparent !important;
+                padding: 20px !important;
+            }
         }
         @media (min-width: 768px) {
-          #mobile-menu-btn,
-          #mobile-menu {
-            display: none !important;
-          }
+            #mobile-menu-btn,
+            #mobile-menu {
+                display: none !important;
+            }
         }
         nav button {
             padding: 10px;
@@ -173,7 +173,6 @@
         .cf-turnstile {
             margin-bottom: 2rem;
         }
-        /* Calculator Styles */
         .calculator-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #fff;
@@ -182,6 +181,14 @@
         .calculator-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+        .action-button {
+            border-image: linear-gradient(45deg, #fff, #ccc) 1;
+            transition: border-image 0.3s ease, transform 0.3s ease;
+        }
+        .action-button:hover {
+            border-image: linear-gradient(45deg, #ccc, #fff) 1;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -330,11 +337,21 @@
     <!-- Dashboard Section -->
     <section id="dashboard" class="hidden py-24">
         <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Your Creative Hub</h2>
-            <p class="mb-12 text-lg text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">Manage projects, connect with talent, or dive into new opportunities.</p>
-            <div class="flex justify-center space-x-6">
-                <button onclick="showSection('projects')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="View Projects">View Projects</button>
-                <button onclick="showSection('freelancers')" class="px-8 py-4 rounded-lg text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">Browse Freelancers</button>
+            <h2 class="text-5xl font-bold mb-4 text-center" style="font-family: 'Montserrat', sans-serif;">Your Creative Hub</h2>
+            <p id="welcome-message" class="mb-8 text-2xl text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></p>
+            <div class="flex flex-wrap justify-center gap-6 mb-12">
+                <button onclick="togglePostProjectForm()" class="action-button px-8 py-4 rounded-lg text-lg font-semibold flex items-center pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Post a Project">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Post Project
+                </button>
+                <button onclick="showSection('freelancers')" class="action-button px-8 py-4 rounded-lg text-lg font-semibold flex items-center pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    Browse Freelancers
+                </button>
             </div>
         </div>
     </section>
@@ -381,7 +398,6 @@
                 Calculate PayPal fees and convert USD to other currencies for your freelance projects.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- PayPal Fee Calculator -->
                 <div class="calculator-card p-8 rounded-lg fade-in-up">
                     <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">PayPal Fee Calculator</h3>
                     <div class="mb-6">
@@ -399,12 +415,11 @@
                     <div id="paypalResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
                     <p id="paypalError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
                 </div>
-                <!-- PayPal Currency Converter -->
                 <div class="calculator-card p-8 rounded-lg fade-in-up" style="animation-delay: 0.2s;">
                     <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">PayPal Currency Converter</h3>
                     <div class="mb-6">
                         <label for="convertAmount" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Amount (USD)</label>
-                        <input type="number" id="convertAmount" placeholder="Enter amount" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
+                        < adhesive type="number" id="convertAmount" placeholder="Enter amount" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
                     </div>
                     <div class="mb-6">
                         <label for="convertCurrency" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Target Currency</label>
@@ -439,34 +454,31 @@
     </div>
 
     <script>
-        // Mobile Menu Toggle Functionality
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-          document.getElementById('mobile-menu').classList.add('open');
-          document.body.classList.add('menu-open');
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.remove('translate-x-full');
+            document.getElementById('mobile-menu').classList.add('slide-in');
         });
-
-        document.getElementById('mobile-menu-close').addEventListener('click', function() {
-          document.getElementById('mobile-menu').classList.remove('open');
-          document.body.classList.remove('menu-open');
+        document.getElementById('mobile-menu-close').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.add('translate-x-full');
+            document.getElementById('mobile-menu').classList.remove('slide-in');
         });
-
         document.querySelectorAll('#mobile-auth-buttons button, #mobile-user-menu button').forEach(button => {
-          button.addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.remove('open');
-            document.body.classList.remove('menu-open');
-          });
+            button.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('translate-x-full');
+                document.getElementById('mobile-menu').classList.remove('slide-in');
+            });
+        });
+        document.addEventListener('click', e => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            if (!mobileMenu.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('slide-in');
+            }
         });
 
-        document.addEventListener('click', function(e) {
-          const mobileMenu = document.getElementById('mobile-menu');
-          const menuBtn = document.getElementById('mobile-menu-btn');
-          
-          if (!mobileMenu.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
-            mobileMenu.classList.remove('open');
-            document.body.classList.remove('menu-open');
-          }
-        });
-
+        // Firebase Initialization
         const firebaseConfig = {
             apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
             authDomain: "testing-dba79.firebaseapp.com",
@@ -484,24 +496,23 @@
         let messagesUnsubscribe = null;
         let isSubmitting = false;
 
-        // Global Error Handler
+        // Error Handler
         function handleError(error, context) {
             console.error(`Error in ${context}:`, error);
-            logEvent('error', { context, message: error.message });
             return null;
         }
 
         // Input Sanitization
-        const sanitizeInput = (input) => {
+        const sanitizeInput = input => {
             const div = document.createElement('div');
             div.textContent = input?.toString() || '';
             return div.innerHTML;
         };
 
         // Validation Functions
-        const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        const isValidPassword = (password) => password.length >= 6;
-        const isValidUrl = (url) => {
+        const isValidEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const isValidPassword = password => password.length >= 6;
+        const isValidUrl = url => {
             try {
                 new URL(url);
                 return url.startsWith('https://') || url.startsWith('http://');
@@ -509,53 +520,44 @@
                 return false;
             }
         };
-        const isValidName = (name) => name.trim().length > 0 && name.length <= 100;
-        const isValidTitle = (title) => title.trim().length > 0 && title.length <= 200;
-        const isValidDescription = (desc) => desc.trim().length > 0 && desc.length <= 5000;
-        const isValidBio = (bio) => bio.trim().length > 0 && bio.length <= 500;
+        const isValidName = name => name.trim().length > 0 && name.length <= 100;
+        const isValidTitle = title => title.trim().length > 0 && title.length <= 200;
+        const isValidDescription = desc => desc.trim().length > 0 && desc.length <= 5000;
+        const isValidBio = bio => bio.trim().length > 0 && bio.length <= 500;
 
-        // Cloudflare Turnstile Validation
+        // Cloudflare Turnstile
         function checkTurnstile(formId) {
             const token = document.querySelector(`#${formId} .cf-turnstile input[name="cf-turnstile-response"]`).value;
-            if (!token) {
-                throw new Error('Please complete the verification.');
-            }
-            logEvent('turnstile_verified', { form: formId });
+            if (!token) throw new Error('Please complete the verification.');
             return true;
         }
-
-        // Logging for Analytics
-        const logEvent = (event, data) => {
-            console.log(`[Analytics] ${event}`, { timestamp: new Date().toISOString(), ...data });
-        };
 
         // Toggle Portfolio Input
         function togglePortfolioInput() {
             const role = document.getElementById('regRole').value;
-            const portfolioInput = document.getElementById('regPortfolio');
-            const bioInput = document.getElementById('regBio');
-            portfolioInput.classList.toggle('hidden', role !== 'freelancer');
-            bioInput.classList.toggle('hidden', role !== 'freelancer');
+            document.getElementById('regPortfolio').classList.toggle('hidden', role !== 'freelancer');
+            document.getElementById('regBio').classList.toggle('hidden', role !== 'freelancer');
         }
 
         // Toggle Post Project Form
         function togglePostProjectForm() {
-            const form = document.getElementById('post-project-form');
-            form.classList.toggle('hidden');
-            logEvent('toggle_post_project_form', { isVisible: !form.classList.contains('hidden') });
+            document.getElementById('post-project-form').classList.toggle('hidden');
         }
 
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.remove('translate-x-full');
-            document.getElementById('mobile-menu').classList.add('slide-in');
-            logEvent('mobile_menu_opened');
-        });
-        document.getElementById('mobile-menu-close').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.add('translate-x-full');
-            document.getElementById('mobile-menu').classList.remove('slide-in');
-            logEvent('mobile_menu_closed');
-        });
+        // Load Welcome Message
+        async function loadWelcomeMessage() {
+            if (!currentUser) return;
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const { name, role } = userDoc.data();
+                    const tagline = role === 'freelancer' ? 'Showcase your talent and find exciting projects!' : 'Launch your projects and hire top talent!';
+                    document.getElementById('welcome-message').textContent = `Welcome, ${sanitizeInput(name)}! ${tagline}`;
+                }
+            } catch (error) {
+                handleError(error, 'load_welcome_message');
+            }
+        }
 
         // Auth State Listener
         auth.onAuthStateChanged(user => {
@@ -569,15 +571,14 @@
                     document.getElementById('user-email').textContent = sanitizeInput(user.email);
                     document.getElementById('mobile-user-email').textContent = sanitizeInput(user.email);
                     showSection('dashboard');
+                    loadWelcomeMessage();
                     loadProjects();
-                    logEvent('user_login', { uid: user.uid });
                 } else {
                     document.getElementById('auth-buttons').style.display = 'flex';
                     document.getElementById('user-menu').style.display = 'none';
                     document.getElementById('mobile-auth-buttons').classList.remove('hidden');
                     document.getElementById('mobile-user-menu').classList.add('hidden');
                     showSection('home');
-                    logEvent('user_logout');
                 }
             } catch (error) {
                 handleError(error, 'auth_state_change');
@@ -592,12 +593,10 @@
             document.getElementById('mobile-menu').classList.remove('slide-in');
             if (id === 'freelancers') loadFreelancers();
             if (id === 'projects') loadProjects();
+            if (id === 'dashboard') loadWelcomeMessage();
             if (id === 'login' || id === 'register') {
-                if (typeof turnstile !== 'undefined') {
-                    turnstile.reset();
-                }
+                if (typeof turnstile !== 'undefined') turnstile.reset();
             }
-            logEvent('section_viewed', { section: id });
         }
 
         // PayPal Fee Calculator
@@ -615,11 +614,10 @@
                 return;
             }
 
-            // PayPal fee structure (as of 2023)
-            const usFee = 0.029; // 2.9% for US
-            const usFixed = 0.49; // $0.49 fixed fee for US
-            const intlFee = 0.044; // 4.4% for international
-            const intlFixed = 0.49; // $0.49 fixed fee for international
+            const usFee = 0.029;
+            const usFixed = 0.49;
+            const intlFee = 0.044;
+            const intlFixed = 0.49;
 
             let fee, netAmount;
             if (country === 'US') {
@@ -635,7 +633,6 @@
                 <p><strong>PayPal Fee:</strong> $${fee.toFixed(2)}</p>
                 <p><strong>Net Amount:</strong> $${netAmount.toFixed(2)}</p>
             `;
-            logEvent('paypal_fee_calculated', { amount, country, fee, netAmount });
         }
 
         // PayPal Currency Converter
@@ -653,17 +650,14 @@
                 return;
             }
 
-            // Simplified exchange rates for PayPal transactions (as of April 2025, for demo purposes)
             const exchangeRates = {
-                EUR: 0.95, // 1 USD = 0.95 EUR
-                GBP: 0.80, // 1 USD = 0.80 GBP
-                CAD: 1.35, // 1 USD = 1.35 CAD
-                AUD: 1.50, // 1 USD = 1.50 AUD
-                JPY: 150.00, // 1 USD = 150.00 JPY
-                INR: 84.00 // 1 USD = 84.00 INR
+                EUR: 0.95,
+                GBP: 0.80,
+                CAD: 1.35,
+                AUD: 1.50,
+                JPY: 150.00,
+                INR: 84.00
             };
-
-            const convertedAmount = amount * exchangeRates[currency];
             const currencySymbols = {
                 EUR: '€',
                 GBP: '£',
@@ -673,11 +667,11 @@
                 INR: '₹'
             };
 
+            const convertedAmount = amount * exchangeRates[currency];
             resultEl.innerHTML = `
                 <p><strong>Amount in USD:</strong> $${amount.toFixed(2)}</p>
                 <p><strong>Converted Amount:</strong> ${currencySymbols[currency]}${convertedAmount.toFixed(2)} ${currency}</p>
             `;
-            logEvent('currency_converted', { amount, currency, convertedAmount });
         }
 
         // Login
@@ -703,17 +697,13 @@
             try {
                 await checkTurnstile('login');
                 await auth.signInWithEmailAndPassword(email, password);
-                showSection('freelancers');
-                logEvent('login_success', { email });
+                showSection('dashboard');
             } catch (error) {
                 errorEl.textContent = error.code === 'auth/user-not-found' ? 'No user found with this email.' : error.message;
-                logEvent('login_error', { error: error.message });
             } finally {
                 isSubmitting = false;
                 btn.classList.remove('loading');
-                if (typeof turnstile !== 'undefined') {
-                    turnstile.reset();
-                }
+                if (typeof turnstile !== 'undefined') turnstile.reset();
             }
         }
 
@@ -763,9 +753,7 @@
                     role,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                if (discordId) {
-                    userData.discordId = sanitizeInput(discordId);
-                }
+                if (discordId) userData.discordId = sanitizeInput(discordId);
                 if (role === 'freelancer') {
                     userData.portfolioLink = sanitizeInput(portfolioLink);
                     userData.bio = sanitizeInput(bio);
@@ -779,17 +767,13 @@
                     });
                 }
                 await db.collection('users').doc(cred.user.uid).set(userData);
-                showSection('freelancers');
-                logEvent('register_success', { email, role, isFreelancer: role === 'freelancer', hasDiscord: !!discordId });
+                showSection('dashboard');
             } catch (error) {
                 errorEl.textContent = error.code === 'auth/email-already-in-use' ? 'Email already registered.' : error.message;
-                logEvent('register_error', { error: error.message });
             } finally {
                 isSubmitting = false;
                 btn.classList.remove('loading');
-                if (typeof turnstile !== 'undefined') {
-                    turnstile.reset();
-                }
+                if (typeof turnstile !== 'undefined') turnstile.reset();
             }
         }
 
@@ -797,7 +781,6 @@
         async function logout() {
             try {
                 await auth.signOut();
-                logEvent('logout_success');
             } catch (error) {
                 handleError(error, 'logout');
             }
@@ -806,10 +789,7 @@
         // Load Freelancers
         async function loadFreelancers() {
             try {
-                const snapshot = await db.collection('freelancers')
-                    .orderBy('createdAt', 'desc')
-                    .limit(50)
-                    .get();
+                const snapshot = await db.collection('freelancers').orderBy('createdAt', 'desc').limit(50).get();
                 const list = document.getElementById('freelancers-list');
                 const noFreelancers = document.getElementById('no-freelancers');
                 list.innerHTML = '';
@@ -828,7 +808,6 @@
                         `;
                     });
                 }
-                logEvent('freelancers_loaded', { count: snapshot.size });
             } catch (error) {
                 handleError(error, 'load_freelancers');
                 document.getElementById('no-freelancers').textContent = 'Error loading freelancers. Please try again.';
@@ -873,7 +852,6 @@
                 document.getElementById('projectBudget').value = '';
                 togglePostProjectForm();
                 loadProjects();
-                logEvent('project_posted', { title, budget });
             } catch (error) {
                 handleError(error, 'post_project');
                 alert('Error posting project: ' + error.message);
@@ -886,10 +864,7 @@
         // Load Projects
         async function loadProjects() {
             try {
-                const snapshot = await db.collection('projects')
-                    .orderBy('createdAt', 'desc')
-                    .limit(50)
-                    .get();
+                const snapshot = await db.collection('projects').orderBy('createdAt', 'desc').limit(50).get();
                 const list = document.getElementById('projects-list');
                 const noProjects = document.getElementById('no-projects');
                 list.innerHTML = '';
@@ -915,7 +890,6 @@
                         `;
                     });
                 }
-                logEvent('projects_loaded', { count: snapshot.size });
             } catch (error) {
                 handleError(error, 'load_projects');
                 document.getElementById('no-projects').textContent = 'Error loading projects. Please try again.';
@@ -927,7 +901,6 @@
         async function openApplyModal(projectId) {
             if (!currentUser) {
                 showSection('register');
-                logEvent('apply_unauthenticated_redirect', { projectId });
                 return;
             }
             currentProjectId = projectId;
@@ -940,9 +913,7 @@
                 const freelancerDoc = await db.collection('freelancers').doc(currentUser.uid).get();
                 if (freelancerDoc.exists) {
                     const portfolioLink = freelancerDoc.data().portfolioLink;
-                    if (portfolioLink) {
-                        portfolioInput.value = sanitizeInput(portfolioLink);
-                    }
+                    if (portfolioLink) portfolioInput.value = sanitizeInput(portfolioLink);
                 }
             } catch (error) {
                 handleError(error, 'fetch_freelancer_portfolio');
@@ -989,10 +960,8 @@
                 await batch.commit();
                 closeApplyModal();
                 openMessages(currentProjectId);
-                logEvent('application_submitted', { projectId: currentProjectId, portfolioLink });
             } catch (error) {
                 errorEl.textContent = 'Error submitting application: ' + error.message;
-                logEvent('application_error', { error: error.message });
             } finally {
                 isSubmitting = false;
                 btn.classList.remove('loading');
@@ -1025,7 +994,6 @@
                     handleError(error, 'load_messages');
                 });
             showSection('messages');
-            logEvent('messages_opened', { projectId });
         }
 
         // Send Message
@@ -1055,7 +1023,6 @@
                 });
                 document.getElementById('message-input').value = '';
                 document.getElementById('message-link').value = '';
-                logEvent('message_sent', { projectId: currentProjectId, hasLink: !!link });
             } catch (error) {
                 handleError(error, 'send_message');
                 alert('Error sending message: ' + error.message);
@@ -1067,7 +1034,6 @@
 
         // Initialize
         showSection('home');
-        logEvent('app_initialized');
     </script>
 </body>
 </html>
