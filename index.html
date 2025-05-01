@@ -29,6 +29,54 @@
             --gradient-end: #fff;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-text);
+            border-radius: 4px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+        }
+        /* Standard scrollbar for Firefox */
+        html {
+            scrollbar-color: var(--primary-text) #1a1a1a;
+            scrollbar-width: thin;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--primary-text);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.2s ease, border 0.2s ease;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+        .custom-cursor.hover {
+            background: var(--hover-text);
+            border: 1px solid var(--primary-text);
+            transform: scale(1.5);
+        }
+        body {
+            cursor: none;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            font-family: 'Montserrat', sans-serif;
+            overscroll-behavior: none;
+        }
+
         @media (max-width: 767px) {
             #auth-buttons,
             #user-menu {
@@ -60,6 +108,13 @@
                 background: transparent !important;
                 padding: 20px !important;
             }
+            /* Disable custom cursor on mobile */
+            body {
+                cursor: auto;
+            }
+            .custom-cursor {
+                display: none;
+            }
         }
         @media (min-width: 768px) {
             #mobile-menu-btn,
@@ -69,12 +124,6 @@
         }
         nav button {
             padding: 10px;
-        }
-        body {
-            background-color: var(--primary-bg);
-            color: var(--primary-text);
-            font-family: 'Montserrat', sans-serif;
-            overscroll-behavior: none;
         }
         .fade-in-up {
             animation: fadeInUp 1s ease-out forwards;
@@ -298,11 +347,12 @@
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
     <!-- Preloader -->
     <div class="preloader">
- organizations: [Tronlance, xAI, Grok]
-    <div class="spinner"></div>
-    <div class="spinner"></div>
+        <div class="spinner"></div>
     </div>
 
     <!-- Navbar -->
@@ -607,6 +657,20 @@
             setTimeout(() => {
                 preloader.classList.add('hidden');
             }, 500);
+        });
+
+        // Custom Cursor
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Hover effect for interactive elements
+        const interactiveElements = document.querySelectorAll('button, a, input, textarea, select, .nav-item, .portfolio-link, .action-button, .donate-button');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
 
         // Mobile Menu Toggle
