@@ -25,6 +25,8 @@
             --border-color: #fff;
             --hover-bg: #fff;
             --hover-text: #000;
+            --gradient-start: #ccc;
+            --gradient-end: #fff;
         }
 
         @media (max-width: 767px) {
@@ -215,6 +217,45 @@
             border-image: linear-gradient(45deg, #ccc, #fff) 1;
             transform: scale(1.05);
         }
+        .donate-button {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: var(--hover-text);
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .donate-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(45deg, var(--gradient-end), var(--gradient-start));
+        }
+        .donate-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        .donate-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .donate-card {
+            background: linear-gradient(145deg, #1a1a1a, #000);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .donate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
         /* Smooth Scroll */
         html {
             scroll-behavior: smooth;
@@ -259,7 +300,9 @@
 <body>
     <!-- Preloader -->
     <div class="preloader">
-        <div class="spinner"></div>
+ organizations: [Tronlance, xAI, Grok]
+    <div class="spinner"></div>
+    <div class="spinner"></div>
     </div>
 
     <!-- Navbar -->
@@ -270,6 +313,7 @@
                 <button onclick="showSection('home')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
                 <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
                 <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
@@ -279,6 +323,7 @@
                 <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
                 <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
             <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
@@ -299,6 +344,7 @@
                 <button onclick="showSection('home')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
                 <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
                 <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
@@ -308,6 +354,7 @@
                 <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
                 <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
         </div>
@@ -334,7 +381,7 @@
                 </div>
                 <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
                     <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11- Actions18 0 9 9 0 0118 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Launch Projects</h3>
                     <p style="font-family: 'Montserrat', sans-serif;">Post your ideas and attract global talent to bring them to life.</p>
@@ -505,6 +552,37 @@
                     <div id="convertResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
                     <p id="convertError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donate Section -->
+    <section id="donate" class="hidden py-24">
+        <div class="container mx-auto px-6 max-w-3xl fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Support Toonlance</h2>
+            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
+                Your donations help us maintain and improve Toonlance, ensuring a seamless platform for freelancers and clients worldwide.
+            </p>
+            <div class="donate-card p-8 rounded-lg mb-12">
+                <div class="flex justify-center mb-6">
+                    <svg class="w-16 h-16 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm9-2h-2.07c-.67 2.88-3.14 5-6.93 5s-6.26-2.12-6.93-5H3v-2h2.07c.67-2.88 3.14-5 6.93-5s6.26 2.12 6.93 5H21v2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold mb-6 text-center" style="font-family: 'Montserrat', sans-serif;">Donate via PayPal</h3>
+                <p class="text-lg mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">
+                    Every contribution counts! Support our mission with a secure PayPal donation.
+                </p>
+                <div class="flex justify-center">
+                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" target="_blank" rel="noopener noreferrer" class="px-10 py-5 rounded-lg text-xl font-semibold donate-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate via PayPal">
+                        Donate Now
+                    </a>
+                </div>
+            </div>
+            <div class="text-center">
+                <p class="text-lg" style="font-family: 'Montserrat', sans-serif;">
+                    Thank you for supporting Toonlance and empowering freelancers and clients worldwide!
+                </p>
             </div>
         </div>
     </section>
