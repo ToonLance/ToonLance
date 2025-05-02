@@ -326,22 +326,10 @@
             <h1 class="text-3xl sm:text-2xl font-bold tracking-tight" style="font-family: 'Poppins', sans-serif;" aria-label="Toonlance Logo">Toonlance</h1>
             <div class="hidden md:flex space-x-8" id="auth-buttons">
                 <button onclick="showSection('home')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button onclick="showSection('contact')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
-                <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
-                <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
             <div class="hidden md:flex space-x-8" id="user-menu" style="display: none;">
                 <span id="user-email" class="flex items-center text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
                 <button onclick="showSection('dashboard')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
-                <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button onclick="showSection('contact')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
-                <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
             <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -352,29 +340,17 @@
         <div id="mobile-menu" class="fixed inset-y-0 right-0 bg-black transform translate-x-full transition-transform duration-300 md:hidden">
             <div class="flex justify-end p-6">
                 <button id="mobile-menu-close" class="focus:outline-none" aria-label="Close Menu">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
             <div id="mobile-auth-buttons" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in">
                 <button onclick="showSection('home')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button onclick="showSection('contact')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
-                <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
-                <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
             <div id="mobile-user-menu" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in hidden">
                 <span id="mobile-user-email" class="text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
                 <button onclick="showSection('dashboard')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
-                <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button onclick="showSection('contact')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
-                <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
         </div>
     </header>
@@ -526,16 +502,16 @@
             }
         });
 
-        // Show Section (Placeholder for navigation)
+        // Show Section (Redirect to root)
         function showSection(id) {
-            window.location.href = `https://toonlance.com/${id}`;
+            window.location.href = '/';
         }
 
         // Logout (Placeholder)
         async function logout() {
             try {
                 await auth.signOut();
-                window.location.href = 'https://toonlance.com';
+                window.location.href = '/';
             } catch (error) {
                 handleError(error, 'logout');
             }
