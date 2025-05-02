@@ -364,6 +364,7 @@
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+               <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
                 <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
                 <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
@@ -374,6 +375,7 @@
                 <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
                 <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
             <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
@@ -395,6 +397,7 @@
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
                 <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
                 <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
             </div>
@@ -405,6 +408,7 @@
                 <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
                 <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
                 <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
                 <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
             </div>
         </div>
@@ -1053,7 +1057,7 @@
             const title = document.getElementById('projectTitle').value.trim();
             const description = document.getElementById('projectDesc').value.trim();
             const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
-            const btn = document.getElementById('postProjectBtn');
+           ; const btn = document.getElementById('postProjectBtn');
 
             if (!isValidTitle(title)) {
                 alert('Project title is required and must be 1-200 characters.');

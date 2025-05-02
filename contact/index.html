@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Toonlance - Connect via our real-time message system. Ask questions or get support for freelance projects.">
+    <meta name="keywords" content="contact, toonlance, freelance, support, real-time chat">
+    <meta name="author" content="Toonlance">
+    <meta property="og:title" content="Contact Toonlance">
+    <meta property="og:description" content="Get in touch with Toonlance via our real-time message system for freelance project inquiries.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://toonlance.com/contact">
+    <meta property="og:image" content="https://toonlance.com/og-image.jpg">
+    <title>Contact Toonlance</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #000;
+            --primary-text: #fff;
+            --border-color: #fff;
+            --hover-bg: #fff;
+            --hover-text: #000;
+            --gradient-start: #ccc;
+            --gradient-end: #fff;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-text);
+            border-radius: 4px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+        }
+        html {
+            scrollbar-color: var(--primary-text) #1a1a1a;
+            scrollbar-width: thin;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--primary-text);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.2s ease, border 0.2s ease;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+        .custom-cursor.hover {
+            background: var(--hover-text);
+            border: 1px solid var(--primary-text);
+            transform: scale(1.5);
+        }
+        body {
+            cursor: none;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            font-family: 'Montserrat', sans-serif;
+            overscroll-behavior: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 767px) {
+            #auth-buttons,
+            #user-menu {
+                display: none !important;
+            }
+            #mobile-menu-btn {
+                display: block;
+            }
+            #mobile-menu {
+                width: 100%;
+                border: none !important;
+                box-shadow: none !important;
+                background: var(--primary-bg);
+            }
+            #mobile-auth-buttons button,
+            #mobile-user-menu button {
+                border: none !important;
+                background: transparent !important;
+                padding: 12px 0 !important;
+                width: 100%;
+                text-align: left;
+                color: var(--primary-text);
+            }
+            .nav-item:hover {
+                opacity: 0.8 !important;
+            }
+            #mobile-menu-close {
+                border: none !important;
+                background: transparent !important;
+                padding: 20px !important;
+            }
+            body {
+                cursor: auto;
+            }
+            .custom-cursor {
+                display: none;
+            }
+            .message-container {
+                height: 60vh !important;
+            }
+            h2 {
+                font-size: 2.5rem;
+            }
+            h3 {
+                font-size: 1.5rem;
+            }
+            .action-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+            .message-input-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        @media (min-width: 768px) {
+            #mobile-menu-btn,
+            #mobile-menu {
+                display: none !important;
+            }
+        }
+        @media (max-width: 1024px) {
+            .message-container {
+                height: 50vh;
+            }
+        }
+        nav button {
+            padding: 10px;
+        }
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .message-slide-in {
+            animation: messageSlideIn 0.3s ease-out forwards;
+        }
+        @keyframes messageSlideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .bounce {
+            animation: bounce 0.3s ease;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .modal-visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--primary-text);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        button {
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            border-radius: 8px;
+        }
+        button:hover {
+            background-color: var(--hover-bg);
+            color: var(--hover-text);
+            transform: translateY(-2px);
+        }
+        input, textarea, select {
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            border: 1px solid var(--border-color);
+            transition: outline-color 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 6px;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid var(--primary-text);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        }
+        .nav-item {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .nav-item:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+        .message-container {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: linear-gradient(145deg, #111, #000);
+        }
+        .message-container:hover {
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+        }
+        .action-button {
+            border-image: linear-gradient(45deg, #fff, #ccc) 1;
+            transition: border-image 0.3s ease, transform 0.3s ease;
+        }
+        .action-button:hover {
+            border-image: linear-gradient(45deg, #ccc, #fff) 1;
+            transform: scale(1.05);
+        }
+        .reaction-btn {
+            transition: transform 0.2s ease;
+        }
+        .reaction-btn:hover {
+            transform: scale(1.2);
+        }
+        .typing-indicator {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .typing-indicator.active {
+            opacity: 1;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        button:focus, input:focus, textarea:focus, select:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+        [aria-hidden="true"] {
+            display: none;
+        }
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--primary-text);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black">
+        <nav role="navigation" class="container mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+            <h1 class="text-3xl sm:text-2xl font-bold tracking-tight" style="font-family: 'Poppins', sans-serif;" aria-label="Toonlance Logo">Toonlance</h1>
+            <div class="hidden md:flex space-x-8" id="auth-buttons">
+                <button onclick="showSection('home')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button onclick="showSection('contact')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
+                <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
+                <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
+            </div>
+            <div class="hidden md:flex space-x-8" id="user-menu" style="display: none;">
+                <span id="user-email" class="flex items-center text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
+                <button onclick="showSection('dashboard')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
+                <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button onclick="showSection('contact')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
+                <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="fixed inset-y-0 right-0 bg-black transform translate-x-full transition-transform duration-300 md:hidden">
+            <div class="flex justify-end p-6">
+                <button id="mobile-menu-close" class="focus:outline-none" aria-label="Close Menu">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="mobile-auth-buttons" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in">
+                <button onclick="showSection('home')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button onclick="showSection('contact')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
+                <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
+                <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
+            </div>
+            <div id="mobile-user-menu" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in hidden">
+                <span id="mobile-user-email" class="text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
+                <button onclick="showSection('dashboard')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
+                <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
+                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
+                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
+                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
+                <button onclick="showSection('contact')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</button>
+                <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 min-h-screen">
+        <div class="container mx-auto px-6 fade-in-up">
+            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Get in Touch</h2>
+            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
+                Have questions or ideas? Chat with us in real-time. Our team is here to support your freelance journey!
+            </p>
+
+            <!-- Real-Time Messaging -->
+            <div class="max-w-3xl mx-auto">
+                <h3 class="text-3xl font-bold mb-6 text-center" style="font-family: 'Montserrat', sans-serif;">Live Support Chat</h3>
+                <p class="text-lg mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">
+                    Ask questions or get support instantly. We're here to help!
+                </p>
+                <div id="message-container" class="p-6 message-container rounded-lg h-[70vh] overflow-y-auto mb-8 border border-white relative">
+                    <div id="typing-indicator" class="typing-indicator text-gray-400 text-sm p-2 absolute bottom-0 left-0" style="font-family: 'Montserrat', sans-serif;">Typing...</div>
+                </div>
+                <div class="message-input-container flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <input type="text" id="message-input" placeholder="Type your message..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Message input">
+                    <input type="url" id="message-link" placeholder="Share a link (optional)..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Link input">
+                    <button id="sendMessageBtn" onclick="sendMessage()" class="px-8 py-4 rounded-lg text-lg font-semibold action-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Send Message">Send</button>
+                </div>
+                <p id="messageError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.querySelector('.preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 500);
+        });
+
+        // Custom Cursor
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Hover effect for interactive elements
+        const interactiveElements = document.querySelectorAll('button, a, input, textarea, select, .nav-item, .action-button, .reaction-btn');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.remove('translate-x-full');
+            document.getElementById('mobile-menu').classList.add('slide-in');
+        });
+        document.getElementById('mobile-menu-close').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.add('translate-x-full');
+            document.getElementById('mobile-menu').classList.remove('slide-in');
+        });
+        document.querySelectorAll('#mobile-auth-buttons button, #mobile-user-menu button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('translate-x-full');
+                document.getElementById('mobile-menu').classList.remove('slide-in');
+            });
+        });
+        document.addEventListener('click', e => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            if (!mobileMenu.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('slide-in');
+            }
+        });
+
+        // Firebase Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
+            authDomain: "testing-dba79.firebaseapp.com",
+            projectId: "testing-dba79",
+            storageBucket: "testing-dba79.appspot.com",
+            messagingSenderId: "808371260131",
+            appId: "1:808371260131:web:a59f409f532e617cba13d6"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let messagesUnsubscribe = null;
+        let isSubmitting = false;
+
+        // Error Handler
+        function handleError(error, context) {
+            console.error(`Error in ${context}:`, error);
+            return null;
+        }
+
+        // Input Sanitization
+        const sanitizeInput = input => {
+            const div = document.createElement('div');
+            div.textContent = input?.toString() || '';
+            return div.innerHTML;
+        };
+
+        // Validation Functions
+        const isValidUrl = url => {
+            try {
+                new URL(url);
+                return url.startsWith('https://') || url.startsWith('http://');
+            } catch {
+                return false;
+            }
+        };
+        const isValidMessage = text => text.trim().length > 0 && text.length <= 1000;
+
+        // Generate Avatar Color
+        function getAvatarColor(userId) {
+            if (!userId) return '#666';
+            const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
+            return colors[hash % colors.length];
+        }
+
+        // Auth State Listener
+        auth.onAuthStateChanged(user => {
+            try {
+                currentUser = user;
+                if (user) {
+                    document.getElementById('auth-buttons').style.display = 'none';
+                    document.getElementById('user-menu').style.display = 'flex';
+                    document.getElementById('mobile-auth-buttons').classList.add('hidden');
+                    document.getElementById('mobile-user-menu').classList.remove('hidden');
+                    document.getElementById('user-email').textContent = sanitizeInput(user.email);
+                    document.getElementById('mobile-user-email').textContent = sanitizeInput(user.email);
+                    loadMessages();
+                } else {
+                    document.getElementById('auth-buttons').style.display = 'flex';
+                    document.getElementById('user-menu').style.display = 'none';
+                    document.getElementById('mobile-auth-buttons').classList.remove('hidden');
+                    document.getElementById('mobile-user-menu').classList.add('hidden');
+                    loadMessages();
+                }
+            } catch (error) {
+                handleError(error, 'auth_state_change');
+            }
+        });
+
+        // Show Section (Placeholder for navigation)
+        function showSection(id) {
+            window.location.href = `https://toonlance.com/${id}`;
+        }
+
+        // Logout (Placeholder)
+        async function logout() {
+            try {
+                await auth.signOut();
+                window.location.href = 'https://toonlance.com';
+            } catch (error) {
+                handleError(error, 'logout');
+            }
+        }
+
+        // Add Reaction
+        async function addReaction(messageId, reaction) {
+            try {
+                await db.collection('contactMessages').doc(messageId).update({
+                    reactions: firebase.firestore.FieldValue.arrayUnion(reaction)
+                });
+            } catch (error) {
+                handleError(error, 'add_reaction');
+            }
+        }
+
+        // Load Messages
+        function loadMessages() {
+            if (messagesUnsubscribe) messagesUnsubscribe();
+            messagesUnsubscribe = db.collection('contactMessages')
+                .orderBy('createdAt')
+                .limit(100)
+                .onSnapshot(snapshot => {
+                    const container = document.getElementById('message-container');
+                    container.innerHTML = '<div id="typing-indicator" class="typing-indicator text-gray-400 text-sm p-2 absolute bottom-0 left-0" style="font-family: \'Montserrat\', sans-serif;">Typing...</div>';
+                    snapshot.forEach(doc => {
+                        const msg = doc.data();
+                        const isSender = currentUser && msg.sender === currentUser.uid;
+                        const avatarColor = getAvatarColor(msg.sender);
+                        const reactions = msg.reactions || [];
+                        const likeCount = reactions.filter(r => r === '👍').length;
+                        const heartCount = reactions.filter(r => r === '❤️').length;
+                        container.innerHTML += `
+                            <div class="p-4 bg-black rounded-lg mb-3 max-w-md ${isSender ? 'ml-auto' : 'mr-auto'} message-slide-in border border-white flex items-start space-x-3">
+                                <div class="w-8 h-8 rounded-full" style="background-color: ${avatarColor};"></div>
+                                <div class="flex-1">
+                                    ${msg.text ? `<p style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.text)}</p>` : ''}
+                                    ${msg.link ? `<a href="${sanitizeInput(msg.link)}" target="_blank" rel="noopener noreferrer" class="text-white underline" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.link)}</a>` : ''}
+                                    <p class="text-xs mt-2 text-gray-400" style="font-family: 'Montserrat', sans-serif;">${msg.createdAt ? new Date(msg.createdAt.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}</p>
+                                    <div class="flex space-x-2 mt-2">
+                                        ${likeCount > 0 ? `<span class="text-sm" style="font-family: 'Montserrat', sans-serif;">👍 ${likeCount}</span>` : ''}
+                                        ${heartCount > 0 ? `<span class="text-sm" style="font-family: 'Montserrat', sans-serif;">❤️ ${heartCount}</span>` : ''}
+                                        <button class="reaction-btn text-sm" onclick="addReaction('${doc.id}', '👍')" style="font-family: 'Montserrat', sans-serif;" aria-label="Like message">👍</button>
+                                        <button class="reaction-btn text-sm" onclick="addReaction('${doc.id}', '❤️')" style="font-family: 'Montserrat', sans-serif;" aria-label="Heart message">❤️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.scrollTop = container.scrollHeight;
+                }, error => {
+                    handleError(error, 'load_messages');
+                    document.getElementById('messageError').textContent = 'Error loading messages. Please try again.';
+                });
+        }
+
+        // Send Message
+        async function sendMessage() {
+            if (isSubmitting) return;
+            const text = document.getElementById('message-input').value.trim();
+            const link = document.getElementById('message-link').value.trim();
+            const errorEl = document.getElementById('messageError');
+            const btn = document.getElementById('sendMessageBtn');
+            const typingIndicator = document.getElementById('typing-indicator');
+
+            if (!text && !link) {
+                errorEl.textContent = 'Please enter a message or a link.';
+                return;
+            }
+            if (text && !isValidMessage(text)) {
+                errorEl.textContent = 'Message must be 1-1000 characters.';
+                return;
+            }
+            if (link && !isValidUrl(link)) {
+                errorEl.textContent = 'Please enter a valid URL (e.g., https://example.com).';
+                return;
+            }
+
+            isSubmitting = true;
+            btn.classList.add('loading');
+            typingIndicator.classList.add('active');
+            errorEl.textContent = '';
+            try {
+                await db.collection('contactMessages').add({
+                    text: text ? sanitizeInput(text) : null,
+                    link: link ? sanitizeInput(link) : null,
+                    sender: currentUser ? currentUser.uid : null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    reactions: []
+                });
+                document.getElementById('message-input').value = '';
+                document.getElementById('message-link').value = '';
+            } catch (error) {
+                errorEl.textContent = 'Error sending message: ' + error.message;
+            } finally {
+                isSubmitting = false;
+                btn.classList.remove('loading');
+                setTimeout(() => typingIndicator.classList.remove('active'), 1000);
+            }
+        }
+
+        // Initialize Messages on Load
+        loadMessages();
+    </script>
+</body>
+</html>
