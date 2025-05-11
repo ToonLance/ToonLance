@@ -1,1272 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Toonlance - Connect with top freelancers or post projects. Minimalist black-and-white platform for remote work.">
-    <meta name="keywords" content="freelance, remote work, freelancers, projects, toonlance">
-    <meta name="author" content="Toonlance">
-    <meta property="og:title" content="Toonlance - Hire Freelancers or Post Projects">
-    <meta property="og:description" content="Connect with top freelancers or post projects on Toonlance, a sleek black-and-white platform for remote work.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://toonlance.com">
-    <meta property="og:image" content="https://toonlance.com/og-image.jpg">
-    <title>Toonlance</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-bg: #000;
-            --primary-text: #fff;
-            --border-color: #fff;
-            --hover-bg: #fff;
-            --hover-text: #000;
-            --gradient-start: #ccc;
-            --gradient-end: #fff;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToonLance - Your 2D Animation Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Custom Font Styles */
+    body {
+      font-family: 'Open Sans', sans-serif;
+      scroll-behavior: smooth;
+      opacity: 0;
+      animation: fade-in-page 0.7s ease-out forwards;
+      background: #f8f1fc url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAB5JREFUGFdj/P///38GEmBgYGBgYGBgYGBgYGBgAABa8QWezTMtOwAAAABJRU5ErkJggg==') repeat;
+    }
+    h1, h2, h3 {
+      font-family: 'Chewy', cursive;
+      letter-spacing: 0.05em;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-text);
-            border-radius: 4px;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ccc;
-        }
-        /* Standard scrollbar for Firefox */
-        html {
-            scrollbar-color: var(--primary-text) #1a1a1a;
-            scrollbar-width: thin;
-        }
+    /* Page Load Animation */
+    @keyframes fade-in-page {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Custom Cursor */
-        .custom-cursor {
-            width: 12px;
-            height: 12px;
-            background: var(--primary-text);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease, background 0.2s ease, border 0.2s ease;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-        }
-        .custom-cursor.hover {
-            background: var(--hover-text);
-            border: 1px solid var(--primary-text);
-            transform: scale(1.5);
-        }
-        body {
-            cursor: none;
-            background-color: var(--primary-bg);
-            color: var(--primary-text);
-            font-family: 'Montserrat', sans-serif;
-            overscroll-behavior: none;
-        }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f4ebfa;
+      border-radius: 12px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#7e22ce, #f97316);
+      border-radius: 12px;
+      border: 2px solid #f4ebfa;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(#f97316, #7e22ce);
+    }
 
-        @media (max-width: 767px) {
-            #auth-buttons,
-            #user-menu {
-                display: none !important;
-            }
-            #mobile-menu-btn {
-                display: block;
-            }
-            #mobile-menu {
-                width: 80%;
-                border: none !important;
-                box-shadow: none !important;
-                background: var(--primary-bg);
-            }
-            #mobile-auth-buttons button,
-            #mobile-user-menu button {
-                border: none !important;
-                background: transparent !important;
-                padding: 12px 0 !important;
-                width: 100%;
-                text-align: left;
-                color: var(--primary-text);
-            }
-            .nav-item:hover {
-                opacity: 0.8 !important;
-            }
-            #mobile-menu-close {
-                border: none !important;
-                background: transparent !important;
-                padding: 20px !important;
-            }
-            /* Disable custom cursor on mobile */
-            body {
-                cursor: auto;
-            }
-            .custom-cursor {
-                display: none;
-            }
-        }
-        @media (min-width: 768px) {
-            #mobile-menu-btn,
-            #mobile-menu {
-                display: none !important;
-            }
-        }
-        nav button {
-            padding: 10px;
-        }
-        .fade-in-up {
-            animation: fadeInUp 1s ease-out forwards;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .slide-in {
-            animation: slideIn 0.5s ease-out forwards;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(100%); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        .bounce {
-            animation: bounce 0.3s ease;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .modal-hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-        .modal-visible {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--primary-text);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        button {
-            background-color: var(--primary-bg);
-            color: var(--primary-text);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-            border-radius: 8px;
-        }
-        button:hover {
-            background-color: var(--hover-bg);
-            color: var(--hover-text);
-            transform: translateY(-2px);
-        }
-        input, textarea, select {
-            background-color: var(--primary-bg);
-            color: var(--primary-text);
-            border: 1px solid var(--border-color);
-            transition: outline-color 0.2s ease, box-shadow 0.2s ease;
-            border-radius: 6px;
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: 2px solid var(--primary-text);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-        }
-        .nav-item {
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .nav-item:hover {
-            opacity: 0.8;
-            transform: translateY(-2px);
-        }
-        .project-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: linear-gradient(145deg, #111, #000);
-        }
-        .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
-        }
-        .feature-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: linear-gradient(145deg, #111, #000);
-        }
-        .feature-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
-        }
-        .feature-card:hover .feature-icon {
-            animation: bounce 0.3s ease;
-        }
-        .portfolio-link {
-            transition: text-decoration-thickness 0.2s ease, color 0.2s ease;
-        }
-        .portfolio-link:hover {
-            text-decoration-thickness: 2px;
-            color: #ccc;
-        }
-        .cf-turnstile {
-            margin-bottom: 2rem;
-        }
-        .calculator-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: linear-gradient(145deg, #111, #000);
-        }
-        .calculator-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
-        }
-        .action-button {
-            border-image: linear-gradient(45deg, #fff, #ccc) 1;
-            transition: border-image 0.3s ease, transform 0.3s ease;
-        }
-        .action-button:hover {
-            border-image: linear-gradient(45deg, #ccc, #fff) 1;
-            transform: scale(1.05);
-        }
-        .donate-button {
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
-            color: var(--hover-text);
-            border: none;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .donate-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-            background: linear-gradient(45deg, var(--gradient-end), var(--gradient-start));
-        }
-        .donate-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
-        }
-        .donate-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        .donate-card {
-            background: linear-gradient(145deg, #1a1a1a, #000);
-            border: 2px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .donate-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
-        }
-        /* Smooth Scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-        /* Improved Focus States */
-        button:focus, input:focus, textarea:focus, select:focus {
-            outline: 2px solid #fff;
-            outline-offset: 2px;
-        }
-        /* Accessibility Enhancements */
-        [aria-hidden="true"] {
-            display: none;
-        }
-        /* Preloader */
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        .preloader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--primary-text);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-    </style>
+    /* Custom Animations */
+    @keyframes bounce-in {
+      0% { transform: scale(0.6); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes slide-in {
+      0% { transform: translateX(-60px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    @keyframes zoom-in {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes fade-slide-up {
+      0% { transform: translateY(15px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes menu-slide-in {
+      0% { transform: translateX(100%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    .bounce-in {
+      animation: bounce-in 0.8s ease-out forwards;
+    }
+    .slide-in {
+      animation: slide-in 1s ease-out forwards;
+    }
+    .pop:hover, .pop:active {
+      animation: pop 0.3s ease-in-out;
+    }
+    .zoom-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+    .zoom-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .pulse {
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    .fade-slide-up {
+      opacity: 0;
+      animation: fade-slide-up 0.7s ease-out forwards;
+      animation-delay: 0.2s;
+    }
+
+    /* Video Frame Animation */
+    .video-frame {
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 1.5rem;
+      overflow: hidden;
+    }
+    .video-frame:hover {
+      transform: scale(1.03);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    .video-frame::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      right: -12px;
+      bottom: -12px;
+      border: 3px solid #f59e0b;
+      border-radius: 2rem;
+      border-style: dotted;
+      opacity: 0.9;
+      z-index: -1;
+    }
+
+    /* Gradient Background for Hero */
+    .hero-bg {
+      background: linear-gradient(145deg, #14b8a6, #6b21a8, #f59e0b);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Hand-Drawn Doodle Overlay */
+    .cartoon-doodle {
+      position: absolute;
+      opacity: 0.3;
+      pointer-events: none;
+      animation: float 5s ease-in-out infinite;
+      filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(3deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Custom Navbar Styles */
+    .nav-link {
+      position: relative;
+      font-family: 'Chewy', cursive;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 4px;
+      background: #f59e0b;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after, .nav-link:active::after {
+      width: 100%;
+    }
+    .hamburger svg {
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .hamburger.active svg .line1 {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+    .hamburger.active svg .line2 {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    .hamburger.active svg .line3 {
+      transform: rotate(-45deg) translate(8px, -8px);
+    }
+
+    /* Button Pop Effect */
+    .pop-btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      border-radius: 0.75rem;
+      background: #f59e0b;
+    }
+    .pop-btn:hover, .pop-btn:active {
+      transform: scale(1.08);
+      background-color: #fb923c;
+    }
+    .pop-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+      transition: 0.6s;
+    }
+    .pop-btn:hover::before, .pop-btn:active::before {
+      left: 100%;
+    }
+    .pop-btn.loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 18px;
+      height: 18px;
+      border: 3px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      transform: translate(-50%, -50%);
+    }
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Animation Section Background */
+    #animation {
+      background: linear-gradient(to bottom, #ecfeff, #f3e8ff);
+      position: relative;
+    }
+    #animation::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAB5JREFUGFdj/P///38GEmBgYGBgYGBgYGBgYGBgAABa8QWezTMtOwAAAABJRU5ErkJggg==') repeat;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #f59e0b;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 50;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .back-to-top:hover {
+      transform: scale(1.1);
+    }
+
+    /* Mobile Header and Navbar Overrides */
+    @media (max-width: 767px) {
+      .mobile-header {
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .nav-menu {
+        width: 70% !important;
+        max-width: 280px !important;
+        padding: 2.5rem 1rem !important;
+        display: none !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        overflow-y: auto !important;
+        background: linear-gradient(to bottom, #14b8a6, #6b21a8) !important;
+      }
+      .nav-menu.active {
+        display: flex !important;
+        animation: menu-slide-in 0.3s ease-out forwards !important;
+      }
+      .nav-link {
+        font-size: 1.5rem !important;
+        padding: 0.75rem 1.25rem !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+        color: white !important;
+        margin: 0.4rem 0 !important;
+      }
+      .nav-link:hover, .nav-link:active {
+        color: #f59e0b !important;
+        transform: scale(1.05) !important;
+      }
+      .nav-link::after {
+        bottom: -5px !important;
+        height: 4px !important;
+      }
+      .hamburger {
+        padding: 0.5rem !important;
+      }
+      .hamburger svg {
+        width: 32px !important;
+        height: 32px !important;
+      }
+      .close-btn svg {
+        width: 28px !important;
+        height: 28px !important;
+      }
+      .overlay {
+        background: rgba(0, 0, 0, 0.8) !important;
+      }
+    }
+  </style>
 </head>
-<body>
-    <!-- Custom Cursor -->
-    <div class="custom-cursor" id="custom-cursor"></div>
-
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="spinner"></div>
+<body class="font-sans">
+  <!-- Mobile Header (replaces navbar on mobile) -->
+  <div class="mobile-header sm:hidden sticky top-0 z-50 p-4">
+    <div class="container mx-auto flex justify-between items-center px-4">
+      <h1 class="text-3xl font-extrabold text-teal-900 animate__animated animate__bounceIn" aria-label="ToonLance Logo">ToonLance</h1>
+      <button class="hamburger p-2 focus:outline-none" onclick="toggleMenu()" aria-label="Toggle Menu">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+          <path class="line1" d="M4 6h16" />
+          <path class="line2" d="M4 12h16" />
+          <path class="line3" d="M4 18h16" />
+        </svg>
+      </button>
     </div>
+    <div class="overlay fixed inset-0 bg-black bg-opacity-80 z-30 hidden transition-opacity duration-300" onclick="toggleMenu()"></div>
+    <ul class="nav-menu fixed top-0 right-0 h-full w-1/2 bg-gradient-to-b from-teal-600 to-purple-900 p-6 pt-16 z-40 transform translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] flex flex-col items-center">
+      <li class="flex justify-end w-full mb-6">
+        <button class="close-btn p-2 focus:outline-none" onclick="toggleMenu()" aria-label="Close Menu">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </li>
+      <li><a href="#home" class="nav-link block text-2xl font-medium text-white hover:text-orange-400 py-3 px-5 transition-colors duration-300 pop" onclick="toggleMenu()" aria-label="Home">Home</a></li>
+      <li><a href="#services" class="nav-link block text-2xl font-medium text-white hover:text-orange-400 py-3 px-5 transition-colors duration-300 pop" onclick="toggleMenu()" aria-label="Services">Services</a></li>
+      <li><a href="#animation" class="nav-link block text-2xl font-medium text-white hover:text-orange-400 py-3 px-5 transition-colors duration-300 pop" onclick="toggleMenu()" aria-label="Animation">Animation</a></li>
+      <li><a href="#contact" class="nav-link block text-2xl font-medium text-white hover:text-orange-400 py-3 px-5 transition-colors duration-300 pop" onclick="toggleMenu()" aria-label="Contact">Contact</a></li>
+    </ul>
+  </div>
 
-    <!-- Navbar -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-black">
-        <nav role="navigation" class="container mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-            <h1 class="text-3xl sm:text-2xl font-bold tracking-tight" style="font-family: 'Poppins', sans-serif;" aria-label="Toonlance Logo">Toonlance</h1>
-            <div class="hidden md:flex space-x-8" id="auth-buttons">
-                <button onclick="showSection('home')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-               <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
-                <button onclick="showSection('login')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
-                <button onclick="showSection('register')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
-            </div>
-            <div class="hidden md:flex space-x-8" id="user-menu" style="display: none;">
-                <span id="user-email" class="flex items-center text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
-                <button onclick="showSection('dashboard')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
-                <button onclick="showSection('projects')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
-                <button onclick="logout()" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
-            </div>
-            <button id="mobile-menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle Menu">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-        </nav>
-        <div id="mobile-menu" class="fixed inset-y-0 right-0 bg-black transform translate-x-full transition-transform duration-300 md:hidden">
-            <div class="flex justify-end p-6">
-                <button id="mobile-menu-close" class="focus:outline-none" aria-label="Close Menu">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <div id="mobile-auth-buttons" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in">
-                <button onclick="showSection('home')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Home">Home</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
-                <button onclick="showSection('login')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
-                <button onclick="showSection('register')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
-            </div>
-            <div id="mobile-user-menu" class="flex flex-col space-y-6 px-6 py-4 items-center slide-in hidden">
-                <span id="mobile-user-email" class="text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></span>
-                <button onclick="showSection('dashboard')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Dashboard">Dashboard</button>
-                <button onclick="showSection('projects')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Projects">Projects</button>
-                <button onclick="showSection('freelancers')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Freelancers">Freelancers</button>
-                <button onclick="showSection('tools')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Tools">Tools</button>
-                <button onclick="showSection('donate')" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate">Donate</button>
-                <button> <a href="/contact" class="nav-item text-lg font-semibold" style="font-family: 'Montserrat', sans-serif;" aria-label="Contact">Contact</a></button>
-                <button onclick="logout()" class="nav-item text-xl font-semibold py-3" style="font-family: 'Montserrat', sans-serif;" aria-label="Logout">Logout</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Home Section -->
-    <section id="home" class="py-24">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-7xl font-bold mb-8 fade-in-up" style="font-family: 'Montserrat', sans-serif;">Build Your Vision with Toonlance</h2>
-            <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto fade-in-up" style="font-family: 'Montserrat', sans-serif;">
-                Connect with top freelancers or post projects to bring your ideas to life.
-            </p>
-            <div class="flex justify-center space-x-6 mb-16 fade-in-up">
-                <button onclick="showSection('register')" class="px-8 py-4 text-lg font-semibold action-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Get Started">Get Started</button>
-                <button onclick="showSection('projects')" class="px-8 py-4 text-lg font-semibold action-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Explore Projects">Explore Projects</button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
-                    <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                    <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Hire Top Talent</h3>
-                    <p style="font-family: 'Montserrat', sans-serif;">Discover skilled freelancers for design, development, and more.</p>
-                </div>
-                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
-                    <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Launch Projects</h3>
-                    <p style="font-family: 'Montserrat', sans-serif;">Post your ideas and attract global talent to bring them to life.</p>
-                </div>
-                <div class="feature-card p-6 bg-black rounded-lg fade-in-up">
-                    <svg class="w-12 h-12 mb-4 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
-                    <h3 class="text-xl font-semibold mb-4" style="font-family: 'Montserrat', sans-serif;">Collaborate Easily</h3>
-                    <p style="font-family: 'Montserrat', sans-serif;">Seamless messaging to keep your projects on track.</p>
-                </div>
-            </div>
-            <div class="text-center mb-16 fade-in-up">
-                <h3 class="text-3xl md:text-5xl font-bold mb-6" style="font-family: 'Montserrat', sans-serif;">Why Toonlance?</h3>
-                <p class="text-lg md:text-xl max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                    Toonlance is your platform for seamless freelance collaboration. Connect, create, succeed.
-                </p>
-            </div>
-            <div class="fade-in-up">
-                <button onclick="showSection('freelancers')" class="px-10 py-5 text-lg font-semibold action-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Discover Freelancers">Discover Freelancers</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Freelancers Section -->
-    <section id="freelancers" class="hidden py-24">
-        <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Meet Our Freelancers</h2>
-            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                Explore talented professionals ready to transform your ideas into reality.
-            </p>
-            <div id="freelancers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
-            <p id="no-freelancers" class="text-center mt-12 hidden" style="font-family: 'Montserrat', sans-serif;">No freelancers found. Be the first to join!</p>
-        </div>
-    </section>
-
-    <!-- Login Section -->
-    <section id="login" class="hidden py-24">
-        <div class="container mx-auto px-6 max-w-md fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Login</h2>
-            <input type="email" id="loginEmail" placeholder="Email" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-            <div class="cf-turnstile mb-8" data-sitekey="0x4AAAAAABWe-yIXOtDHNlu6"></div>
-            <button id="loginBtn" onclick="login()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Login">Login</button>
-            <p id="loginError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
-        </div>
-    </section>
-
-    <!-- Register Section -->
-    <section id="register" class="hidden py-24">
-        <div class="container mx-auto px-6 max-w-md fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Join Toonlance</h2>
-            <input type="email" id="regEmail" placeholder="Email" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-            <input type="text" id="regName" placeholder="Name" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-            <input type="password" id="regPassword" placeholder="Password (min 6 characters)" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-            <input type="text" id="regDiscordId" placeholder="Discord ID (optional)" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
-            <select id="regRole" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true" onchange="togglePortfolioInput()">
-                <option value="client">Client</option>
-                <option value="freelancer">Freelancer</option>
-            </select>
-            <input type="url" id="regPortfolio" placeholder="Portfolio Link (e.g., https://yourportfolio.com)" class="w-full p-4 mb-8 rounded-lg hidden" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-            <textarea id="regBio" placeholder="Bio (max 500 characters)" class="w-full p-4 mb-8 rounded-lg hidden" style="font-family: 'Montserrat', sans-serif;" maxlength="500" aria-required="true"></textarea>
-            <div class="cf-turnstile mb-8" data-sitekey="0x4AAAAAABWe-yIXOtDHNlu6"></div>
-            <button id="registerBtn" onclick="register()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Register">Register</button>
-            <p id="regError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
-        </div>
-    </section>
-
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="hidden py-24">
-        <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-4 text-center" style="font-family: 'Montserrat', sans-serif;">Your Creative Hub</h2>
-            <p id="welcome-message" class="mb-8 text-2xl text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></p>
-            <div class="flex flex-wrap justify-center gap-6 mb-12">
-                <button onclick="showSection('projects')" class="action-button px-8 py-4 rounded-lg text-lg font-semibold flex items-center pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Explore Projects">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    Explore Projects
-                </button>
-                <button onclick="showSection('freelancers')" class="action-button px-8 py-4 rounded-lg text-lg font-semibold flex items-center pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Browse Freelancers">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                    Browse Freelancers
-                </button>
-            </div>
-            <div class="donate-card p-8 rounded-lg mb-12 max-w-3xl mx-auto fade-in-up">
-                <div class="flex justify-center mb-6">
-                    <svg class="w-16 h-16 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm9-2h-2.07c-.67 2.88-3.14 5-6.93 5s-6.26-2.12-6.93-5H3v-2h2.07c.67-2.88 3.14-5 6.93-5s6.26 2.12 6.93 5H21v2z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-semibold mb-6 text-center" style="font-family: 'Montserrat', sans-serif;">Support Toonlance</h3>
-                <p class="text-lg mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">
-                    Your donations help keep Toonlance running smoothly for freelancers and clients like you!
-                </p>
-                <div class="flex justify-center">
-                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" target="_blank" rel="noopener noreferrer" class="px-10 py-5 rounded-lg text-xl font-semibold donate-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate via PayPal">Donate Now</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="hidden py-24">
-        <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Explore Projects</h2>
-            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                Discover opportunities or post your own to attract top freelancers.
-            </p>
-            <div class="mb-12">
-                <button onclick="togglePostProjectForm()" class="px-8 py-4 rounded-lg text-lg font-semibold action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Toggle Post Project Form">Post a Project</button>
-                <div id="post-project-form" class="hidden p-8 bg-black rounded-lg mt-6 border border-white">
-                    <input type="text" id="projectTitle" placeholder="Project Title" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-                    <textarea id="projectDesc" placeholder="Project Description" class="w-full p-4 mb-8 rounded-lg h-36" style="font-family: 'Montserrat', sans-serif;" aria-required="true"></textarea>
-                    <input type="number" id="projectBudget" placeholder="Budget in USD" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-                    <button id="postProjectBtn" onclick="postProject()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Post Project">Post Project</button>
-                </div>
-            </div>
-            <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
-            <p id="no-projects" class="text-center mt-12 hidden" style="font-family: 'Montserrat', sans-serif;">No projects found. Post one now!</p>
-        </div>
-    </section>
-
-    <!-- Messages Section -->
-    <section id="messages" class="hidden py-24">
-        <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Messages</h2>
-            <div id="message-container" class="p-6 bg-black rounded-lg h-96 overflow-y-auto mb-8 border border-white"></div>
-            <div class="flex space-x-4">
-                <input type="text" id="message-input" placeholder="Type a message..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
-                <input type="url" id="message-link" placeholder="Share a link..." class="flex-1 p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
-                <button id="sendMessageBtn" onclick="sendMessage()" class="px-8 py-4 rounded-lg text-lg font-semibold action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Send Message">Send</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tools Section -->
-    <section id="tools" class="hidden py-24">
-        <div class="container mx-auto px-6 fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Financial Tools</h2>
-            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                Calculate PayPal fees and convert USD to other currencies for your freelance projects.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div class="calculator-card p-8 rounded-lg fade-in-up">
-                    <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">PayPal Fee Calculator</h3>
-                    <div class="mb-6">
-                        <label for="paypalAmount" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Transaction Amount (USD)</label>
-                        <input type="number" id="paypalAmount" placeholder="Enter amount" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-                    </div>
-                    <div class="mb-6">
-                        <label for="paypalCountry" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Country</label>
-                        <select id="paypalCountry" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
-                            <option value="US">United States</option>
-                            <option value="International">International</option>
-                        </select>
-                    </div>
-                    <button onclick="calculatePaypalFees()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold action-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Calculate PayPal Fees">Calculate</button>
-                    <div id="paypalResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
-                    <p id="paypalError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
-                </div>
-                <div class="calculator-card p-8 rounded-lg fade-in-up" style="animation-delay: 0.2s;">
-                    <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Montserrat', sans-serif;">PayPal Currency Converter</h3>
-                    <div class="mb-6">
-                        <label for="convertAmount" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Amount (USD)</label>
-                        <input type="number" id="convertAmount" placeholder="Enter amount" min="0" step="0.01" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-required="true">
-                    </div>
-                    <div class="mb-6">
-                        <label for="convertCurrency" class="block mb-2" style="font-family: 'Montserrat', sans-serif;">Target Currency</label>
-                        <select id="convertCurrency" class="w-full p-4 rounded-lg" style="font-family: 'Montserrat', sans-serif;">
-                            <option value="EUR">Euro (EUR)</option>
-                            <option value="GBP">British Pound (GBP)</option>
-                            <option value="CAD">Canadian Dollar (CAD)</option>
-                            <option value="AUD">Australian Dollar (AUD)</option>
-                            <option value="JPY">Japanese Yen (JPY)</option>
-                            <option value="INR">Indian Rupee (INR)</option>
-                        </select>
-                    </div>
-                    <button onclick="convertCurrency()" class="w-full px-8 py-4 rounded-lg text-lg font-semibold action-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Convert Currency">Convert</button>
-                    <div id="convertResult" class="mt-6 text-lg" style="font-family: 'Montserrat', sans-serif;" aria-live="polite"></div>
-                    <p id="convertError" class="text-red-400 mt-4 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Donate Section -->
-    <section id="donate" class="hidden py-24">
-        <div class="container mx-auto px-6 max-w-700px fade-in-up">
-            <h2 class="text-5xl font-bold mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">Support Toonlance</h2>
-            <p class="text-lg mb-12 text-center max-w-2xl mx-auto" style="font-family: 'Montserrat', sans-serif;">
-                Your donations help us maintain and improve Toonlance, ensuring a seamless platform for freelancers and clients worldwide.
-            </p>
-            <div class="donate-card p-8 rounded-lg mb-12">
-                <div class="flex justify-center mb-6">
-                    <svg class="w-16 h-16 feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm9-2h-2.07c-.67 2.88-3.14 5-6.93 5s-6.26-2.12-6.93-5H3v-2h2.07c.67-2.88 3.14-5 6.93-5s6.26 2.12 6.93 5H21v2z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-semibold mb-6 text-center" style="font-family: 'Montserrat', sans-serif;">Donate via PayPal</h3>
-                <p class="text-lg mb-8 text-center" style="font-family: 'Montserrat', sans-serif;">
-                    Every contribution counts! Support our mission with a secure PayPal donation.
-                </p>
-                <div class="flex justify-center">
-                    <a href="https://www.paypal.com/paypalme/sunitamishra256?country.x=IN&locale.x=en_GB" target="_blank" rel="noopener noreferrer" class="px-10 py-5 rounded-lg text-xl font-semibold donate-button pulse" style="font-family: 'Montserrat', sans-serif;" aria-label="Donate via PayPal">Donate Now</a>
-                </div>
-            </div>
-            <div class="text-center">
-                <p class="text-lg" style="font-family: 'Montserrat', sans-serif;">
-                    Thank you for supporting Toonlance and empowering freelancers and clients worldwide!
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Apply Modal -->
-    <div id="applyModal" class="modal modal-hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-        <div class="p-8 bg-black rounded-lg max-w-md w-full border border-white">
-            <h3 class="text-3xl font-bold mb-6" style="font-family: 'Montserrat', sans-serif;">Apply for Project</h3>
-            <input type="url" id="portfolioLink" placeholder="Portfolio Link" class="w-full p-4 mb-8 rounded-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Portfolio Link">
-            <div class="flex justify-end space-x-4">
-                <button onclick="closeApplyModal()" class="px-6 py-3 rounded-lg text-lg" style="font-family: 'Montserrat', sans-serif;" aria-label="Cancel">Cancel</button>
-                <button id="applyBtn" onclick="submitApplication()" class="px-6 py-3 rounded-lg text-lg font-semibold action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Apply">Apply</button>
-            </div>
-            <p id="applyError" class="text-red-400 mt-6 text-center" style="font-family: 'Montserrat', sans-serif;" role="alert"></p>
-        </div>
+  <!-- Desktop/Tablet Navbar -->
+  <nav class="hidden sm:block bg-gradient-to-r from-teal-600 to-purple-900 text-white p-4 sticky top-0 z-50 shadow-2xl">
+    <div class="container mx-auto flex justify-between items-center px-4 sm:px-6">
+      <h1 class="text-3xl md:text-4xl font-extrabold animate__animated animate__bounceIn" aria-label="ToonLance Logo">ToonLance</h1>
+      <button class="hamburger md:hidden p-2 focus:outline-none" onclick="toggleMenu()" aria-label="Toggle Menu">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+          <path class="line1" d="M4 6h16" />
+          <path class="line2" d="M4 12h16" />
+          <path class="line3" d="M4 18h16" />
+        </svg>
+      </button>
+      <ul class="hidden md:flex space-x-8 items-center">
+        <li><a href="#home" class="nav-link text-lg xl:text-xl font-medium hover:text-orange-400 transition-colors duration-300 animate__animated animate__slideInRight" style="animation-delay: 0.1s;" aria-label="Home">Home</a></li>
+        <li><a href="#services" class="nav-link text-lg xl:text-xl font-medium hover:text-orange-400 transition-colors duration-300 animate__animated animate__slideInRight" style="animation-delay: 0.2s;" aria-label="Services">Services</a></li>
+        <li><a href="#animation" class="nav-link text-lg xl:text-xl font-medium hover:text-orange-400 transition-colors duration-300 animate__animated animate__slideInRight" style="animation-delay: 0.3s;" aria-label="Animation">Animation</a></li>
+        <li><a href="#contact" class="nav-link text-lg xl:text-xl font-medium hover:text-orange-400 transition-colors duration-300 animate__animated animate__slideInRight" style="animation-delay: 0.4s;" aria-label="Contact">Contact</a></li>
+      </ul>
     </div>
+  </nav>
 
-    <script>
-        // Preloader
-        window.addEventListener('load', () => {
-            const preloader = document.querySelector('.preloader');
-            setTimeout(() => {
-                preloader.classList.add('hidden');
-            }, 500);
+  <!-- Hero Section -->
+  <section id="home" class="hero-bg text-white py-20 md:py-32 relative">
+    <svg class="cartoon-doodle top-8 left-8 w-36 h-36 md:w-40 md:h-40" viewBox="0 0 100 100" fill="none" stroke="#ffffff" stroke-width="2.5">
+      <path d="M20 80 Q30 60 50 80 T80 80" />
+      <circle cx="30" cy="30" r="15" />
+      <path d="M70 20 L80 30 L70 40" />
+    </svg>
+    <svg class="cartoon-doodle bottom-8 right-8 w-40 h-40 md:w-44 md:h-44" viewBox="0 0 100 100" fill="none" stroke="#ffffff" stroke-width="2.5">
+      <path d="M30 70 Q50 50 70 70" />
+      <rect x="20" y="20" width="28" height="28" rx="8" />
+      <path d="M60 30 L70 20 L80 30" />
+    </svg>
+    <svg class="cartoon-doodle top-24 right-24 w-32 h-32 md:w-36 md:h-36 hidden md:block" viewBox="0 0 100 100" fill="none" stroke="#ffffff" stroke-width="2.5">
+      <circle cx="50" cy="50" r="32" />
+      <path d="M40 30 L60 30" />
+    </svg>
+    <div class="container mx-auto text-center relative z-10 px-4 sm:px-6">
+      <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 bounce-in">Craft Your Story with ToonLance</h2>
+      <p class="text-lg sm:text-xl md:text-2xl mb-10 slide-in max-w-3xl mx-auto">We handcraft vibrant 2D animations that bring your ideas to life with heart, humor, and a touch of magic.</p>
+      <div class="max-w-3xl mx-auto mt-8 video-frame zoom-in">
+        <iframe class="w-full h-48 sm:h-56 md:h-80 lg:h-96" src="https://www.youtube.com/embed/0mg2m6MiJGE" title="ToonLance Showreel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-20 md:py-28 bg-white relative">
+    <svg class="cartoon-doodle top-12 left-6 w-32 h-32 md:w-36 md:h-36" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <path d="M30 70 Q50 50 70 70" />
+      <circle cx="50" cy="30" r="16" />
+    </svg>
+    <svg class="cartoon-doodle bottom-12 right-6 w-36 h-36 md:w-40 md:h-40" viewBox="0 0 100 100" fill="none" stroke="#6b21a8" stroke-width="3">
+      <path d="M20 80 Q50 50 80 80" />
+      <circle cx="30" cy="30" r="12" />
+    </svg>
+    <svg class="cartoon-doodle top-20 right-12 w-28 h-28 md:w-32 md:h-32 hidden md:block" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <path d="M30 70 Q50 50 70 70" />
+      <rect x="20" y="20" width="24" height="24" rx="6" />
+    </svg>
+    <div class="container mx-auto text-center px-4 sm:px-6">
+      <h2 class="text-4xl md:text-5xl font-bold mb-12 bounce-in text-teal-900">Our Craft</h2>
+      <div class="services-grid grid grid-cols-1 gap-8 sm:gap-10 md:gap-12">
+        <div class="bg-teal-50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl card-hover zoom-in">
+          <h3 class="text-2xl sm:text-3xl md:text-3xl font-semibold mb-4 text-teal-700">2D Animation Episodes</h3>
+          <p class="text-gray-700 text-base sm:text-lg md:text-lg">We weave your stories into lively cartoon episodes with bold colors and playful vibes.</p>
+        </div>
+        <div class="bg-teal-50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl card-hover zoom-in">
+          <h3 class="text-2xl sm:text-3xl md:text-3xl font-semibold mb-4 text-teal-700">Character Design</h3>
+          <p class="text-gray-700 text-base sm:text-lg md:text-lg">We sketch unique characters bursting with personality to make your animation unforgettable.</p>
+        </div>
+        <div class="bg-teal-50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl card-hover zoom-in">
+          <h3 class="text-2xl sm:text-3xl md:text-3xl font-semibold mb-4 text-teal-700">Storyboarding</h3>
+          <p class="text-gray-700 text-base sm:text-lg md:text-lg">We map out your vision with hand-drawn storyboards to set the stage for epic animations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animation Section -->
+  <section id="animation" class="py-20 md:py-28 relative">
+    <svg class="cartoon-doodle top-10 left-10 w-32 h-32 md:w-36 md:h-36" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <path d="M30 70 Q50 50 70 70" />
+      <circle cx="50" cy="30" r="16" />
+    </svg>
+    <svg class="cartoon-doodle bottom-10 right-10 w-36 h-36 md:w-40 md:h-40" viewBox="0 0 100 100" fill="none" stroke="#6b21a8" stroke-width="3">
+      <path d="M20 80 Q50 50 80 80" />
+      <circle cx="30" cy="30" r="12" />
+    </svg>
+    <div class="container mx-auto text-center px-4 sm:px-6">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6 bounce-in text-teal-900">Our Latest Animation</h2>
+      <p class="text-lg sm:text-xl md:text-xl mb-10 max-w-2xl mx-auto fade-slide-up">Sneak Peak of Our Animated Series</p>
+      <div class="max-w-4xl mx-auto video-frame zoom-in pulse">
+        <iframe class="w-full h-40 sm:h-56 md:h-80 lg:h-[360px]" src="https://www.youtube.com/embed/RxBC_QGWQJE" title="ToonLance Signature Animation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="py-20 md:py-28 bg-white relative">
+    <svg class="cartoon-doodle top-8 right-6 w-32 h-32 md:w-36 md:h-36" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <circle cx="50" cy="50" r="32" />
+      <path d="M40 30 L60 30" />
+    </svg>
+    <svg class="cartoon-doodle bottom-8 left-6 w-36 h-36 md:w-40 md:h-40" viewBox="0 0 100 100" fill="none" stroke="#6b21a8" stroke-width="3">
+      <path d="M30 70 Q50 50 70 70" />
+      <rect x="20" y="20" width="28" height="28" rx="8" />
+    </svg>
+    <svg class="cartoon-doodle top-20 left-20 w-28 h-28 md:w-32 md:h-32 hidden md:block" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <path d="M20 80 Q50 50 80 80" />
+      <circle cx="30" cy="30" r="12" />
+    </svg>
+    <div class="container mx-auto text-center px-4 sm:px-6">
+      <h2 class="text-4xl md:text-5xl font-bold mb-12 bounce-in text-teal-900">Testimonials</h2>
+      <div class="testimonials-grid grid grid-cols-1 gap-8 sm:gap-10 md:gap-12">
+        <div class="bg-teal-50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl card-hover zoom-in">
+          <p class="italic mb-4 text-gray-700 text-base sm:text-lg md:text-lg">"the people at ToonLance, are some of the nicest and coolest people I have ever worked with. They focused on quality over quantity even at a cheap price when it comes to animation. I highly recommend them if you ever need a freelancing animation company to work with."</p>
+          <p class="font-semibold text-teal-700 text-lg sm:text-xl md:text-xl">Panic Toons</p>
+        </div>
+        <div class="bg-teal-50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl card-hover zoom-in">
+          <p class="italic mb-4 text-gray-700 text-base sm:text-lg md:text-lg">"Toonlance's team of animators continue to provide my studio with the animations we need, intuitively and with a level of quality that reflects famous TV series. We negotiated prices that a working-class person can afford. I'll definitely be reaching out again."</p>
+          <p class="font-semibold text-teal-700 text-lg sm:text-xl md:text-xl">Ryan Edgar</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="bg-teal-900 text-white py-20 md:py-28 relative">
+    <svg class="cartoon-doodle bottom-8 right-8 w-36 h-36 md:w-40 md:h-40" viewBox="0 0 100 100" fill="none" stroke="#6b21a8" stroke-width="3">
+      <path d="M30 70 Q50 50 70 70" />
+      <rect x="20" y="20" width="28" height="28" rx="8" />
+    </svg>
+    <svg class="cartoon-doodle top-8 left-8 w-32 h-32 md:w-36 md:h-36" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <path d="M20 80 Q50 50 80 80" />
+      <circle cx="30" cy="30" r="14" />
+    </svg>
+    <svg class="cartoon-doodle bottom-20 right-20 w-28 h-28 md:w-32 md:h-32 hidden md:block" viewBox="0 0 100 100" fill="none" stroke="#f59e0b" stroke-width="3">
+      <circle cx="50" cy="50" r="32" />
+      <path d="M40 30 L60 30" />
+    </svg>
+    <div class="container mx-auto text-center px-4 sm:px-6">
+      <h2 class="text-4xl md:text-5xl font-bold mb-12 bounce-in">Let's Create Together</h2>
+      <p class="text-lg sm:text-xl md:text-xl mb-10 zoom-in max-w-2xl mx-auto">Have a spark of an idea? Let's craft it into an animation that's full of life and love. Drop us a note!</p>
+      <div class="max-w-md mx-auto">
+        <form id="contact-form" class="space-y-5" action="https://formspree.io/f/myzenzjg" method="POST">
+          <input type="text" name="name" placeholder="Your Name" class="w-full p-3.5 sm:p-4 rounded-xl text-gray-900 input-focus border-2 border-gray-200" required aria-label="Your Name">
+          <input type="email" name="email" placeholder="Your Email" class="w-full p-3.5 sm:p-4 rounded-xl text-gray-900 input-focus border-2 border-gray-200" required aria-label="Your Email">
+          <input type="text" name="discord" placeholder="Your Discord ID (Optional)" class="w-full p-3.5 sm:p-4 rounded-xl text-gray-900 input-focus border-2 border-gray-200" aria-label="Your Discord ID">
+          <textarea name="message" placeholder="Your Message" class="w-full p-3.5 sm:p-4 rounded-xl text-gray-900 h-32 sm:h-36 input-focus border-2 border-gray-200" required aria-label="Your Message"></textarea>
+          <button type="submit" class="bg-orange-500 text-white px-10 sm:px-12 py-4 sm:py-4.5 rounded-xl font-bold text-lg sm:text-xl pop-btn transition-colors duration-300 pop" aria-label="Send Message">Send Message</button>
+          <p id="form-message" class="text-base sm:text-lg md:text-lg mt-4 hidden"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-10">
+    <div class="container mx-auto text-center px-4 sm:px-6">
+      <p class="text-base sm:text-lg md:text-lg">Handcrafted with ❤️ by ToonLance © 2025</p>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <a href="#home" class="back-to-top" aria-label="Back to Top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  </a>
+
+  <!-- JavaScript for Animations, Form Submission, Navbar Toggle, and UX -->
+  <script>
+    // Scroll-Triggered Animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const elements = document.querySelectorAll('.zoom-in');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
         });
+      }, { threshold: 0.3 });
+      elements.forEach(element => observer.observe(element));
+    });
 
-        // Custom Cursor
-        const cursor = document.getElementById('custom-cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
+    // Navbar Toggle
+    function toggleMenu() {
+      const menu = document.querySelector('.mobile-header .nav-menu');
+      const hamburger = document.querySelector('.hamburger');
+      const overlay = document.querySelector('.overlay');
+      
+      menu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Back to Top Button
+    window.addEventListener('scroll', () => {
+      const backToTop = document.querySelector('.back-to-top');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // Formspree Submission with Loading State
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const submitButton = form.querySelector('button[type="submit"]');
+      const message = document.getElementById('form-message');
+      
+      // Show loading state
+      submitButton.classList.add('loading');
+      submitButton.disabled = true;
+      submitButton.textContent = '';
+      
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
         });
-
-        // Hover effect for interactive elements
-        const interactiveElements = document.querySelectorAll('button, a, input, textarea, select, .nav-item, .portfolio-link, .action-button, .donate-button');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.remove('translate-x-full');
-            document.getElementById('mobile-menu').classList.add('slide-in');
-        });
-        document.getElementById('mobile-menu-close').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.add('translate-x-full');
-            document.getElementById('mobile-menu').classList.remove('slide-in');
-        });
-        document.querySelectorAll('#mobile-auth-buttons button, #mobile-user-menu button').forEach(button => {
-            button.addEventListener('click', () => {
-                document.getElementById('mobile-menu').classList.add('translate-x-full');
-                document.getElementById('mobile-menu').classList.remove('slide-in');
-            });
-        });
-        document.addEventListener('click', e => {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            if (!mobileMenu.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
-                mobileMenu.classList.add('translate-x-full');
-                mobileMenu.classList.remove('slide-in');
-            }
-        });
-
-        // Firebase Initialization
-        const firebaseConfig = {
-            apiKey: "AIzaSyA1YGFbDHDuSQVXFsRO-XD7Usir9dULoEU",
-            authDomain: "testing-dba79.firebaseapp.com",
-            projectId: "testing-dba79",
-            storageBucket: "testing-dba79.appspot.com",
-            messagingSenderId: "808371260131",
-            appId: "1:808371260131:web:a59f409f532e617cba13d6"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        let currentUser = null;
-        let currentProjectId = null;
-        let messagesUnsubscribe = null;
-        let isSubmitting = false;
-
-        // Error Handler
-        function handleError(error, context) {
-            console.error(`Error in ${context}:`, error);
-            return null;
+        
+        if (response.ok) {
+          message.textContent = 'Message sent! We will get back to you soon!';
+          message.classList.remove('hidden', 'text-red-400');
+          message.classList.add('text-orange-400');
+          form.reset();
+        } else {
+          throw new Error('Form submission failed');
         }
-
-        // Input Sanitization
-        const sanitizeInput = input => {
-            const div = document.createElement('div');
-            div.textContent = input?.toString() || '';
-            return div.innerHTML;
-        };
-
-        // Validation Functions
-        const isValidEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        const isValidPassword = password => password.length >= 6;
-        const isValidUrl = url => {
-            try {
-                new URL(url);
-                return url.startsWith('https://') || url.startsWith('http://');
-            } catch {
-                return false;
-            }
-        };
-        const isValidName = name => name.trim().length > 0 && name.length <= 100;
-        const isValidTitle = title => title.trim().length > 0 && title.length <= 200;
-        const isValidDescription = desc => desc.trim().length > 0 && desc.length <= 5000;
-        const isValidBio = bio => bio.trim().length > 0 && bio.length <= 500;
-
-        // Cloudflare Turnstile
-        function checkTurnstile(formId) {
-            const token = document.querySelector(`#${formId} .cf-turnstile input[name="cf-turnstile-response"]`).value;
-            if (!token) throw new Error('Please complete the verification.');
-            return true;
-        }
-
-        // Toggle Portfolio Input
-        function togglePortfolioInput() {
-            const role = document.getElementById('regRole').value;
-            document.getElementById('regPortfolio').classList.toggle('hidden', role !== 'freelancer');
-            document.getElementById('regBio').classList.toggle('hidden', role !== 'freelancer');
-        }
-
-        // Toggle Post Project Form
-        function togglePostProjectForm() {
-            document.getElementById('post-project-form').classList.toggle('hidden');
-        }
-
-        // Load Welcome Message
-        async function loadWelcomeMessage() {
-            if (!currentUser) return;
-            try {
-                const userDoc = await db.collection('users').doc(currentUser.uid).get();
-                if (userDoc.exists) {
-                    const { name, role } = userDoc.data();
-                    const tagline = role === 'freelancer' ? 'Showcase your talent and find exciting projects!' : 'Launch your projects and hire top talent!';
-                    document.getElementById('welcome-message').textContent = `Welcome, ${sanitizeInput(name)}! ${tagline}`;
-                }
-            } catch (error) {
-                handleError(error, 'load_welcome_message');
-            }
-        }
-
-        // Auth State Listener
-        auth.onAuthStateChanged(user => {
-            try {
-                currentUser = user;
-                if (user) {
-                    document.getElementById('auth-buttons').style.display = 'none';
-                    document.getElementById('user-menu').style.display = 'flex';
-                    document.getElementById('mobile-auth-buttons').classList.add('hidden');
-                    document.getElementById('mobile-user-menu').classList.remove('hidden');
-                    document.getElementById('user-email').textContent = sanitizeInput(user.email);
-                    document.getElementById('mobile-user-email').textContent = sanitizeInput(user.email);
-                    showSection('dashboard');
-                    loadWelcomeMessage();
-                    loadProjects();
-                } else {
-                    document.getElementById('auth-buttons').style.display = 'flex';
-                    document.getElementById('user-menu').style.display = 'none';
-                    document.getElementById('mobile-auth-buttons').classList.remove('hidden');
-                    document.getElementById('mobile-user-menu').classList.add('hidden');
-                    showSection('home');
-                }
-            } catch (error) {
-                handleError(error, 'auth_state_change');
-            }
-        });
-
-        // Show Section
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById('mobile-menu').classList.add('translate-x-full');
-            document.getElementById('mobile-menu').classList.remove('slide-in');
-            if (id === 'freelancers') loadFreelancers();
-            if (id === 'projects') loadProjects();
-            if (id === 'dashboard') loadWelcomeMessage();
-            if (id === 'login' || id === 'register') {
-                if (typeof turnstile !== 'undefined') turnstile.reset();
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // PayPal Fee Calculator
-        function calculatePaypalFees() {
-            const amount = parseFloat(document.getElementById('paypalAmount').value);
-            const country = document.getElementById('paypalCountry').value;
-            const resultEl = document.getElementById('paypalResult');
-            const errorEl = document.getElementById('paypalError');
-
-            errorEl.textContent = '';
-            resultEl.textContent = '';
-
-            if (isNaN(amount) || amount <= 0) {
-                errorEl.textContent = 'Please enter a valid transaction amount.';
-                return;
-            }
-
-            const usFee = 0.029;
-            const usFixed = 0.49;
-            const intlFee = 0.044;
-            const intlFixed = 0.49;
-
-            let fee, netAmount;
-            if (country === 'US') {
-                fee = (amount * usFee) + usFixed;
-                netAmount = amount - fee;
-            } else {
-                fee = (amount * intlFee) + intlFixed;
-                netAmount = amount - fee;
-            }
-
-            resultEl.innerHTML = `
-                <p><strong>Transaction Amount:</strong> $${amount.toFixed(2)}</p>
-                <p><strong>PayPal Fee:</strong> $${fee.toFixed(2)}</p>
-                <p><strong>Net Amount:</strong> $${netAmount.toFixed(2)}</p>
-            `;
-        }
-
-        // PayPal Currency Converter
-        async function convertCurrency() {
-            const amount = parseFloat(document.getElementById('convertAmount').value);
-            const currency = document.getElementById('convertCurrency').value;
-            const resultEl = document.getElementById('convertResult');
-            const errorEl = document.getElementById('convertError');
-
-            errorEl.textContent = '';
-            resultEl.textContent = '';
-
-            if (isNaN(amount) || amount <= 0) {
-                errorEl.textContent = 'Please enter a valid amount.';
-                return;
-            }
-
-            const exchangeRates = {
-                EUR: 0.95,
-                GBP: 0.80,
-                CAD: 1.35,
-                AUD: 1.50,
-                JPY: 150.00,
-                INR: 84.00
-            };
-            const currencySymbols = {
-                EUR: '€',
-                GBP: '£',
-                CAD: 'C$',
-                AUD: 'A$',
-                JPY: '¥',
-                INR: '₹'
-            };
-
-            const convertedAmount = amount * exchangeRates[currency];
-            resultEl.innerHTML = `
-                <p><strong>Amount in USD:</strong> $${amount.toFixed(2)}</p>
-                <p><strong>Converted Amount:</strong> ${currencySymbols[currency]}${convertedAmount.toFixed(2)} ${currency}</p>
-            `;
-        }
-
-        // Login
-        async function login() {
-            if (isSubmitting) return;
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const errorEl = document.getElementById('loginError');
-            const btn = document.getElementById('loginBtn');
-
-            if (!isValidEmail(email)) {
-                errorEl.textContent = 'Please enter a valid email.';
-                return;
-            }
-            if (!isValidPassword(password)) {
-                errorEl.textContent = 'Password must be at least 6 characters.';
-                return;
-            }
-
-            isSubmitting = true;
-            btn.classList.add('loading');
-            errorEl.textContent = '';
-            try {
-                await checkTurnstile('login');
-                await auth.signInWithEmailAndPassword(email, password);
-                showSection('dashboard');
-            } catch (error) {
-                errorEl.textContent = error.code === 'auth/user-not-found' ? 'No user found with this email.' : error.message;
-            } finally {
-                isSubmitting = false;
-                btn.classList.remove('loading');
-                if (typeof turnstile !== 'undefined') turnstile.reset();
-            }
-        }
-
-        // Register
-        async function register() {
-            if (isSubmitting) return;
-            const email = document.getElementById('regEmail').value.trim();
-            const name = document.getElementById('regName').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const discordId = document.getElementById('regDiscordId').value.trim();
-            const role = document.getElementById('regRole').value;
-            const portfolioLink = document.getElementById('regPortfolio').value.trim();
-            const bio = document.getElementById('regBio').value.trim();
-            const errorEl = document.getElementById('regError');
-            const btn = document.getElementById('registerBtn');
-
-            if (!isValidEmail(email)) {
-                errorEl.textContent = 'Please enter a valid email.';
-                return;
-            }
-            if (!isValidName(name)) {
-                errorEl.textContent = 'Name is required and must be 1-100 characters.';
-                return;
-            }
-            if (!isValidPassword(password)) {
-                errorEl.textContent = 'Password must be at least 6 characters.';
-                return;
-            }
-            if (role === 'freelancer' && !isValidUrl(portfolioLink)) {
-                errorEl.textContent = 'Please enter a valid portfolio URL (e.g., https://yourportfolio.com).';
-                return;
-            }
-            if (role === 'freelancer' && !isValidBio(bio)) {
-                errorEl.textContent = 'Bio is required and must be 1-500 characters.';
-                return;
-            }
-
-            isSubmitting = true;
-            btn.classList.add('loading');
-            errorEl.textContent = '';
-            try {
-                await checkTurnstile('register');
-                const cred = await auth.createUserWithEmailAndPassword(email, password);
-                const userData = {
-                    email: sanitizeInput(email),
-                    name: sanitizeInput(name),
-                    role,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                };
-                if (discordId) userData.discordId = sanitizeInput(discordId);
-                if (role === 'freelancer') {
-                    userData.portfolioLink = sanitizeInput(portfolioLink);
-                    userData.bio = sanitizeInput(bio);
-                    await db.collection('freelancers').doc(cred.user.uid).set({
-                        userId: cred.user.uid,
-                        name: sanitizeInput(name),
-                        portfolioLink: sanitizeInput(portfolioLink),
-                        bio: sanitizeInput(bio),
-                        discordId: discordId ? sanitizeInput(discordId) : null,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                await db.collection('users').doc(cred.user.uid).set(userData);
-                showSection('dashboard');
-            } catch (error) {
-                errorEl.textContent = error.code === 'auth/email-already-in-use' ? 'Email already registered.' : error.message;
-            } finally {
-                isSubmitting = false;
-                btn.classList.remove('loading');
-                if (typeof turnstile !== 'undefined') turnstile.reset();
-            }
-        }
-
-        // Logout
-        async function logout() {
-            try {
-                await auth.signOut();
-            } catch (error) {
-                handleError(error, 'logout');
-            }
-        }
-
-        // Load Freelancers
-        async function loadFreelancers() {
-            try {
-                const snapshot = await db.collection('freelancers').orderBy('createdAt', 'desc').limit(50).get();
-                const list = document.getElementById('freelancers-list');
-                const noFreelancers = document.getElementById('no-freelancers');
-                list.innerHTML = '';
-                if (snapshot.empty) {
-                    noFreelancers.classList.remove('hidden');
-                } else {
-                    noFreelancers.classList.add('hidden');
-                    snapshot.forEach(doc => {
-                        const freelancer = doc.data();
-                        list.innerHTML += `
-                            <div class="p-6 bg-black rounded-lg project-card fade-in-up">
-                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(freelancer.name)}</h3>
-                                <p class="mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(freelancer.bio)}</p>
-                                <a href="${sanitizeInput(freelancer.portfolioLink)}" target="_blank" rel="noopener noreferrer" class="text-lg text-white underline portfolio-link" style="font-family: 'Montserrat', sans-serif;">View Portfolio</a>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (error) {
-                handleError(error, 'load_freelancers');
-                document.getElementById('no-freelancers').textContent = 'Error loading freelancers. Please try again.';
-                document.getElementById('no-freelancers').classList.remove('hidden');
-            }
-        }
-
-        // Post Project
-        async function postProject() {
-            if (isSubmitting) return;
-            const title = document.getElementById('projectTitle').value.trim();
-            const description = document.getElementById('projectDesc').value.trim();
-            const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
-           ; const btn = document.getElementById('postProjectBtn');
-
-            if (!isValidTitle(title)) {
-                alert('Project title is required and must be 1-200 characters.');
-                return;
-            }
-            if (!isValidDescription(description)) {
-                alert('Project description is required and must be 1-5000 characters.');
-                return;
-            }
-            if (budget <= 0) {
-                alert('Please enter a valid budget greater than 0.');
-                return;
-            }
-
-            isSubmitting = true;
-            btn.classList.add('loading');
-            try {
-                await db.collection('projects').add({
-                    title: sanitizeInput(title),
-                    description: sanitizeInput(description),
-                    budget,
-                    client: currentUser.uid,
-                    status: 'open',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                document.getElementById('projectTitle').value = '';
-                document.getElementById('projectDesc').value = '';
-                document.getElementById('projectBudget').value = '';
-                togglePostProjectForm();
-                loadProjects();
-            } catch (error) {
-                handleError(error, 'post_project');
-                alert('Error posting project: ' + error.message);
-            } finally {
-                isSubmitting = false;
-                btn.classList.remove('loading');
-            }
-        }
-
-        // Load Projects
-        async function loadProjects() {
-            try {
-                const snapshot = await db.collection('projects').orderBy('createdAt', 'desc').limit(50).get();
-                const list = document.getElementById('projects-list');
-                const noProjects = document.getElementById('no-projects');
-                list.innerHTML = '';
-                if (snapshot.empty) {
-                    noProjects.classList.remove('hidden');
-                } else {
-                    noProjects.classList.add('hidden');
-                    snapshot.forEach(doc => {
-                        const project = doc.data();
-                        const isClient = currentUser && currentUser.uid === project.client;
-                        const truncatedDesc = project.description.length > 100 ? sanitizeInput(project.description).substring(0, 100) + '...' : sanitizeInput(project.description);
-                        list.innerHTML += `
-                            <div class="p-6 bg-black rounded-lg project-card fade-in-up">
-                                <h3 class="text-xl font-semibold mb-3" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(project.title)}</h3>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;">${truncatedDesc}</p>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Budget:</strong> $${project.budget}</p>
-                                <p class="mb-4" style="font-family: 'Montserrat', sans-serif;"><strong>Status:</strong> ${sanitizeInput(project.status)}</p>
-                                <div class="flex space-x-4">
-                                    <button onclick="openMessages('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Message about ${project.title}">Message</button>
-                                    ${!isClient ? `<button onclick="openApplyModal('${doc.id}')" class="px-6 py-3 rounded-lg flex-1 text-lg action-button" style="font-family: 'Montserrat', sans-serif;" aria-label="Apply for ${project.title}">Apply</button>` : ''}
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (error) {
-                handleError(error, 'load_projects');
-                document.getElementById('no-projects').textContent = 'Error loading projects. Please try again.';
-                document.getElementById('no-projects').classList.remove('hidden');
-            }
-        }
-
-        // Apply Modal
-        async function openApplyModal(projectId) {
-            if (!currentUser) {
-                showSection('register');
-                return;
-            }
-            currentProjectId = projectId;
-            const portfolioInput = document.getElementById('portfolioLink');
-            const errorEl = document.getElementById('applyError');
-            portfolioInput.value = '';
-            errorEl.textContent = '';
-
-            try {
-                const freelancerDoc = await db.collection('freelancers').doc(currentUser.uid).get();
-                if (freelancerDoc.exists) {
-                    const portfolioLink = freelancerDoc.data().portfolioLink;
-                    if (portfolioLink) portfolioInput.value = sanitizeInput(portfolioLink);
-                }
-            } catch (error) {
-                handleError(error, 'fetch_freelancer_portfolio');
-            }
-
-            document.getElementById('applyModal').classList.remove('modal-hidden');
-            document.getElementById('applyModal').classList.add('modal-visible');
-        }
-
-        function closeApplyModal() {
-            document.getElementById('applyModal').classList.remove('modal-visible');
-            document.getElementById('applyModal').classList.add('modal-hidden');
-        }
-
-        async function submitApplication() {
-            if (isSubmitting) return;
-            const portfolioLink = document.getElementById('portfolioLink').value.trim();
-            const errorEl = document.getElementById('applyError');
-            const btn = document.getElementById('applyBtn');
-
-            if (!isValidUrl(portfolioLink)) {
-                errorEl.textContent = 'Please enter a valid URL (e.g., https://yourportfolio.com).';
-                return;
-            }
-
-            isSubmitting = true;
-            btn.classList.add('loading');
-            errorEl.textContent = '';
-            try {
-                const batch = db.batch();
-                const applicationRef = db.collection('projects').doc(currentProjectId).collection('applications').doc();
-                batch.set(applicationRef, {
-                    applicant: currentUser.uid,
-                    portfolioLink: sanitizeInput(portfolioLink),
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                const messageRef = db.collection('projects').doc(currentProjectId).collection('messages').doc();
-                batch.set(messageRef, {
-                    text: `I have applied for this project. Here is my portfolio: ${sanitizeInput(portfolioLink)}`,
-                    link: sanitizeInput(portfolioLink),
-                    sender: currentUser.uid,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                await batch.commit();
-                closeApplyModal();
-                openMessages(currentProjectId);
-            } catch (error) {
-                errorEl.textContent = 'Error submitting application: ' + error.message;
-            } finally {
-                isSubmitting = false;
-                btn.classList.remove('loading');
-            }
-        }
-
-        // Open Messages
-        function openMessages(projectId) {
-            currentProjectId = projectId;
-            if (messagesUnsubscribe) messagesUnsubscribe();
-            messagesUnsubscribe = db.collection('projects').doc(projectId).collection('messages')
-                .orderBy('createdAt')
-                .limit(100)
-                .onSnapshot(snapshot => {
-                    const container = document.getElementById('message-container');
-                    container.innerHTML = '';
-                    snapshot.forEach(doc => {
-                        const msg = doc.data();
-                        const isSender = msg.sender === currentUser.uid;
-                        container.innerHTML += `
-                            <div class="p-4 bg-black rounded-lg mb-3 max-w-md ${isSender ? 'ml-auto' : 'mr-auto'} fade-in border border-white">
-                                ${msg.text ? `<p style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.text)}</p>` : ''}
-                                ${msg.link ? `<a href="${sanitizeInput(msg.link)}" target="_blank" rel="noopener noreferrer" class="text-white underline portfolio-link" style="font-family: 'Montserrat', sans-serif;">${sanitizeInput(msg.link)}</a>` : ''}
-                                <p class="text-xs mt-2 text-gray-400" style="font-family: 'Montserrat', sans-serif;">${new Date(msg.createdAt?.toDate()).toLocaleString()}</p>
-                            </div>
-                        `;
-                    });
-                    container.scrollTop = container.scrollHeight;
-                }, error => {
-                    handleError(error, 'load_messages');
-                });
-            showSection('messages');
-        }
-
-        // Send Message
-        async function sendMessage() {
-            if (isSubmitting) return;
-            const text = document.getElementById('message-input').value.trim();
-            const link = document.getElementById('message-link').value.trim();
-            const btn = document.getElementById('sendMessageBtn');
-
-            if (!text && !link) {
-                alert('Please enter a message or a link.');
-                return;
-            }
-            if (link && !isValidUrl(link)) {
-                alert('Please enter a valid URL (e.g., https://yourportfolio.com).');
-                return;
-            }
-
-            isSubmitting = true;
-            btn.classList.add('loading');
-            try {
-                await db.collection('projects').doc(currentProjectId).collection('messages').add({
-                    text: text ? sanitizeInput(text) : null,
-                    link: link ? sanitizeInput(link) : null,
-                    sender: currentUser.uid,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                document.getElementById('message-input').value = '';
-                document.getElementById('message-link').value = '';
-            } catch (error) {
-                handleError(error, 'send_message');
-                alert('Error sending message: ' + error.message);
-            } finally {
-                isSubmitting = false;
-                btn.classList.remove('loading');
-            }
-        }
-    </script>
+      } catch (error) {
+        message.textContent = 'Oops! Something went wrong. Please try again.';
+        message.classList.remove('hidden', 'text-orange-400');
+        message.classList.add('text-red-400');
+      } finally {
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message';
+        
+        setTimeout(() => {
+          message.classList.add('hidden');
+        }, 4000);
+      }
+    });
+  </script>
 </body>
 </html>
