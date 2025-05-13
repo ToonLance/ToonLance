@@ -20,6 +20,27 @@
       font-family: 'Fredoka', sans-serif;
     }
     
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #ffe6f0;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #ff7ab3;
+      border-radius: 10px;
+      border: 2px solid #ffe6f0;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff5c9d;
+    }
+    
     /* Hand-drawn animations */
     @keyframes squiggly {
       0% { transform: rotate(0deg) scale(1); }
@@ -203,6 +224,68 @@
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
     }
     
+    /* Testimonial Card Styles */
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-5px) rotate(0.5deg);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #758cff, #75ffcc);
+    }
+    
+    .testimonial-quote {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    
+    .testimonial-quote::before {
+      content: '"';
+      position: absolute;
+      left: 0;
+      top: -0.5rem;
+      font-size: 3rem;
+      color: #758cff;
+      opacity: 0.3;
+      font-family: serif;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+    
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1rem;
+      border: 3px solid #ff7ab3;
+      background: #ffe6f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
     .doodle-bg {
       position: absolute;
       width: 100%;
@@ -273,6 +356,7 @@
     <nav class="hidden md:flex space-x-8">
       <a href="#home" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Home</a>
       <a href="#services" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Services</a>
+      <a href="#testimonials" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Testimonials</a>
       <a href="#showcase" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Showcase</a>
       <a href="#contact" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Contact</a>
     </nav>
@@ -289,6 +373,7 @@
   <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-sm px-6 py-4 space-y-4 border-t border-gray-100">
     <a href="#home" class="block py-2 font-medium hover:text-pink-500 transition-colors">Home</a>
     <a href="#services" class="block py-2 font-medium hover:text-pink-500 transition-colors">Services</a>
+    <a href="#testimonials" class="block py-2 font-medium hover:text-pink-500 transition-colors">Testimonials</a>
     <a href="#showcase" class="block py-2 font-medium hover:text-pink-500 transition-colors">Showcase</a>
     <a href="#contact" class="block py-2 font-medium hover:text-pink-500 transition-colors">Contact</a>
   </div>
@@ -374,8 +459,54 @@
     </div>
   </section>
 
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="py-20 px-6 bg-gray-50 relative overflow-hidden">
+    <div class="doodle-bg"></div>
+    <div class="color-splash splash-1" style="background: #758cff;"></div>
+    <div class="color-splash splash-2" style="background: #75ffcc;"></div>
+    
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16 animate-in">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+          What Our <span class="text-pink-500 brush-stroke">Clients</span> Say
+        </h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Don't just take our word for it - hear from happy creators!
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="testimonial-card animate-in">
+          <div class="testimonial-quote">
+            <p class="text-gray-700 italic">"Toonlance's team of animators continue to provide my studio with the animations we need, intuitively and with a level of quality that reflects famous TV series. We negotiated prices that a working-class person can afford. I'll definitely be reaching out again."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">🎨</div>
+            <div>
+              <h4 class="font-bold text-gray-800">Ryan Edgar</h4>
+              <p class="text-sm text-gray-600">Game Developer</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card animate-in delay-1">
+          <div class="testimonial-quote">
+            <p class="text-gray-700 italic">"The people at ToonLance are some of the nicest and coolest people I have ever worked with. They focused on quality over quantity even at a cheap price when it comes to animation. I highly recommend them if you ever need a freelancing animation company to work with."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">✨</div>
+            <div>
+              <h4 class="font-bold text-gray-800">Panic Toons</h4>
+              <p class="text-sm text-gray-600">Animation Director</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Showcase Section -->
-  <section id="showcase" class="py-20 px-6 bg-gray-50 relative overflow-hidden">
+  <section id="showcase" class="py-20 px-6 bg-white relative overflow-hidden">
     <div class="doodle-bg"></div>
     <div class="max-w-4xl mx-auto relative z-10">
       <div class="text-center mb-12 animate-in">
@@ -383,7 +514,7 @@
           Our <span class="text-pink-500 brush-stroke">Animation</span> Showcase
         </h2>
         <p class="text-xl text-gray-600">
-          Our Passion Project (Sneak Peek)
+          Passion Project (Sneak Peek)
         </p>
       </div>
       
