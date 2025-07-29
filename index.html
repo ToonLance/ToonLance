@@ -6,18 +6,20 @@
   <title>ToonLance - Playful 2D Animation Studio</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">  
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     html {
       scroll-behavior: smooth;
     }
     body {
-      font-family: 'Comic Neue', cursive;
-      background: #fff5fa;
+      font-family: 'Patrick Hand', cursive;
+      background: #fff9fb;
       overflow-x: hidden;
+      letter-spacing: 0.5px;
     }
-    h1, h2, h3 {
-      font-family: 'Fredoka', sans-serif;
+    h1, h2, h3, h4 {
+      font-family: 'Fredoka One', cursive;
+      letter-spacing: 1px;
     }
     
     /* Custom Scrollbar */
@@ -74,6 +76,17 @@
       to { transform: scaleX(1); opacity: 1; }
     }
     
+    @keyframes sketchIn {
+      from { 
+        stroke-dashoffset: 1000;
+        opacity: 0;
+      }
+      to { 
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+    
     .squiggly-animate {
       animation: squiggly 8s ease-in-out infinite;
     }
@@ -125,6 +138,12 @@
       animation: brushStroke 1s ease-out forwards;
     }
     
+    .hand-drawn-border {
+      border: 3px solid #333;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+    }
+    
     .doodle-underline {
       position: relative;
     }
@@ -145,15 +164,16 @@
       position: relative;
       padding-bottom: 56.25%;
       overflow: hidden;
-      border-radius: 16px;
+      border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
       transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
       transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
                  box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      border: 4px solid white;
     }
     
     .video-container:hover {
-      transform: perspective(1000px) rotateX(1deg) rotateY(-1deg);
+      transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) scale(1.02);
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
     }
     
@@ -181,6 +201,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 3px solid #ff7ab3;
     }
     
     .play-button:hover {
@@ -201,12 +222,13 @@
     
     .service-card {
       background: white;
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       position: relative;
       overflow: hidden;
+      border: 3px solid white;
     }
     
     .service-card::before {
@@ -215,29 +237,32 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 5px;
+      height: 8px;
       background: linear-gradient(90deg, #ff7ab3, #ff758c);
     }
     
     .service-card:hover {
       transform: translateY(-10px) rotate(1deg);
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      border-color: #ffe6f0;
     }
     
     /* Testimonial Card Styles */
     .testimonial-card {
       background: white;
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       position: relative;
       overflow: hidden;
       transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      border: 3px solid white;
     }
     
     .testimonial-card:hover {
       transform: translateY(-5px) rotate(0.5deg);
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      border-color: #e6f0ff;
     }
     
     .testimonial-card::before {
@@ -246,7 +271,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 5px;
+      height: 8px;
       background: linear-gradient(90deg, #758cff, #75ffcc);
     }
     
@@ -328,6 +353,154 @@
       animation: float 12s ease-in-out infinite 2s;
     }
     
+    /* Art Gallery Styles */
+    .art-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      border: 3px solid white;
+    }
+    
+    .art-card:hover {
+      transform: translateY(-5px) rotate(0.5deg);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      border-color: #ffe6f0;
+    }
+    
+    .art-image-container {
+      position: relative;
+      padding-bottom: 100%;
+      overflow: hidden;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+      border: 3px solid #ffe6f0;
+    }
+    
+    .art-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .art-card:hover .art-image {
+      transform: scale(1.03);
+    }
+    
+    .art-title {
+      font-family: 'Fredoka One', sans-serif;
+      font-size: 1.5rem;
+      color: #ff7ab3;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    
+    /* Sketchy Button */
+    .sketchy-btn {
+      position: relative;
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+    }
+    
+    .sketchy-btn::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border: 2px dashed currentColor;
+      border-radius: inherit;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .sketchy-btn:hover {
+      transform: translateY(-3px) rotate(1deg);
+      box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+    }
+    
+    /* Hand-drawn separator */
+    .hand-drawn-separator {
+      position: relative;
+      height: 30px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M1200 0L0 0 0 7.99C0 7.99 200 20 400 20s400-12.01 400-12.01S800 20 1000 20 1200 7.99 1200 7.99L1200 0z' fill='%23ffffff'%3E%3C/path%3E%3C/svg%3E");
+      background-size: cover;
+      background-repeat: no-repeat;
+      margin: 2rem 0;
+    }
+    
+    /* Animation for sketch elements */
+    .sketch-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: sketchIn 2s ease-in-out forwards;
+    }
+    
+    /* Custom checkbox */
+    .custom-checkbox {
+      position: relative;
+      padding-left: 2rem;
+      cursor: pointer;
+    }
+    
+    .custom-checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+    
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 1.5rem;
+      width: 1.5rem;
+      background-color: white;
+      border: 2px solid #ff7ab3;
+      border-radius: 5px;
+    }
+    
+    .custom-checkbox:hover input ~ .checkmark {
+      background-color: #ffe6f0;
+    }
+    
+    .custom-checkbox input:checked ~ .checkmark {
+      background-color: #ff7ab3;
+    }
+    
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+    
+    .custom-checkbox input:checked ~ .checkmark:after {
+      display: block;
+    }
+    
+    .custom-checkbox .checkmark:after {
+      left: 0.45rem;
+      top: 0.2rem;
+      width: 0.4rem;
+      height: 0.8rem;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+    
     @media (max-width: 768px) {
       .hero-heading {
         font-size: 2.5rem;
@@ -341,50 +514,11 @@
         border-bottom: 12px solid transparent;
         border-left: 20px solid #ff7ab3;
       }
+      
+      .hand-drawn-border {
+        border-radius: 155px 10px 155px 10px/10px 155px 10px 155px;
+      }
     }
-    /* Art Gallery Styles */
-.art-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.art-card:hover {
-  transform: translateY(-5px) rotate(0.5deg);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-}
-
-.art-image-container {
-  position: relative;
-  padding-bottom: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-}
-
-.art-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.art-card:hover .art-image {
-  transform: scale(1.03);
-}
-
-.art-title {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 1.5rem;
-  color: #ff7ab3;
-  text-align: center;
-  margin-top: 0.5rem;
-}
   </style>
 </head>
 <body class="text-gray-800 relative">
@@ -440,11 +574,11 @@
             Your stories deserve <span class="font-bold text-pink-500">vibrant animation</span> that pops off the screen. Let's create something magical together!
           </p>
           <div class="flex flex-wrap gap-4">
-            <a href="#contact" class="inline-block px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors shadow-lg hover:scale-105 transform transition-transform">
-              Start Your Project <span class="pencil-scribble inline-block">✏️</span>
+            <a href="#contact" class="sketchy-btn bg-pink-500 text-white hover:bg-pink-600">
+              Start Your Project <span class="pencil-scribble inline-block ml-1">✏️</span>
             </a>
-            <a href="#showcase" class="inline-block px-6 py-3 bg-white text-pink-500 border-2 border-pink-300 rounded-full font-medium hover:bg-pink-50 transition-colors shadow hover:scale-105 transform transition-transform">
-              See Our Work <span class="floating">✨</span>
+            <a href="#showcase" class="sketchy-btn bg-white text-pink-500 border-2 border-pink-300 hover:bg-pink-50">
+              See Our Work <span class="floating ml-1">✨</span>
             </a>
           </div>
         </div>
@@ -460,35 +594,38 @@
       </div>
     </div>
   </section>
-<section id="art-gallery" class="py-20 px-6 bg-white relative overflow-hidden">
-  <div class="doodle-bg"></div>
-  <div class="max-w-6xl mx-auto relative z-10">
-    <div class="text-center mb-16 animate-in">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">
-        Our <span class="text-pink-500 brush-stroke">Frames</span>
-      </h2>
-      <p class="text-xl text-gray-600">
-        Each Frame has its own Unique Story
-      </p>
-    </div>
 
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="art-card animate-in">
-        <div class="art-image-container">
-          <img src="classroomthumbnail.png" alt="Artwork 1" class="art-image">
-        </div>
-        <h3 class="art-title">"CLASSROOM SCENE"</h3>
+  <!-- Art Gallery Section -->
+  <section id="art-gallery" class="py-20 px-6 bg-white relative overflow-hidden">
+    <div class="doodle-bg"></div>
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16 animate-in">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+          Our <span class="text-pink-500 brush-stroke">Frames</span>
+        </h2>
+        <p class="text-xl text-gray-600">
+          Each Frame has its own Unique Story
+        </p>
       </div>
-      
-      <div class="art-card animate-in delay-1">
-        <div class="art-image-container">
-          <img src="tiethumbnail.jpg" alt="Artwork 2" class="art-image">
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="art-card animate-in">
+          <div class="art-image-container">
+            <img src="classroomthumbnail.png" alt="Artwork 1" class="art-image">
+          </div>
+          <h3 class="art-title">"CLASSROOM SCENE"</h3>
         </div>
-        <h3 class="art-title">"TIE KNOTTING"</h3>
+        
+        <div class="art-card animate-in delay-1">
+          <div class="art-image-container">
+            <img src="tiethumbnail.jpg" alt="Artwork 2" class="art-image">
+          </div>
+          <h3 class="art-title">"TIE KNOTTING"</h3>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
   <!-- Services Section -->
   <section id="services" class="py-20 px-6 bg-white relative overflow-hidden">
     <div class="doodle-bg"></div>
@@ -606,8 +743,7 @@
       </div>
     </div>
   </section>
-
-  <!-- Contact Section -->
+    <!-- Contact Section -->
   <section id="contact" class="py-20 px-6 bg-gradient-to-br from-pink-500 to-purple-500 text-white relative overflow-hidden">
     <div class="color-splash splash-1" style="background: #ffcc75;"></div>
     <div class="color-splash splash-2" style="background: #75ffcc;"></div>
@@ -622,26 +758,104 @@
         </p>
       </div>
       
-<form id="contact-form" class="space-y-4 animate-in delay-1" action="https://formspree.io/f/myzenzjg" method="POST">
-  <div>
-    <input type="text" name="name" placeholder="Your Name" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition" required>
-  </div>
-  <div>
-    <input type="email" name="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition" required>
-  </div>
-  <div>
-    <input type="text" name="discord" placeholder="Discord ID (Optional)" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition">
-  </div>
-  <div>
-    <textarea name="message" rows="4" placeholder="What's your animation vision?" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition" required></textarea>
-  </div>
-  <button type="submit" class="w-full py-4 bg-white text-pink-500 rounded-lg font-bold hover:bg-gray-100 hover:scale-105 transform transition-transform shadow-lg flex items-center justify-center">
-    Send Message <span class="ml-2 floating">✉️</span>
-  </button>
-</form>
+      <form id="contact-form" class="space-y-4 animate-in delay-1" action="https://formspree.io/f/myzenzjg" method="POST">
+        <div>
+          <input type="text" name="name" placeholder="Your Name" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border" required>
+        </div>
+        <div>
+          <input type="email" name="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border" required>
+        </div>
+        <div>
+          <input type="text" name="discord" placeholder="Discord ID (Optional)" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border">
+        </div>
+        <div>
+          <textarea name="message" rows="4" placeholder="What's your animation vision?" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border" required></textarea>
+        </div>
+        <!-- <div class="flex items-center">
+          <label class="custom-checkbox text-sm">
+            <input type="checkbox" required>
+            <span class="checkmark"></span>
+            I agree 
+          </label>
+        </div> -->
+        <button type="submit" class="w-full py-4 bg-white text-pink-500 rounded-lg font-bold hover:bg-gray-100 hover:scale-105 transform transition-transform shadow-lg flex items-center justify-center sketchy-btn">
+          Send Message <span class="ml-2 floating">✉️</span>
+        </button>
+      </form>
     </div>
   </section>
 </main>
+
+<!-- Footer -->
+<!-- <footer class="bg-gray-900 text-white py-12 px-6 relative overflow-hidden">
+  <div class="doodle-bg"></div>
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="animate-in">
+        <h3 class="text-xl font-bold mb-4 text-pink-400">ToonLance</h3>
+        <p class="text-gray-300">
+          Bringing your 2D animation dreams to life with creativity and passion.
+        </p>
+        <div class="flex space-x-4 mt-4">
+          <a href="#" class="text-2xl hover:text-pink-400 transition-colors floating">🎨</a>
+          <a href="#" class="text-2xl hover:text-pink-400 transition-colors floating delay-1">✏️</a>
+          <a href="#" class="text-2xl hover:text-pink-400 transition-colors floating delay-2">📽️</a>
+        </div>
+      </div>
+      
+      <div class="animate-in delay-1">
+        <h3 class="text-xl font-bold mb-4 text-pink-400">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="#home" class="text-gray-300 hover:text-pink-400 transition-colors">Home</a></li>
+          <li><a href="#services" class="text-gray-300 hover:text-pink-400 transition-colors">Services</a></li>
+          <li><a href="#testimonials" class="text-gray-300 hover:text-pink-400 transition-colors">Testimonials</a></li>
+          <li><a href="#showcase" class="text-gray-300 hover:text-pink-400 transition-colors">Showcase</a></li>
+          <li><a href="#contact" class="text-gray-300 hover:text-pink-400 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="animate-in delay-2">
+        <h3 class="text-xl font-bold mb-4 text-pink-400">Services</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">2D Animation</a></li>
+          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Character Design</a></li>
+          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Storyboarding</a></li>
+          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Motion Graphics</a></li>
+          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Illustration</a></li>
+        </ul>
+      </div>
+      
+      <div class="animate-in delay-3">
+        <h3 class="text-xl font-bold mb-4 text-pink-400">Contact Us</h3>
+        <ul class="space-y-2">
+          <li class="flex items-center">
+            <span class="mr-2">📧</span>
+            <span>hello@toonlance.com</span>
+          </li>
+          <li class="flex items-center">
+            <span class="mr-2">📱</span>
+            <span>+1 (555) 123-4567</span>
+          </li>
+          <li class="flex items-center">
+            <span class="mr-2">🎮</span>
+            <span>ToonLance#1234</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 animate-in">
+      <p>&copy; 2023 ToonLance. All rights reserved. Made with ❤️ and 🎨</p>
+    </div>
+  </div>
+</footer> -->
+
+<!-- Sketchy SVG elements for decoration -->
+<svg class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <path class="sketch-path" d="M0,20 Q25,5 50,20 T100,20" stroke="#ff7ab3" stroke-width="0.5" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation-delay: 0.5s;"></path>
+  <path class="sketch-path" d="M0,50 Q25,35 50,50 T100,50" stroke="#758cff" stroke-width="0.5" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation-delay: 1s;"></path>
+  <path class="sketch-path" d="M0,80 Q25,65 50,80 T100,80" stroke="#ffcc75" stroke-width="0.5" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation-delay: 1.5s;"></path>
+</svg>
 
 <script>
   // Mobile menu toggle
@@ -722,7 +936,8 @@
       });
     }
   });
-    // Formspree form submission
+  
+  // Formspree form submission
   const contactForm = document.getElementById('contact-form');
   
   contactForm.addEventListener('submit', async (e) => {
@@ -748,8 +963,8 @@
       if (response.ok) {
         // Show success message
         const successMessage = document.createElement('div');
-        successMessage.className = 'mt-4 p-4 bg-green-100 text-green-800 rounded-lg text-center';
-        successMessage.textContent = 'Message sent successfully!';
+        successMessage.className = 'mt-4 p-4 bg-green-100 text-green-800 rounded-lg text-center hand-drawn-border';
+        successMessage.textContent = 'Message sent successfully! We\'ll get back to you soon. 🎉';
         contactForm.appendChild(successMessage);
         
         // Reset form
@@ -765,7 +980,7 @@
     } catch (error) {
       // Show error message
       const errorMessage = document.createElement('div');
-      errorMessage.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-lg text-center';
+      errorMessage.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-lg text-center hand-drawn-border';
       errorMessage.textContent = 'Oops! There was a problem sending your message. Please try again.';
       contactForm.appendChild(errorMessage);
       
@@ -778,6 +993,16 @@
       submitButton.innerHTML = originalButtonText;
       submitButton.disabled = false;
     }
+  });
+
+  // Add sketchy animation to all hand-drawn borders on hover
+  document.querySelectorAll('.hand-drawn-border').forEach(element => {
+    element.addEventListener('mouseenter', () => {
+      element.style.transform = 'rotate(0.5deg)';
+    });
+    element.addEventListener('mouseleave', () => {
+      element.style.transform = 'rotate(0deg)';
+    });
   });
 </script>
 
