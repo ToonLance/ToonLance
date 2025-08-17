@@ -1,1010 +1,1405 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToonLance - Playful 2D Animation Studio</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      font-family: 'Patrick Hand', cursive;
-      background: #fff9fb;
-      overflow-x: hidden;
-      letter-spacing: 0.5px;
-    }
-    h1, h2, h3, h4 {
-      font-family: 'Fredoka One', cursive;
-      letter-spacing: 1px;
-    }
-    
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 12px;
-      height: 12px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: #ffe6f0;
-      border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: #ff7ab3;
-      border-radius: 10px;
-      border: 2px solid #ffe6f0;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: #ff5c9d;
-    }
-    
-    /* Hand-drawn animations */
-    @keyframes squiggly {
-      0% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(2deg) scale(1.02); }
-      50% { transform: rotate(-2deg) scale(0.98); }
-      75% { transform: rotate(1deg) scale(1.01); }
-      100% { transform: rotate(0deg) scale(1); }
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-    }
-    
-    @keyframes pencilScribble {
-      0% { transform: translateX(0) rotate(0deg); }
-      25% { transform: translateX(5px) rotate(5deg); }
-      50% { transform: translateX(-5px) rotate(-5deg); }
-      75% { transform: translateX(3px) rotate(3deg); }
-      100% { transform: translateX(0) rotate(0deg); }
-    }
-    
-    @keyframes colorPulse {
-      0% { filter: hue-rotate(0deg); }
-      50% { filter: hue-rotate(15deg); }
-      100% { filter: hue-rotate(0deg); }
-    }
-    
-    @keyframes brushStroke {
-      from { transform: scaleX(0); opacity: 0; }
-      to { transform: scaleX(1); opacity: 1; }
-    }
-    
-    @keyframes sketchIn {
-      from { 
-        stroke-dashoffset: 1000;
-        opacity: 0;
-      }
-      to { 
-        stroke-dashoffset: 0;
-        opacity: 1;
-      }
-    }
-    
-    .squiggly-animate {
-      animation: squiggly 8s ease-in-out infinite;
-    }
-    
-    .floating {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    .pencil-scribble {
-      animation: pencilScribble 1.5s ease-in-out infinite;
-    }
-    
-    .color-pulse {
-      animation: colorPulse 10s linear infinite;
-    }
-    
-    .animate-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                 transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    .animate-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .delay-1 { transition-delay: 0.2s; }
-    .delay-2 { transition-delay: 0.4s; }
-    .delay-3 { transition-delay: 0.6s; }
-    
-    .brush-stroke {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .brush-stroke::after {
-      content: '';
-      position: absolute;
-      left: -5px;
-      right: -5px;
-      bottom: 5px;
-      height: 12px;
-      background: rgba(255, 122, 178, 0.3);
-      z-index: -1;
-      transform: skewX(-15deg);
-      transform-origin: left;
-      animation: brushStroke 1s ease-out forwards;
-    }
-    
-    .hand-drawn-border {
-      border: 3px solid #333;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-    }
-    
-    .doodle-underline {
-      position: relative;
-    }
-    
-    .doodle-underline::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 6px;
-      bottom: -2px;
-      left: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='100' height='6' viewBox='0 0 100 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3C15 5 30 1 45 3S75 1 99 3' stroke='%23ff7ab3' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: repeat-x;
-      background-size: 100px 6px;
-    }
-    
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      overflow: hidden;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                 box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-      border: 4px solid white;
-    }
-    
-    .video-container:hover {
-      transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) scale(1.02);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-    }
-    
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    
-    .play-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80px;
-      height: 80px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      border: 3px solid #ff7ab3;
-    }
-    
-    .play-button:hover {
-      transform: translate(-50%, -50%) scale(1.1);
-      background: white;
-    }
-    
-    .play-button::after {
-      content: '';
-      display: block;
-      width: 0;
-      height: 0;
-      border-top: 15px solid transparent;
-      border-bottom: 15px solid transparent;
-      border-left: 25px solid #ff7ab3;
-      margin-left: 5px;
-    }
-    
-    .service-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-      position: relative;
-      overflow: hidden;
-      border: 3px solid white;
-    }
-    
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 8px;
-      background: linear-gradient(90deg, #ff7ab3, #ff758c);
-    }
-    
-    .service-card:hover {
-      transform: translateY(-10px) rotate(1deg);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-      border-color: #ffe6f0;
-    }
-    
-    /* Testimonial Card Styles */
-    .testimonial-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-      border: 3px solid white;
-    }
-    
-    .testimonial-card:hover {
-      transform: translateY(-5px) rotate(0.5deg);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-      border-color: #e6f0ff;
-    }
-    
-    .testimonial-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 8px;
-      background: linear-gradient(90deg, #758cff, #75ffcc);
-    }
-    
-    .testimonial-quote {
-      position: relative;
-      padding-left: 1.5rem;
-    }
-    
-    .testimonial-quote::before {
-      content: '"';
-      position: absolute;
-      left: 0;
-      top: -0.5rem;
-      font-size: 3rem;
-      color: #758cff;
-      opacity: 0.3;
-      font-family: serif;
-    }
-    
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      margin-top: 1.5rem;
-    }
-    
-    .testimonial-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 1rem;
-      border: 3px solid #ff7ab3;
-      background: #ffe6f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-    }
-    
-    .doodle-bg {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ff7ab3' fill-opacity='0.05'/%3E%3C/svg%3E");
-      opacity: 0.5;
-      z-index: 0;
-    }
-    
-    .color-splash {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.15;
-      z-index: 0;
-    }
-    
-    .splash-1 {
-      background: #ff7ab3;
-      top: 10%;
-      left: 5%;
-      animation: float 8s ease-in-out infinite;
-    }
-    
-    .splash-2 {
-      background: #758cff;
-      bottom: 15%;
-      right: 10%;
-      animation: float 10s ease-in-out infinite reverse;
-    }
-    
-    .splash-3 {
-      background: #ffcc75;
-      top: 60%;
-      left: 30%;
-      animation: float 12s ease-in-out infinite 2s;
-    }
-    
-    /* Art Gallery Styles */
-    .art-card {
-      background: white;
-      border-radius: 20px;
-      padding: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-      border: 3px solid white;
-    }
-    
-    .art-card:hover {
-      transform: translateY(-5px) rotate(0.5deg);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-      border-color: #ffe6f0;
-    }
-    
-    .art-image-container {
-      position: relative;
-      padding-bottom: 100%;
-      overflow: hidden;
-      border-radius: 15px;
-      margin-bottom: 1rem;
-      border: 3px solid #ffe6f0;
-    }
-    
-    .art-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    
-    .art-card:hover .art-image {
-      transform: scale(1.03);
-    }
-    
-    .art-title {
-      font-family: 'Fredoka One', sans-serif;
-      font-size: 1.5rem;
-      color: #ff7ab3;
-      text-align: center;
-      margin-top: 0.5rem;
-    }
-    
-    /* Sketchy Button */
-    .sketchy-btn {
-      position: relative;
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      transform-style: preserve-3d;
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-    }
-    
-    .sketchy-btn::before {
-      content: '';
-      position: absolute;
-      top: -3px;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      border: 2px dashed currentColor;
-      border-radius: inherit;
-      opacity: 0.3;
-      pointer-events: none;
-    }
-    
-    .sketchy-btn:hover {
-      transform: translateY(-3px) rotate(1deg);
-      box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
-    }
-    
-    /* Hand-drawn separator */
-    .hand-drawn-separator {
-      position: relative;
-      height: 30px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M1200 0L0 0 0 7.99C0 7.99 200 20 400 20s400-12.01 400-12.01S800 20 1000 20 1200 7.99 1200 7.99L1200 0z' fill='%23ffffff'%3E%3C/path%3E%3C/svg%3E");
-      background-size: cover;
-      background-repeat: no-repeat;
-      margin: 2rem 0;
-    }
-    
-    /* Animation for sketch elements */
-    .sketch-path {
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      animation: sketchIn 2s ease-in-out forwards;
-    }
-    
-    /* Custom checkbox */
-    .custom-checkbox {
-      position: relative;
-      padding-left: 2rem;
-      cursor: pointer;
-    }
-    
-    .custom-checkbox input {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
-    
-    .checkmark {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 1.5rem;
-      width: 1.5rem;
-      background-color: white;
-      border: 2px solid #ff7ab3;
-      border-radius: 5px;
-    }
-    
-    .custom-checkbox:hover input ~ .checkmark {
-      background-color: #ffe6f0;
-    }
-    
-    .custom-checkbox input:checked ~ .checkmark {
-      background-color: #ff7ab3;
-    }
-    
-    .checkmark:after {
-      content: "";
-      position: absolute;
-      display: none;
-    }
-    
-    .custom-checkbox input:checked ~ .checkmark:after {
-      display: block;
-    }
-    
-    .custom-checkbox .checkmark:after {
-      left: 0.45rem;
-      top: 0.2rem;
-      width: 0.4rem;
-      height: 0.8rem;
-      border: solid white;
-      border-width: 0 3px 3px 0;
-      transform: rotate(45deg);
-    }
-    
-    @media (max-width: 768px) {
-      .hero-heading {
-        font-size: 2.5rem;
-      }
-      .play-button {
-        width: 60px;
-        height: 60px;
-      }
-      .play-button::after {
-        border-top: 12px solid transparent;
-        border-bottom: 12px solid transparent;
-        border-left: 20px solid #ff7ab3;
-      }
-      
-      .hand-drawn-border {
-        border-radius: 155px 10px 155px 10px/10px 155px 10px 155px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToonLance | Professional 2D Animation Studio</title>
+    <link rel="icon" href="toonlance.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #FF5E7D;
+            --secondary: #47CFD0;
+            --accent: #FFE05D;
+            --dark: #2A2D43;
+            --light: #FFF9F0;
+            --highlight: #FF9F43;
+            --pink: #FF8BBD;
+            --purple: #A78BFA;
+            --blue: #5EAAF8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        @font-face {
+            font-family: 'Comic Neue';
+            src: url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 158, 189, 0.1) 0%, rgba(255, 158, 189, 0.05) 90%);
+        }
+        
+        /* Hand-drawn elements */
+        .hand-drawn-border {
+            position: relative;
+        }
+        
+        .hand-drawn-border::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px dashed var(--accent);
+            border-radius: 12px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        .sketchy-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sketchy-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px dashed var(--dark);
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        /* Brush stroke text effect */
+        .brush-stroke {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .brush-stroke::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background-color: var(--highlight);
+            opacity: 0.4;
+            z-index: -1;
+            border-radius: 50% 50% 0 0;
+            transform: rotate(-1deg);
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(255, 94, 125, 0.3);
+            border-bottom: 6px dotted var(--accent);
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary), 
+                var(--purple), 
+                var(--pink));
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+            animation: bounce 1.5s infinite alternate;
+            color: white;
+            -webkit-text-stroke: 2px var(--dark);
+            letter-spacing: 2px;
+            transform: rotate(-2deg);
+            display: inline-block;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px dashed white;
+            transform: rotate(1deg);
+            display: inline-block;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: var(--dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 4px dotted var(--accent);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-small {
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: none;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        nav li {
+            transform: rotate(-1deg);
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            background-color: var(--primary);
+            display: inline-block;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+        }
+        
+        nav a:hover {
+            background-color: var(--highlight);
+            color: var(--dark);
+            transform: translateY(-3px) rotate(1deg);
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed var(--accent);
+            border-radius: 30px;
+            top: -2px;
+            left: -2px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            opacity: 0.5;
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: var(--primary);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--dark);
+            padding: 1rem;
+            z-index: 99;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-bottom: 4px dotted var(--accent);
+        }
+        
+        .mobile-menu.active {
+            display: block;
+        }
+        
+        .mobile-menu ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .mobile-menu li {
+            width: 100%;
+        }
+        
+        .mobile-menu a {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 3px solid var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary), 
+                var(--purple), 
+                var(--pink));
+        }
+        
+        section:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 15px 15px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+            transform: rotate(-1deg);
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background-color: var(--accent);
+            bottom: 5px;
+            left: 0;
+            border-radius: 5px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        /* Video Showcase */
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .video-card {
+            flex: 1 1 100%;
+            max-width: 100%;
+            background: var(--dark);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+            border: 4px solid var(--dark);
+            transform: rotate(-1deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: rotate(1deg) scale(1.02);
+        }
+        
+        .video-card video {
+            width: 100%;
+            display: block;
+            border-bottom: 4px solid var(--dark);
+        }
+        
+        .video-info {
+            padding: 1.5rem;
+            background: white;
+            border-top: 4px dashed var(--accent);
+        }
+        
+        .video-info h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        /* Image Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .gallery-item {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            aspect-ratio: 16/9;
+            border: 3px solid var(--dark);
+            transform: rotate(0deg);
+        }
+        
+        .gallery-item:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+        
+        .gallery-item:nth-child(even) {
+            transform: rotate(2deg);
+        }
+        
+        .gallery-item:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(42, 45, 67, 0.9);
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+        
+        /* About Section */
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .about-text {
+            flex: 1 1 300px;
+        }
+        
+        .about-text p {
+            margin-bottom: 1rem;
+            background-color: rgba(255, 224, 93, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .skills {
+            flex: 1 1 300px;
+            background-color: rgba(71, 207, 208, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px dashed var(--secondary);
+        }
+        
+        /* Updated Expertise Section */
+        .expertise-list {
+            margin-top: 1.5rem;
+        }
+
+        .expertise-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .expertise-icon {
+            font-size: 1.8rem;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+
+        .expertise-content h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .expertise-content p {
+            margin: 0;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        /* Contact Section */
+        #contact {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: white;
+            padding: 3rem 1rem;
+            position: relative;
+            overflow: hidden;
+            border-top: 6px dotted var(--accent);
+            border-bottom: 6px dotted var(--accent);
+        }
+        
+        .color-splash {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+        }
+        
+        .splash-1 {
+            top: -50px;
+            left: -50px;
+            background: var(--accent);
+            width: 300px;
+            height: 300px;
+        }
+        
+        .splash-2 {
+            bottom: -50px;
+            right: -50px;
+            background: var(--secondary);
+            width: 250px;
+            height: 250px;
+        }
+        
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .contact-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-header h2 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
+            transform: rotate(-2deg);
+        }
+        
+        .contact-header h2::after {
+            display: none;
+        }
+        
+        .contact-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        #contact-form {
+            display: grid;
+            gap: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        #contact-form input,
+        #contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        #contact-form input::placeholder,
+        #contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        #contact-form input:focus,
+        #contact-form textarea:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+        
+        #contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        #contact-form button {
+            background-color: white;
+            color: var(--pink);
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #contact-form button:hover {
+            background-color: var(--light);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-message {
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .form-success {
+            background-color: rgba(46, 213, 115, 0.2);
+            color: white;
+            border: 2px dashed rgba(46, 213, 115, 0.5);
+        }
+        
+        .form-error {
+            background-color: rgba(255, 71, 87, 0.2);
+            color: white;
+            border: 2px dashed rgba(255, 71, 87, 0.5);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary), 
+                var(--purple), 
+                var(--pink));
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: white;
+            -webkit-text-stroke: 1px var(--accent);
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+        
+        .footer-tagline {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .contact-info {
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+        
+        .contact-info p {
+            margin: 0.5rem 0;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+            background-color: var(--highlight);
+            color: var(--dark);
+        }
+        
+        .copyright {
+            margin-top: 1.5rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes bounce {
+            from {
+                transform: translateY(0) rotate(-2deg);
+            }
+            to {
+                transform: translateY(-10px) rotate(-2deg);
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delay-1 {
+            animation-delay: 0.3s;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            /* Mobile Navigation */
+            nav ul {
+                display: none;
+            }
+            
+            .logo-small {
+                display: block;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hamburger.active span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+            
+            /* Header adjustments */
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+                padding: 0.5rem;
+            }
+            
+            /* Section adjustments */
+            section {
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            /* Video adjustments */
+            .video-card {
+                flex: 1 1 100%;
+                max-width: 100%;
+                margin-bottom: 1rem;
+            }
+            
+            .video-info {
+                padding: 1rem;
+            }
+            
+            .video-info h3 {
+                font-size: 1.3rem;
+            }
+            
+            /* Gallery adjustments */
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item {
+                aspect-ratio: 1/1;
+            }
+            
+            /* About adjustments */
+            .about-content {
+                flex-direction: column;
+            }
+            
+            /* Contact adjustments */
+            .contact-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            #contact-form {
+                padding: 1rem;
+            }
+            
+            .expertise-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .expertise-icon {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            section {
+                padding: 1rem;
+                border-radius: 15px;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .contact-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .footer-logo {
+                font-size: 1.8rem;
+            }
+            
+            .social-link {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            /* Make videos full width on mobile */
+            .video-card {
+                border-radius: 0;
+                margin-left: -1rem;
+                margin-right: -1rem;
+                max-width: none;
+                width: calc(100% + 2rem);
+            }
+            
+            /* Make gallery images full width on mobile */
+            .gallery-item {
+                border-radius: 0;
+                margin-left: -1rem;
+                margin-right: -1rem;
+                width: calc(100% + 2rem);
+            }
+        }
+        
+        /* Desktop Minimalism Enhancements */
+        @media (min-width: 769px) {
+            /* Simplify header */
+            header {
+                padding: 4rem 0;
+            }
+            
+            .logo {
+                font-size: 3.5rem;
+                -webkit-text-stroke: 1.5px var(--dark);
+            }
+            
+            .tagline {
+                font-size: 1.3rem;
+                background-color: transparent;
+                border: none;
+                padding: 0.5rem 0;
+            }
+            
+            /* Simplify navigation */
+            nav {
+                padding: 0.8rem 0;
+            }
+            
+            nav a {
+                padding: 0.5rem 1.2rem;
+                background-color: transparent;
+                box-shadow: none;
+            }
+            
+            nav a:hover {
+                background-color: var(--primary);
+                box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+            }
+            
+            /* Simplify sections */
+            section {
+                padding: 2rem;
+                box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+            }
+            
+            section:hover {
+                box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Simplify video cards */
+            .video-card {
+                box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Simplify gallery */
+            .gallery-item {
+                box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+            }
+            
+            .gallery-item:hover {
+                box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Simplify expertise items */
+            .expertise-item {
+                padding: 0.8rem;
+                background-color: transparent;
+                border-left: none;
+            }
+            
+            .expertise-icon {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="text-gray-800 relative">
-
-<!-- Header -->
-<header class="fixed w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="#home" class="text-2xl font-bold text-pink-500 flex items-center hover:text-pink-600 transition-colors">
-      <span class="text-3xl mr-2 floating">🎨</span>
-      <span class="brush-stroke squiggly-animate">ToonLance</span>
-    </a>
-    <nav class="hidden md:flex space-x-8">
-      <a href="#home" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Home</a>
-      <a href="#services" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Services</a>
-      <a href="#testimonials" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Testimonials</a>
-      <a href="#showcase" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Showcase</a>
-      <a href="#contact" class="font-medium doodle-underline hover:text-pink-500 transition-colors">Contact</a>
+<body>
+    <header>
+        <h1 class="logo">ToonLance</h1>
+        <p class="tagline">Where Imagination Meets Frame-by-Frame Magic</p>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <div class="logo-small">ToonLance</div>
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul>
+                <li><a href="#showcase">Showcase</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
     </nav>
-    <button id="mobile-menu-toggle" class="md:hidden">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="line-top"/>
-        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="line-middle"/>
-        <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="line-bottom"/>
-      </svg>
-    </button>
-  </div>
-  
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-sm px-6 py-4 space-y-4 border-t border-gray-100">
-    <a href="#home" class="block py-2 font-medium hover:text-pink-500 transition-colors">Home</a>
-    <a href="#services" class="block py-2 font-medium hover:text-pink-500 transition-colors">Services</a>
-    <a href="#testimonials" class="block py-2 font-medium hover:text-pink-500 transition-colors">Testimonials</a>
-    <a href="#showcase" class="block py-2 font-medium hover:text-pink-500 transition-colors">Showcase</a>
-    <a href="#contact" class="block py-2 font-medium hover:text-pink-500 transition-colors">Contact</a>
-  </div>
-</header>
-
-<main class="pt-20">
-  <!-- Hero Section -->
-  <section id="home" class="py-24 px-6 bg-gradient-to-br from-pink-50 to-purple-50 relative overflow-hidden">
-    <div class="doodle-bg"></div>
-    <div class="color-splash splash-1"></div>
-    <div class="color-splash splash-2"></div>
-    <div class="color-splash splash-3"></div>
     
-    <div class="max-w-6xl mx-auto relative z-10">
-      <div class="flex flex-col lg:flex-row items-center gap-12">
-        <div class="lg:w-1/2 animate-in">
-          <h1 class="hero-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            We Bring <span class="text-pink-500 brush-stroke">Characters</span> to Life!
-          </h1>
-          <p class="text-xl mb-8 text-gray-700">
-            Your stories deserve <span class="font-bold text-pink-500">vibrant animation</span> that pops off the screen. Let's create something magical together!
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <a href="#contact" class="sketchy-btn bg-pink-500 text-white hover:bg-pink-600">
-              Start Your Project <span class="pencil-scribble inline-block ml-1">✏️</span>
-            </a>
-            <a href="#showcase" class="sketchy-btn bg-white text-pink-500 border-2 border-pink-300 hover:bg-pink-50">
-              See Our Work <span class="floating ml-1">✨</span>
-            </a>
-          </div>
-        </div>
-        <div class="lg:w-1/2 animate-in delay-1">
-          <div class="video-container">
-            <iframe id="hero-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <div id="video-thumbnail" class="absolute inset-0">
-              <img src="https://img.youtube.com/vi/0mg2m6MiJGE/maxresdefault.jpg" alt="Animation showcase" class="w-full h-full object-cover">
-              <div class="play-button" id="play-button"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="mobile-menu">
+        <ul>
+            <li><a href="#showcase">Showcase</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
     </div>
-  </section>
-
-  <!-- Art Gallery Section -->
-  <section id="art-gallery" class="py-20 px-6 bg-white relative overflow-hidden">
-    <div class="doodle-bg"></div>
-    <div class="max-w-6xl mx-auto relative z-10">
-      <div class="text-center mb-16 animate-in">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Our <span class="text-pink-500 brush-stroke">Frames</span>
-        </h2>
-        <p class="text-xl text-gray-600">
-          Each Frame has its own Unique Story
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="art-card animate-in">
-          <div class="art-image-container">
-            <img src="classroomthumbnail.png" alt="Artwork 1" class="art-image">
-          </div>
-          <h3 class="art-title">"CLASSROOM SCENE"</h3>
-        </div>
-        
-        <div class="art-card animate-in delay-1">
-          <div class="art-image-container">
-            <img src="tiethumbnail.jpg" alt="Artwork 2" class="art-image">
-          </div>
-          <h3 class="art-title">"TIE KNOTTING"</h3>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services Section -->
-  <section id="services" class="py-20 px-6 bg-white relative overflow-hidden">
-    <div class="doodle-bg"></div>
-    <div class="max-w-6xl mx-auto relative z-10">
-      <div class="text-center mb-16 animate-in">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Our <span class="text-pink-500 brush-stroke">Creative</span> Services
-        </h2>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Everything you need to make your animation dreams a reality
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="service-card animate-in">
-          <div class="text-5xl mb-4 floating">🎬</div>
-          <h3 class="text-2xl font-bold mb-3 text-pink-500">2D Animation</h3>
-          <p class="text-gray-700">
-            Fluid, expressive animations that bring your characters and stories to life frame by frame with that classic hand-drawn charm.
-          </p>
-        </div>
-        
-        <div class="service-card animate-in delay-1">
-          <div class="text-5xl mb-4 floating">🧑‍🎨</div>
-          <h3 class="text-2xl font-bold mb-3 text-pink-500">Character Design</h3>
-          <p class="text-gray-700">
-            Memorable characters with exaggerated features and loads of personality that leap off the screen.
-          </p>
-        </div>
-        
-        <div class="service-card animate-in delay-2">
-          <div class="text-5xl mb-4 floating">📝</div>
-          <h3 class="text-2xl font-bold mb-3 text-pink-500">Storyboarding</h3>
-          <p class="text-gray-700">
-            Visual narratives with dynamic compositions that map out your story with perfect comedic timing.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials Section -->
-  <section id="testimonials" class="py-20 px-6 bg-gray-50 relative overflow-hidden">
-    <div class="doodle-bg"></div>
-    <div class="color-splash splash-1" style="background: #758cff;"></div>
-    <div class="color-splash splash-2" style="background: #75ffcc;"></div>
     
-    <div class="max-w-6xl mx-auto relative z-10">
-      <div class="text-center mb-16 animate-in">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          What Our <span class="text-pink-500 brush-stroke">Clients</span> Say
-        </h2>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Don't just take our word for it - hear from happy creators!
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="testimonial-card animate-in">
-          <div class="testimonial-quote">
-            <p class="text-gray-700 italic">"Toonlance's team of animators continue to provide my studio with the animations we need, intuitively and with a level of quality that reflects famous TV series. We negotiated prices that a working-class person can afford. I'll definitely be reaching out again."</p>
-          </div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">💫</div>
-            <div>
-              <h4 class="font-bold text-gray-800">Ryan Edgar</h4>
-              <p class="text-sm text-gray-600">Game Developer</p>
+    <div class="container">
+        <section id="showcase">
+            <h2>Our Animation Work</h2>
+            <p>Handcrafted frame-by-frame animation that breathes life into characters and stories.</p>
+            
+            <div class="video-container">
+                <div class="video-card hand-drawn-border">
+                    <video controls poster="BLUR.png">
+                        <source src="BLUR Shortfilm.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-info">
+                        <h3>BLUR Shortfilm</h3>
+                        <p>Our experimental piece exploring perception through animation. Every frame hand-drawn to create a surreal visual experience.</p>
+                    </div>
+                </div>
+                
+                <div class="video-card hand-drawn-border">
+                    <video controls poster="Fog Thumbnail.jpg">
+                        <source src="Animation Showreel.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-info">
+                        <h3>Showreel 2023</h3>
+                        <p>A collection of our best moments from various projects. The laughter, the drama, the action - all brought to life through animation.</p>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
+        </section>
         
-        <div class="testimonial-card animate-in delay-1">
-          <div class="testimonial-quote">
-            <p class="text-gray-700 italic">"The people at ToonLance are some of the nicest and coolest people I have ever worked with. They focused on quality over quantity even at a cheap price when it comes to animation. I highly recommend them if you ever need a freelancing animation company to work with."</p>
-          </div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">✨</div>
-            <div>
-              <h4 class="font-bold text-gray-800">Panic Toons</h4>
-              <p class="text-sm text-gray-600">Animation Director</p>
+        <section id="gallery">
+            <h2>Frame Gallery</h2>
+            <p>Selected frames that showcase our attention to detail and unique visual style.</p>
+            
+            <div class="gallery">
+                <div class="gallery-item hand-drawn-border">
+                    <img src="tie.png" alt="TIE Frame">
+                    <div class="gallery-caption">
+                        <h3>TIE FRAME</h3>
+                        <p>From our upcoming animated series - capturing a moment of tension</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item hand-drawn-border">
+                    <img src="shoe.png" alt="SHOE Frame">
+                    <div class="gallery-caption">
+                        <h3>SHOE FRAME</h3>
+                        <p>A quiet character moment from episode 3</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item hand-drawn-border">
+                    <img src="classroom.png" alt="CLASSROOM Frame">
+                    <div class="gallery-caption">
+                        <h3>CLASSROOM FRAME</h3>
+                        <p>Establishing shot showing our background art style</p>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
+        </section>
+        
+        <section id="about">
+            <h2>Who We Are</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>We're ToonLance - a small team of animators who believe in the power of hand-drawn animation. No AI, no shortcuts, just pencil-to-paper craftsmanship combined with digital tools.</p>
+                    <p>Our studio was founded on late nights, countless cups of coffee, and a shared passion for bringing characters to life. We specialize in creating animation that feels alive, with weight, personality, and that intangible magic that makes you believe in the characters.</p>
+                    <p>Every project we take on gets our full attention. We're not a factory - we're a studio that cares deeply about the work we put out.</p>
+                </div>
+                
+                <div class="skills">
+                    <h3>What We Do Best</h3>
+                    
+                    <div class="expertise-list">
+                        <div class="expertise-item">
+                            <div class="expertise-icon">🎨</div>
+                            <div class="expertise-content">
+                                <h4>Character Animation</h4>
+                                <p>Making characters move with personality and purpose. We focus on creating performances, not just movement.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="expertise-item">
+                            <div class="expertise-icon">📜</div>
+                            <div class="expertise-content">
+                                <h4>Storyboarding</h4>
+                                <p>Crafting the visual blueprint of your story. We think in sequences, not just shots.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="expertise-item">
+                            <div class="expertise-icon">✨</div>
+                            <div class="expertise-content">
+                                <h4>Motion Design</h4>
+                                <p>Creating movement that communicates, whether it's for a character or a logo.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="expertise-item">
+                            <div class="expertise-icon">🎭</div>
+                            <div class="expertise-content">
+                                <h4>Visual Development</h4>
+                                <p>Establishing the look and feel of your project. Style frames, color scripts, and character designs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-  </section>
-
-  <!-- Showcase Section -->
-  <section id="showcase" class="py-20 px-6 bg-white relative overflow-hidden">
-    <div class="doodle-bg"></div>
-    <div class="max-w-4xl mx-auto relative z-10">
-      <div class="text-center mb-12 animate-in">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Our <span class="text-pink-500 brush-stroke">Animation</span> Showcase
-        </h2>
-        <p class="text-xl text-gray-600">
-          Passion Project (Sneak Peek)
-        </p>
-      </div>
-      
-      <div class="animate-in delay-1">
-        <div class="video-container">
-          <iframe id="showcase-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          <div id="showcase-thumbnail" class="absolute inset-0">
-            <img src="https://img.youtube.com/vi/RxBC_QGWQJE/maxresdefault.jpg" alt="Featured animation" class="w-full h-full object-cover">
-            <div class="play-button" id="showcase-play-button"></div>
-          </div>
-        </div>
-        <div class="mt-8 text-center">
-          <h3 class="text-2xl font-bold text-pink-500">"Fog" Sneak Peek</h3>
-          <p class="text-gray-700 mt-2">
-            Fog Animation Series Coming Soon
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+    
     <!-- Contact Section -->
-  <section id="contact" class="py-20 px-6 bg-gradient-to-br from-pink-500 to-purple-500 text-white relative overflow-hidden">
-    <div class="color-splash splash-1" style="background: #ffcc75;"></div>
-    <div class="color-splash splash-2" style="background: #75ffcc;"></div>
-    
-    <div class="max-w-2xl mx-auto relative z-10">
-      <div class="text-center mb-12 animate-in">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Let's <span class="text-yellow-200 brush-stroke">Create</span> Together!
-        </h2>
-        <p class="text-xl opacity-90">
-          Tell us about your animation dreams and let's make them real
-        </p>
-      </div>
-      
-      <form id="contact-form" class="space-y-4 animate-in delay-1" action="https://formspree.io/f/myzenzjg" method="POST">
-        <div>
-          <input type="text" name="name" placeholder="Your Name" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border" required>
-        </div>
-        <div>
-          <input type="email" name="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border" required>
-        </div>
-        <div>
-          <input type="text" name="discord" placeholder="Discord ID (Optional)" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border">
-        </div>
-        <div>
-          <textarea name="message" rows="4" placeholder="What's your animation vision?" class="w-full p-4 rounded-lg bg-white/20 border border-white/30 placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white/30 transition hand-drawn-border" required></textarea>
-        </div>
-        <!-- <div class="flex items-center">
-          <label class="custom-checkbox text-sm">
-            <input type="checkbox" required>
-            <span class="checkmark"></span>
-            I agree 
-          </label>
-        </div> -->
-        <button type="submit" class="w-full py-4 bg-white text-pink-500 rounded-lg font-bold hover:bg-gray-100 hover:scale-105 transform transition-transform shadow-lg flex items-center justify-center sketchy-btn">
-          Send Message <span class="ml-2 floating">✉️</span>
-        </button>
-      </form>
-    </div>
-  </section>
-</main>
-
-<!-- Footer -->
-<!-- <footer class="bg-gray-900 text-white py-12 px-6 relative overflow-hidden">
-  <div class="doodle-bg"></div>
-  <div class="max-w-6xl mx-auto relative z-10">
-    <div class="grid md:grid-cols-4 gap-8">
-      <div class="animate-in">
-        <h3 class="text-xl font-bold mb-4 text-pink-400">ToonLance</h3>
-        <p class="text-gray-300">
-          Bringing your 2D animation dreams to life with creativity and passion.
-        </p>
-        <div class="flex space-x-4 mt-4">
-          <a href="#" class="text-2xl hover:text-pink-400 transition-colors floating">🎨</a>
-          <a href="#" class="text-2xl hover:text-pink-400 transition-colors floating delay-1">✏️</a>
-          <a href="#" class="text-2xl hover:text-pink-400 transition-colors floating delay-2">📽️</a>
-        </div>
-      </div>
-      
-      <div class="animate-in delay-1">
-        <h3 class="text-xl font-bold mb-4 text-pink-400">Quick Links</h3>
-        <ul class="space-y-2">
-          <li><a href="#home" class="text-gray-300 hover:text-pink-400 transition-colors">Home</a></li>
-          <li><a href="#services" class="text-gray-300 hover:text-pink-400 transition-colors">Services</a></li>
-          <li><a href="#testimonials" class="text-gray-300 hover:text-pink-400 transition-colors">Testimonials</a></li>
-          <li><a href="#showcase" class="text-gray-300 hover:text-pink-400 transition-colors">Showcase</a></li>
-          <li><a href="#contact" class="text-gray-300 hover:text-pink-400 transition-colors">Contact</a></li>
-        </ul>
-      </div>
-      
-      <div class="animate-in delay-2">
-        <h3 class="text-xl font-bold mb-4 text-pink-400">Services</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">2D Animation</a></li>
-          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Character Design</a></li>
-          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Storyboarding</a></li>
-          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Motion Graphics</a></li>
-          <li><a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">Illustration</a></li>
-        </ul>
-      </div>
-      
-      <div class="animate-in delay-3">
-        <h3 class="text-xl font-bold mb-4 text-pink-400">Contact Us</h3>
-        <ul class="space-y-2">
-          <li class="flex items-center">
-            <span class="mr-2">📧</span>
-            <span>hello@toonlance.com</span>
-          </li>
-          <li class="flex items-center">
-            <span class="mr-2">📱</span>
-            <span>+1 (555) 123-4567</span>
-          </li>
-          <li class="flex items-center">
-            <span class="mr-2">🎮</span>
-            <span>ToonLance#1234</span>
-          </li>
-        </ul>
-      </div>
+    <section id="contact">
+        <div class="color-splash splash-1"></div>
+        <div class="color-splash splash-2"></div>
+        
+        <div class="contact-container">
+            <div class="contact-header animate-in">
+                <h2>
+                    Let's <span class="text-yellow-200 brush-stroke">Create</span> Together
+                </h2>
+                <p>
+                    Have a project in mind? Let's talk about how we can bring it to life.
+                </p>
+            </div>
+            
+            <form id="contact-form" class="animate-in delay-1" action="https://formspree.io/f/myzenzjg" method="POST">
+                <div>
+                    <input type="text" name="name" placeholder="Your Name" required>
+                </div>
+                <div>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div>
+                    <input type="text" name="discord" placeholder="Discord: toonlance" value="toonlance" readonly>
+                </div>
+                <div>
+                    <textarea name="message" rows="4" placeholder="Tell us about your project..." required></textarea>
+                </div>
+                <button type="submit" class="sketchy-btn">
+                    Send Message <span class="ml-2 floating">✉️</span>
+                </button>
+                <div id="form-message" class="form-message"></div>
+            </form>
+                </section>
     </div>
     
-    <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 animate-in">
-      <p>&copy; 2023 ToonLance. All rights reserved. Made with ❤️ and 🎨</p>
-    </div>
-  </div>
-</footer> -->
-
-<!-- Sketchy SVG elements for decoration -->
-<svg class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <path class="sketch-path" d="M0,20 Q25,5 50,20 T100,20" stroke="#ff7ab3" stroke-width="0.5" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation-delay: 0.5s;"></path>
-  <path class="sketch-path" d="M0,50 Q25,35 50,50 T100,50" stroke="#758cff" stroke-width="0.5" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation-delay: 1s;"></path>
-  <path class="sketch-path" d="M0,80 Q25,65 50,80 T100,80" stroke="#ffcc75" stroke-width="0.5" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" style="animation-delay: 1.5s;"></path>
-</svg>
-
-<script>
-  // Mobile menu toggle
-  const menuToggle = document.getElementById('mobile-menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-  
-  menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    menuToggle.classList.toggle('menu-open');
-  });
-
-  // Video lazy loading
-  const heroVideo = document.getElementById('hero-video');
-  const heroThumbnail = document.getElementById('video-thumbnail');
-  const playButton = document.getElementById('play-button');
-  
-  playButton.addEventListener('click', () => {
-    heroThumbnail.style.display = 'none';
-    heroVideo.src = 'https://www.youtube.com/embed/0mg2m6MiJGE?autoplay=1&rel=0&showinfo=0';
-  });
-  
-  const showcaseVideo = document.getElementById('showcase-video');
-  const showcaseThumbnail = document.getElementById('showcase-thumbnail');
-  const showcasePlayButton = document.getElementById('showcase-play-button');
-  
-  showcasePlayButton.addEventListener('click', () => {
-    showcaseThumbnail.style.display = 'none';
-    showcaseVideo.src = 'https://www.youtube.com/embed/RxBC_QGWQJE?autoplay=1&rel=0&showinfo=0';
-  });
-
-  // Scroll animations
-  const animateElements = document.querySelectorAll('.animate-in');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-  });
-
-  animateElements.forEach(element => {
-    observer.observe(element);
-  });
-
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const targetId = this.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-      
-      if (targetElement) {
-        window.scrollTo({
-          top: targetElement.offsetTop - 80,
-          behavior: 'smooth'
+    <!-- <footer>
+        <h3 class="footer-logo">ToonLance</h3>
+        <p class="footer-tagline">Professional 2D Animation Studio</p>
+        
+        <div class="contact-info">
+            <p>Email: <a href="mailto:toonlanceservice@gmail.com" style="color: var(--accent);">toonlanceservice@gmail.com</a></p>
+            <p>Discord: toonlance</p>
+        </div>
+        
+        <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link" aria-label="Vimeo"><i class="fab fa-vimeo-v"></i></a>
+            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        
+        <p class="copyright">&copy; 2023 ToonLance. All animation handcrafted with care.</p>
+    </footer> -->
+    
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            
+            // Toggle body scroll when menu is open
+            if (mobileMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         });
         
-        // Close mobile menu if open
-        if (!mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-        }
-      }
-    });
-  });
-
-  // Logo click scroll to top
-  document.querySelector('header a[href="#home"]').addEventListener('click', (e) => {
-    if (window.location.hash === '#home') {
-      e.preventDefault();
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-  });
-  
-  // Formspree form submission
-  const contactForm = document.getElementById('contact-form');
-  
-  contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.innerHTML;
-    
-    // Change button text to indicate loading
-    submitButton.innerHTML = 'Sending...';
-    submitButton.disabled = true;
-    
-    try {
-      const formData = new FormData(contactForm);
-      const response = await fetch(contactForm.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-      
-      if (response.ok) {
-        // Show success message
-        const successMessage = document.createElement('div');
-        successMessage.className = 'mt-4 p-4 bg-green-100 text-green-800 rounded-lg text-center hand-drawn-border';
-        successMessage.textContent = 'Message sent successfully! We\'ll get back to you soon. 🎉';
-        contactForm.appendChild(successMessage);
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
         
-        // Reset form
-        contactForm.reset();
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a, .mobile-menu a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
         
-        // Remove success message after 5 seconds
-        setTimeout(() => {
-          successMessage.remove();
-        }, 5000);
-      } else {
-        throw new Error('Form submission failed');
-      }
-    } catch (error) {
-      // Show error message
-      const errorMessage = document.createElement('div');
-      errorMessage.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-lg text-center hand-drawn-border';
-      errorMessage.textContent = 'Oops! There was a problem sending your message. Please try again.';
-      contactForm.appendChild(errorMessage);
-      
-      // Remove error message after 5 seconds
-      setTimeout(() => {
-        errorMessage.remove();
-      }, 5000);
-    } finally {
-      // Reset button state
-      submitButton.innerHTML = originalButtonText;
-      submitButton.disabled = false;
-    }
-  });
+        // Animation for elements on scroll
+        const animateElements = document.querySelectorAll('.video-card, .gallery-item, section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animateElements.forEach(element => {
+            element.style.opacity = 0;
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(element);
+        });
+        
+        // Video play/pause on hover (desktop only)
+        if (window.innerWidth > 768) {
+            const videos = document.querySelectorAll('video');
+            
+            videos.forEach(video => {
+                video.addEventListener('mouseenter', () => {
+                    if (video.paused) {
+                        video.play().catch(e => console.log(e));
+                    }
+                });
+                
+                video.addEventListener('mouseleave', () => {
+                    if (!video.paused) {
+                        video.pause();
+                    }
+                });
+            });
+        }
+        
+        // Formspree form submission
+        const contactForm = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+        
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            
+            // Change button text to indicate loading
+            submitButton.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+            submitButton.disabled = true;
+            
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    formMessage.textContent = 'Message sent! We\'ll get back to you soon.';
+                    formMessage.className = 'form-message form-success';
+                    formMessage.style.display = 'block';
+                    
+                    // Reset form
+                    contactForm.reset();
+                    contactForm.querySelector('input[name="discord"]').value = 'toonlance';
+                    
+                    // Remove success message after 5 seconds
+                    setTimeout(() => {
+                        formMessage.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                // Show error message
+                formMessage.textContent = 'Oops! There was a problem. Please try again.';
+                formMessage.className = 'form-message form-error';
+                formMessage.style.display = 'block';
+                
+                // Remove error message after 5 seconds
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            } finally {
+                // Reset button state
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            }
+        });
 
-  // Add sketchy animation to all hand-drawn borders on hover
-  document.querySelectorAll('.hand-drawn-border').forEach(element => {
-    element.addEventListener('mouseenter', () => {
-      element.style.transform = 'rotate(0.5deg)';
-    });
-    element.addEventListener('mouseleave', () => {
-      element.style.transform = 'rotate(0deg)';
-    });
-  });
-</script>
+        // Add sketchy animation to all hand-drawn borders on hover
+        document.querySelectorAll('.hand-drawn-border').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.transform = 'rotate(1deg)';
+            });
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'rotate(0deg)';
+            });
+        });
 
+        // Lazy loading for images
+        if ('loading' in HTMLImageElement.prototype) {
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            lazyImages.forEach(img => {
+                img.loading = 'lazy';
+            });
+        } else {
+            // Fallback for browsers that don't support lazy loading
+            const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                lazyLoadObserver.observe(img);
+            });
+        }
+        
+        // Add animation to social links on hover
+        const socialLinks = document.querySelectorAll('.social-link');
+        socialLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                const icon = link.querySelector('i');
+                if (icon) {
+                    icon.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        icon.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            });
+        });
+        
+        // Add subtle animation to logo on page load
+        const logo = document.querySelector('.logo');
+        if (logo) {
+            setTimeout(() => {
+                logo.style.transform = 'rotate(-2deg) scale(1.05)';
+                setTimeout(() => {
+                    logo.style.transform = 'rotate(-2deg) scale(1)';
+                }, 300);
+            }, 500);
+        }
+    </script>
 </body>
 </html>
