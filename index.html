@@ -84,7 +84,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 16px;
+            padding: 0 20px;
         }
 
         /* Header */
@@ -261,6 +261,7 @@
         .hero-content {
             max-width: 700px;
             z-index: 2;
+            width: 100%;
         }
 
         .hero-content h1 {
@@ -1104,8 +1105,11 @@
 
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .container { max-width: 960px; }
-            .hero-content { max-width: 600px; }
+            .container { 
+                max-width: 1140px;
+                padding: 0 20px;
+            }
+            .hero-content { max-width: 650px; }
             .work-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
             .process-timeline::before { left: 30px; }
             .process-step { flex-direction: row !important; }
@@ -1115,6 +1119,10 @@
         }
 
         @media (max-width: 1024px) {
+            .container { 
+                max-width: 960px;
+                padding: 0 20px;
+            }
             .contact-container { grid-template-columns: 1fr; }
             nav ul { display: none; }
             .hamburger { display: block; }
@@ -1134,13 +1142,39 @@
             .modal-controls { flex-wrap: wrap; gap: 0.5rem; }
         }
 
+        /* FIX: Specific fix for 985px width issue */
+        @media (max-width: 992px) and (min-width: 769px) {
+            .container { 
+                max-width: 90%;
+                padding: 0 30px;
+            }
+            .hero-content { 
+                max-width: 85%;
+                margin: 0 auto;
+            }
+            .hero-content p {
+                max-width: 95%;
+            }
+            .work-grid { grid-template-columns: repeat(2, 1fr); }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-step { margin-bottom: 2.5rem; }
+            .step-content { flex-direction: column; }
+            .step-media { padding: 1rem 0; }
+            .contact-container { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+
         @media (max-width: 768px) {
             :root {
                 --section-padding: 50px 0;
             }
             
+            .container { 
+                max-width: 720px;
+                padding: 0 15px;
+            }
             section { padding: var(--section-padding); }
-            .container { padding: 0 12px; }
             h1 { font-size: clamp(1.75rem, 5vw, 2rem); }
             h2 { font-size: clamp(1.5rem, 4vw, 1.75rem); }
             .work-grid, .services-grid, .testimonials-grid, .pricing-grid { grid-template-columns: 1fr; }
@@ -1159,11 +1193,24 @@
             .playback-btn { font-size: 0.8rem; padding: 0.2rem 0.4rem; }
         }
 
+        @media (max-width: 576px) {
+            .container { 
+                max-width: 540px;
+                padding: 0 15px;
+            }
+            .hero-content { max-width: 100%; }
+            .hero-content p { max-width: 95%; }
+        }
+
         @media (max-width: 480px) {
             :root {
                 --section-padding: 40px 0;
             }
             
+            .container { 
+                max-width: 100%;
+                padding: 0 12px;
+            }
             h1 { font-size: clamp(1.5rem, 5vw, 1.75rem); }
             h2 { font-size: clamp(1.3rem, 4vw, 1.5rem); }
             h3 { font-size: clamp(1rem, 3vw, 1.1rem); }
@@ -1175,7 +1222,6 @@
             .control-btn { font-size: 0.9rem; }
             .close-modal { font-size: 1.3rem; }
             .form-group input, .form-group textarea { font-size: 0.8rem; }
-            .container { padding: 0 10px; }
             .section-header { margin-bottom: 1.25rem; }
             .process-timeline::before { display: none; }
             .step-info { padding: 1rem; }
@@ -1183,7 +1229,7 @@
         }
 
         @media (max-width: 360px) {
-            .container { padding: 0 8px; }
+            .container { padding: 0 10px; }
             .btn { font-size: 0.8rem; padding: 0.5rem 1rem; }
             .work-grid { grid-template-columns: 1fr; }
             .overlay-text h3 { font-size: 1.1rem; }
@@ -1191,20 +1237,6 @@
             .section-header { margin-bottom: 1rem; }
             .modal-controls { flex-direction: column; gap: 0.4rem; }
             .progress-bar { margin: 0.4rem 0; }
-        }
-
-        /* Tablet-specific optimizations */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .container { max-width: 90%; }
-            .hero-content { max-width: 80%; }
-            .work-grid { grid-template-columns: repeat(2, 1fr); }
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-            .pricing-grid { grid-template-columns: repeat(2, 1fr); }
-            .process-step { margin-bottom: 2.5rem; }
-            .step-content { flex-direction: column; }
-            .step-media { padding: 1rem 0; }
-            .contact-container { grid-template-columns: 1fr; gap: 1.5rem; }
         }
 
         /* PC-specific optimizations */
@@ -1231,7 +1263,7 @@
             align-items: center;
         }
 
-        /* Mobile-specific subtle animations */
+        /* FIX: Mobile-specific subtle animations - Fixed selector for process steps */
         @media (max-width: 768px) {
             .work-item, .service-card, .testimonial-card, .pricing-card, .step-info {
                 transform: translateY(10px);
@@ -1258,6 +1290,12 @@
             
             .hero-btns {
                 animation: fadeInUp 0.8s ease-out 0.4s both;
+            }
+            
+            /* FIX: Ensure process step content is visible on mobile */
+            .process-step .step-info {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
             }
         }
 
@@ -1334,8 +1372,8 @@
                     </div>
                     <div class="video-overlay">
                         <div class="overlay-text">
-                            <h3>Dynamic Showreel</h3>
-                            <p>A collection of our best 2D animation work</p>
+                            <h3>Click ME</h3>
+                            <p>Click for large view</p>
                         </div>
                     </div>
                 </div>
@@ -1347,8 +1385,8 @@
                     </div>
                     <div class="video-overlay">
                         <div class="overlay-text">
-                            <h3>Character Line Art</h3>
-                            <p>Clean lines for compelling stories</p>
+                            <h3>Click ME</h3>
+                            <p>Click for large view</p>
                         </div>
                     </div>
                 </div>
@@ -1360,8 +1398,8 @@
                     </div>
                     <div class="video-overlay">
                         <div class="overlay-text">
-                            <h3>Rough Animation Draft</h3>
-                            <p>Initial sketches of movement and flow</p>
+                            <h3>Click ME</h3>
+                            <p>Click for large view</p>
                         </div>
                     </div>
                 </div>
