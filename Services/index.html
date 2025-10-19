@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOONLANCE - Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="../content/toonlance.png">
+    <style>
+        :root {
+            --primary: #4A3FBF;
+            --primary-light: #6B5ED7;
+            --primary-dark: #372F8A;
+            --secondary: #0B0B1F;
+            --secondary-light: #1C1C38;
+            --accent: #A89CFF;
+            --text: #F5F5FF;
+            --text-secondary: #D8D8F0;
+            --card-bg: rgba(11, 11, 31, 0.9);
+            --card-border: rgba(168, 156, 255, 0.4);
+            --gradient: linear-gradient(135deg, #4A3FBF 0%, #6B5ED7 50%, #A89CFF 100%);
+            --gradient-horizontal: linear-gradient(90deg, #4A3FBF 0%, #A89CFF 100%);
+            --gradient-process: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            --gradient-testimonials: linear-gradient(135deg, #6B5ED7 0%, #A89CFF 100%);
+            --section-padding: 80px 0;
+            --grid-gap: 16px;
+            --mobile-grid-gap: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-weight: 600;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+
+        /* Video Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(11, 11, 31, 0.95) 0%,
+                rgba(74, 63, 191, 0.6) 50%,
+                rgba(11, 11, 31, 0.95) 100%
+            );
+        }
+
+        #services {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header (Copied from Homepage) */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 30, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 4px 16px rgba(90, 79, 207, 0.15);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo img {
+            height: clamp(36px, 5vw, 44px);
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover { transform: scale(1.05); }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.25rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            font-weight: 500;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover { color: var(--accent); }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 32px;
+            height: 24px;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: var(--text);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 10px; }
+        .hamburger span:nth-child(3) { top: 20px; }
+
+        .hamburger.active span:nth-child(1) {
+            top: 10px;
+            transform: rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+
+        .hamburger.active span:nth-child(3) {
+            top: 10px;
+            transform: rotate(-45deg);
+        }
+
+        /* Mobile Menu */
+        nav.mobile-active ul {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: var(--secondary);
+            padding: 1.5rem;
+            gap: 1.25rem;
+            box-shadow: 0 4px 16px rgba(90, 79, 207, 0.15);
+            z-index: 999;
+        }
+
+        nav.mobile-active a {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* Sections */
+        section {
+            padding: var(--section-padding);
+            position: relative;
+            background: var(--secondary);
+            transition: opacity 0.6s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            animation: fadeInSection 0.8s ease-out;
+        }
+
+        @keyframes fadeInSection {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #services {
+            background: var(--secondary-light);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4.5vw, 2.8rem);
+            font-weight: 500;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        /* NEW: Enhanced Process Section */
+        .process-section {
+            padding: 80px 0;
+            background: var(--card-bg);
+            border-radius: 20px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-horizontal);
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .process-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .process-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .process-header h2 {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .process-header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 60px 0;
+        }
+
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: var(--gradient-horizontal);
+            z-index: 1;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            padding: 0 15px;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            box-shadow: 0 8px 20px rgba(74, 63, 191, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover .step-number {
+            transform: scale(1.1);
+            box-shadow: 0 12px 25px rgba(74, 63, 191, 0.6);
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .step-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Services Subsections */
+        .services-subsection {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            width: 100%; /* Adjusted to full width since only one subsection remains */
+        }
+
+        .services-subsection:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(74, 63, 191, 0.5);
+        }
+
+        .services-subheader {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .services-subheader h3 {
+            font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+            font-weight: 500;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--grid-gap);
+            margin-bottom: 32px;
+            justify-items: center;
+        }
+
+        .service-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(40px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            max-width: 320px;
+            width: 100%;
+            min-height: 420px;
+        }
+
+        .service-item.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+
+        .service-item:hover,
+        .service-item:active {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(74, 63, 191, 0.5);
+        }
+
+        .service-icon {
+            text-align: center;
+            padding: 16px;
+            background: var(--gradient-horizontal);
+        }
+
+        .service-icon i {
+            font-size: 2.4rem;
+            color: var(--text);
+        }
+
+        .service-info {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .service-info h4 {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: 0.2px;
+        }
+
+        /* Examples Subsection */
+        .examples-subsection {
+            margin-top: 12px;
+            padding: 8px;
+            background: rgba(168, 156, 255, 0.1);
+            border-radius: 8px;
+            flex-grow: 0;
+            text-align: center;
+        }
+
+        .examples-subsection h5 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--mobile-grid-gap);
+            padding: 8px;
+            border-radius: 8px;
+            justify-items: center;
+        }
+
+        .example-item {
+            background: var(--secondary-light);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            max-width: 200px;
+            width: 100%;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .example-item.video-large {
+            max-width: 360px; /* Increased width for videos */
+            height: 260px;
+        }
+
+        .example-item.visible {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.4s ease;
+        }
+
+        .example-item:hover,
+        .example-item:active {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(74, 63, 191, 0.3);
+        }
+
+        .example-item img,
+        .example-item video {
+            width: 100%;
+            height: 160px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            object-fit: cover;
+            aspect-ratio: 4/3;
+            loading: lazy;
+        }
+
+        .example-item.video-large .video-container,
+        .example-item.video-large video {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            border-radius: 0;
+        }
+
+        /* Click Me Overlay */
+        .example-item .click-me-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 160px;
+            background: rgba(11, 11, 31, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .example-item.video-large .click-me-overlay {
+            height: 100%;
+            border-radius: 0;
+        }
+
+        .example-item:hover .click-me-overlay {
+            opacity: 1;
+        }
+
+        .click-me-overlay span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .example-item .click-me-overlay {
+                height: 120px;
+            }
+
+            .click-me-overlay span {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .example-item .click-me-overlay {
+                height: 100px;
+            }
+
+            .click-me-overlay span {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Expand Icon */
+        .expand-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: var(--text);
+            font-size: 1.5rem;
+            background: rgba(11, 11, 31, 0.7);
+            border-radius: 50%;
+            padding: 6px;
+            transition: all 0.3s ease;
+            opacity: 1;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .example-item:hover .expand-icon {
+            transform: scale(1.1);
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* View More Button */
+        .view-more-btn {
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            background: var(--gradient);
+            color: var(--text);
+            margin-top: 8px;
+            touch-action: manipulation;
+            min-width: 120px;
+        }
+
+        .view-more-btn:hover,
+        .view-more-btn:active {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(74, 63, 191, 0.4);
+        }
+
+        /* Skeleton Loading */
+        .example-item.loading img,
+        .example-item.loading video {
+            background: linear-gradient(
+                90deg,
+                var(--secondary-light) 25%,
+                rgba(168, 156, 255, 0.2) 50%,
+                var(--secondary-light) 75%
+            );
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Custom Video Controls */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 16/9;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(11, 11, 31, 0.9);
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            flex-wrap: wrap;
+            gap: 4px;
+            z-index: 5;
+        }
+
+        .example-item.video-large .video-controls {
+            border-radius: 0;
+            opacity: 0;
+        }
+
+        .video-controls button {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 5px;
+            margin: 0 2px;
+            min-width: 40px;
+            min-height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .video-controls button:hover,
+        .video-controls button:focus {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .video-controls .progress-bar {
+            flex-grow: 1;
+            height: 4px;
+            background: var(--secondary-light);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+            margin: 0 4px;
+        }
+
+        .video-controls .progress-filled {
+            width: 0%;
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+
+        .video-controls .progress-bar:hover .progress-filled {
+            opacity: 0.8;
+        }
+
+        .video-controls .speed-btn {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            min-width: 40px;
+            border-radius: 4px;
+            background: rgba(168, 156, 255, 0.2);
+        }
+
+        .video-controls .speed-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .modal-content .video-controls {
+            border-radius: 0 0 10px 10px;
+            padding: 8px;
+            opacity: 1;
+        }
+
+        /* Media Modal */
+        .media-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 11, 31, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            animation: fadeInModal 0.3s ease-out;
+            pointer-events: none;
+        }
+
+        .media-modal.active {
+            display: flex;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 80%;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 12px 40px rgba(74, 63, 191, 0.5);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+            position: relative;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .modal-content video {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: auto;
+            border-radius: 12px 12px 0 0;
+            aspect-ratio: 16/9;
+            display: block;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .media-modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--text);
+            font-size: 2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+            z-index: 2100;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .media-modal.active .close-modal {
+            opacity: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInModal {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Buttons */
+        .buttons {
+            text-align: center;
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .buttons a {
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 12px 28px;
+            touch-action: manipulation;
+            min-width: 140px;
+        }
+
+        .buttons a.contact-btn {
+            background: var(--gradient);
+            color: var(--text);
+        }
+
+        .buttons a.testimonials-btn {
+            background: var(--gradient-testimonials);
+            color: var(--text);
+        }
+
+        .buttons a:hover,
+        .buttons a:active {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(74, 63, 191, 0.4);
+        }
+
+        .buttons a.testimonials-btn:hover,
+        .buttons a.testimonials-btn:active {
+            box-shadow: 0 8px 20px rgba(107, 94, 215, 0.5);
+        }
+
+        /* New Styles for Structure Change */
+        .services-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center; /* Centered since only one subsection */
+            gap: 32px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 960px;
+                padding: 0 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 12px;
+            }
+
+            .examples-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                max-width: 800px;
+                padding: 0 18px;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 10px;
+            }
+
+            .examples-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 8px;
+            }
+
+            .service-item {
+                min-height: 400px;
+                max-width: 300px;
+            }
+
+            .modal-content {
+                max-width: 85%;
+                max-height: 75%;
+            }
+
+            .modal-content video {
+                min-width: 400px;
+                min-height: 225px;
+            }
+
+            .services-wrapper {
+                flex-direction: column;
+            }
+
+            /* Process Responsive */
+            .process-steps {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .process-steps::before {
+                display: none;
+            }
+
+            .process-step {
+                display: flex;
+                align-items: flex-start;
+                text-align: left;
+                gap: 20px;
+            }
+
+            .step-number {
+                margin: 0;
+                flex-shrink: 0;
+            }
+
+            .step-icon {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 48px 0;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: var(--mobile-grid-gap);
+                margin-bottom: 24px;
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+                gap: var(--mobile-grid-gap);
+            }
+
+            .section-header {
+                margin-bottom: 32px;
+            }
+
+            .section-header h2 {
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+            }
+
+            .services-subheader {
+                margin-bottom: 20px;
+            }
+
+            .services-subheader h3 {
+                font-size: clamp(1.5rem, 3vw, 2rem);
+            }
+
+            .logo img {
+                height: 48px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 24px;
+            }
+
+            .buttons a {
+                padding: 10px 24px;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .view-more-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+                min-width: 100px;
+            }
+
+            .media-modal {
+                padding: 10px;
+            }
+
+            .modal-content {
+                max-width: 90%;
+                max-height: 80%;
+            }
+
+            .modal-content video {
+                min-width: 350px;
+                min-height: 197px;
+            }
+
+            .close-modal {
+                top: 10px;
+                right: 10px;
+                font-size: 1.8rem;
+            }
+
+            .service-item {
+                max-width: 280px;
+                min-height: 380px;
+            }
+
+            .example-item {
+                max-width: 260px;
+                height: 200px;
+            }
+
+            .example-item.video-large {
+                max-width: 300px;
+                height: 220px;
+            }
+
+            .example-item img,
+            .example-item video,
+            .video-container {
+                height: 120px;
+            }
+
+            .example-item.video-large .video-container,
+            .example-item.video-large video {
+                height: 100%;
+            }
+
+            .expand-icon {
+                font-size: 1.2rem;
+                padding: 5px;
+            }
+
+            /* Process Mobile */
+            .process-section {
+                padding: 50px 0;
+                margin: 40px 0;
+            }
+
+            .process-header {
+                margin-bottom: 40px;
+            }
+
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .step-number {
+                margin: 0 auto 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 14px;
+            }
+
+            .section-header h2 {
+                font-size: clamp(1.6rem, 3.8vw, 2.3rem);
+            }
+
+            .services-subheader h3 {
+                font-size: clamp(1.4rem, 2.8vw, 1.8rem);
+            }
+
+            .service-item {
+                padding: 8px;
+                max-width: 260px;
+                min-height: 360px;
+            }
+
+            .service-info h4 {
+                font-size: 1.1rem;
+            }
+
+            .examples-subsection {
+                padding: 6px;
+                margin-top: 8px;
+            }
+
+            .examples-subsection h5 {
+                margin-bottom: 6px;
+            }
+
+            .examples-grid {
+                padding: 6px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 85%;
+            }
+
+            .modal-content video {
+                min-width: 300px;
+                min-height: 169px;
+            }
+
+            /* Process Mobile */
+            .process-header p {
+                font-size: 1rem;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.4rem;
+            }
+
+            .step-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 12px;
+            }
+
+            .section-header h2 {
+                font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+            }
+
+            .services-subheader h3 {
+                font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+            }
+
+            .service-item {
+                padding: 8px;
+                max-width: 240px;
+                min-height: 340px;
+            }
+
+            .service-info h4 {
+                font-size: 1.05rem;
+            }
+
+            .logo img {
+                height: 40px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 90%;
+            }
+
+            .modal-content video {
+                min-width: 280px;
+                min-height: 158px;
+            }
+
+            .close-modal {
+                top: 8px;
+                right: 8px;
+                font-size: 1.6rem;
+                min-width: 40px;
+                min-height: 40px;
+            }
+
+            .video-controls button {
+                padding: 4px;
+                min-width: 36px;
+                min-height: 36px;
+                font-size: 0.8rem;
+            }
+
+            .video-controls .speed-btn {
+                font-size: 0.7rem;
+                min-width: 36px;
+                padding: 3px 6px;
+            }
+
+            .view-more-btn {
+                padding: 7px 14px;
+                font-size: 0.8rem;
+                min-width: 90px;
+            }
+
+            .example-item {
+                max-width: 240px;
+                height: 180px;
+            }
+
+            .example-item.video-large {
+                max-width: 280px;
+                height: 200px;
+            }
+
+            .example-item img,
+            .example-item video,
+            .video-container {
+                height: 100px;
+            }
+
+            .example-item.video-large .video-container,
+            .example-item.video-large video {
+                height: 100%;
+            }
+
+            .expand-icon {
+                font-size: 1rem;
+                padding: 4px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Selection Styles */
+        ::selection {
+            background: rgba(168, 156, 255, 0.35);
+            color: var(--text);
+        }
+
+        ::-moz-selection {
+            background: rgba(168, 156, 255, 0.35);
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <video class="bg-video" muted loop playsinline>
+            <source src="../content/Animation Showreel.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Header (Copied from Homepage) -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="../content/toonlance_transparent.png" alt="TOONLANCE Studio Logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/services" class="active">Services</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+            </div>
+
+            <div class="services-wrapper">
+                <!-- 2D Services Box -->
+                <div class="services-subsection">
+                    <div class="services-subheader">
+                        <h3>2D Services</h3>
+                    </div>
+                    <div class="services-grid">
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <i class="fas fa-pencil-ruler"></i>
+                            </div>
+                            <div class="service-info">
+                                <h4>Storyboard</h4>
+                            </div>
+                            <div class="examples-subsection">
+                                <h5>Examples</h5>
+                                <div class="examples-grid">
+                                    <div class="example-item video-large" data-media="../content/MarioStoryboard.mp4" data-type="video">
+                                        <div class="video-container">
+                                            <video muted playsinline>
+                                                <source src="../content/MarioStoryboard.mp4" type="video/mp4">
+                                            </video>
+                                            <div class="click-me-overlay">
+                                                <span>Click Me</span>
+                                            </div>
+                                            <i class="fas fa-expand-arrows-alt expand-icon" aria-label="Expand video"></i>
+                                            <div class="video-controls">
+                                                <button class="play-pause" aria-label="Play or pause video"><i class="fas fa-play"></i></button>
+                                                <div class="progress-bar" role="slider" aria-label="Video progress">
+                                                    <div class="progress-filled"></div>
+                                                </div>
+                                                <button class="seek-backward" aria-label="Seek backward 10 seconds"><i class="fas fa-backward"></i></button>
+                                                <button class="seek-forward" aria-label="Seek forward 10 seconds"><i class="fas fa-forward"></i></button>
+                                                <button class="speed-btn" data-speed="0.5" aria-label="Set playback speed to 0.5x">0.5x</button>
+                                                <button class="speed-btn active" data-speed="1" aria-label="Set playback speed to 1x">1x</button>
+                                                <button class="speed-btn" data-speed="1.5" aria-label="Set playback speed to 1.5x">1.5x</button>
+                                                <button class="speed-btn" data-speed="2" aria-label="Set playback speed to 2x">2x</button>
+                                                <button class="frame-prev" aria-label="Previous frame"><i class="fas fa-step-backward"></i></button>
+                                                <button class="frame-next" aria-label="Next frame"><i class="fas fa-step-forward"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/storyboard" class="view-more-btn" aria-label="View more storyboard examples">View More</a>
+                            </div>
+                        </div>
+                                                <div class="service-item">
+                            <div class="service-icon">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="service-info">
+                                <h4>Animation</h4>
+                            </div>
+                            <div class="examples-subsection">
+                                <h5>Examples</h5>
+                                <div class="examples-grid">
+                                    <div class="example-item video-large" data-media="../content/AnimationEx.mp4" data-type="video">
+                                        <div class="video-container">
+                                            <video muted playsinline>
+                                                <source src="../content/AnimationEx.mp4" type="video/mp4">
+                                            </video>
+                                            <div class="click-me-overlay">
+                                                <span>Click Me</span>
+                                            </div>
+                                            <i class="fas fa-expand-arrows-alt expand-icon" aria-label="Expand video"></i>
+                                            <div class="video-controls">
+                                                <button class="play-pause" aria-label="Play or pause video"><i class="fas fa-play"></i></button>
+                                                <div class="progress-bar" role="slider" aria-label="Video progress">
+                                                    <div class="progress-filled"></div>
+                                                </div>
+                                                <button class="seek-backward" aria-label="Seek backward 10 seconds"><i class="fas fa-backward"></i></button>
+                                                <button class="seek-forward" aria-label="Seek forward 10 seconds"><i class="fas fa-forward"></i></button>
+                                                <button class="speed-btn" data-speed="0.5" aria-label="Set playback speed to 0.5x">0.5x</button>
+                                                <button class="speed-btn active" data-speed="1" aria-label="Set playback speed to 1x">1x</button>
+                                                <button class="speed-btn" data-speed="1.5" aria-label="Set playback speed to 1.5x">1.5x</button>
+                                                <button class="speed-btn" data-speed="2" aria-label="Set playback speed to 2x">2x</button>
+                                                <button class="frame-prev" aria-label="Previous frame"><i class="fas fa-step-backward"></i></button>
+                                                <button class="frame-next" aria-label="Next frame"><i class="fas fa-step-forward"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/Animation" class="view-more-btn" aria-label="View more animation examples">View More</a>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="service-info">
+                                <h4>Background</h4>
+                            </div>
+                            <div class="examples-subsection">
+                                <h5>Examples</h5>
+                                <div class="examples-grid">
+                                    <div class="example-item" data-media="../content/SBG3.jpg" data-type="image">
+                                        <img src="../content/SBG3.jpg" alt="Mystical Forest Background" loading="lazy">
+                                        <div class="click-me-overlay">
+                                            <span>Click Me</span>
+                                        </div>
+                                        <i class="fas fa-expand-arrows-alt expand-icon" aria-label="Expand image"></i>
+                                    </div>
+                                </div>
+                                <a href="/Backgrounds" class="view-more-btn" aria-label="View more background examples">View More</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Process Section -->
+            <div class="process-section">
+                <div class="process-container">
+                    <div class="process-header">
+                        <h2>Our Creative Process</h2>
+                        <p>We follow a structured approach to bring your ideas to life with precision and creativity</p>
+                    </div>
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Concept Sketch</h3>
+                                <p>We start by discussing your ideas and sketching out the basics to align on direction.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-icon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Storyboard</h3>
+                                <p>We lay out the scenes in detail to visualize how the story will unfold.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Rough Animation</h3>
+                                <p>We build the rough movements and elements to get a sense of the flow.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-icon">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Clean Up</h3>
+                                <p>We refine everything for smooth, polished animation ready for delivery.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <a href="/#testimonials" class="testimonials-btn" aria-label="Client Satisfaction Experience">What our Client Says</a>
+                <a href="/#contact" class="contact-btn" aria-label="Contact Us">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Modal -->
+    <div class="media-modal" role="dialog" aria-label="Media preview">
+        <span class="close-modal" aria-label="Close modal">&times;</span>
+        <div class="modal-content"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Hamburger menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('nav');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('mobile-active');
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                nav.classList.remove('mobile-active');
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Section fade-in/fade-out on scroll
+        const sections = document.querySelectorAll('section');
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => sectionObserver.observe(section));
+
+        // Animation on scroll for service items
+        const animateElements = document.querySelectorAll('.service-item');
+        const elementObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('animate-in');
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        animateElements.forEach(element => elementObserver.observe(element));
+
+        // Animation for example items
+        const exampleItems = document.querySelectorAll('.example-item');
+        const exampleObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 50);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        exampleItems.forEach(item => exampleObserver.observe(item));
+
+        // Background video control with promise-based play
+        const bgVideo = document.querySelector('.bg-video');
+        const servicesSection = document.querySelector('#services');
+
+        const playVideo = async (video) => {
+            if (video.dataset.isPlaying !== 'true') {
+                try {
+                    video.loop = true;
+                    await video.play();
+                    video.dataset.isPlaying = 'true';
+                } catch (err) {
+                    console.warn('Video play failed:', err);
+                }
+            }
+        };
+
+        const pauseVideo = (video) => {
+            if (video.dataset.isPlaying === 'true') {
+                video.pause();
+                video.dataset.isPlaying = 'false';
+            }
+        };
+
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    playVideo(bgVideo);
+                } else {
+                    pauseVideo(bgVideo);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        videoObserver.observe(servicesSection);
+
+        // Auto-play video-large videos on visibility
+        const largeVideos = document.querySelectorAll('.example-item.video-large video');
+        const largeVideoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    playVideo(video);
+                } else {
+                    pauseVideo(video);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        largeVideos.forEach(video => {
+            video.dataset.isPlaying = 'false';
+            largeVideoObserver.observe(video);
+        });
+
+        // Custom Video Controls
+        const videos = document.querySelectorAll('.video-container video');
+        videos.forEach(video => {
+            const container = video.parentElement;
+            const playPauseBtn = container.querySelector('.play-pause');
+            const seekBackwardBtn = container.querySelector('.seek-backward');
+            const seekForwardBtn = container.querySelector('.seek-forward');
+            const framePrevBtn = container.querySelector('.frame-prev');
+            const frameNextBtn = container.querySelector('.frame-next');
+            const progressBar = container.querySelector('.progress-bar');
+            const progressFilled = container.querySelector('.progress-filled');
+            const speedButtons = container.querySelectorAll('.speed-btn');
+
+            // Play/Pause with promise
+            playPauseBtn.addEventListener('click', async (e) => {
+                e.stopPropagation(); // Prevent modal opening
+                if (video.dataset.isPlaying === 'true') {
+                    pauseVideo(video);
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    await playVideo(video);
+                    video.loop = false;
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            });
+
+            // Playback Speed
+            if (speedButtons.length > 0) {
+                speedButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent modal opening
+                        speedButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        video.playbackRate = parseFloat(btn.dataset.speed);
+                    });
+                });
+            }
+
+            // Seek Backward/Forward
+            seekBackwardBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent modal opening
+                if (video.readyState >= 2 && isFinite(video.duration)) {
+                    video.currentTime = Math.max(0, video.currentTime - 10);
+                }
+            });
+
+            seekForwardBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent modal opening
+                if (video.readyState >= 2 && isFinite(video.duration)) {
+                    video.currentTime = Math.min(video.duration, video.currentTime + 10);
+                }
+            });
+
+            // Frame-by-Frame Navigation
+            if (framePrevBtn) {
+                framePrevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent modal opening
+                    if (video.readyState >= 2 && isFinite(video.duration)) {
+                        if (!video.paused) {
+                            video.pause();
+                            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                            video.dataset.isPlaying = 'false';
+                        }
+                        video.currentTime = Math.max(0, video.currentTime - (1 / 30)); // Assuming 30fps
+                    }
+                });
+            }
+
+            if (frameNextBtn) {
+                frameNextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent modal opening
+                    if (video.readyState >= 2 && isFinite(video.duration)) {
+                        if (!video.paused) {
+                            video.pause();
+                            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                            video.dataset.isPlaying = 'false';
+                        }
+                        video.currentTime = Math.min(video.duration, video.currentTime + (1 / 30)); // Assuming 30fps
+                    }
+                });
+            }
+
+            // Progress Bar
+            video.addEventListener('timeupdate', () => {
+                if (video.readyState >= 2 && isFinite(video.duration)) {
+                    const percentage = (video.currentTime / video.duration) * 100;
+                    progressFilled.style.width = `${percentage}%`;
+                }
+            });
+
+            progressBar.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent modal opening
+                if (video.readyState >= 2 && isFinite(video.duration)) {
+                    const rect = progressBar.getBoundingClientRect();
+                    const pos = (e.clientX - rect.left) / rect.width;
+                    video.currentTime = pos * video.duration;
+                }
+            });
+
+            // Reset controls on video end
+            video.addEventListener('ended', () => {
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                video.currentTime = 0;
+                video.loop = true;
+                video.dataset.isPlaying = 'false';
+                playVideo(video);
+            });
+
+            // Skeleton loading
+            video.classList.add('loading');
+            video.addEventListener('loadeddata', () => {
+                video.classList.remove('loading');
+                playVideo(video);
+            });
+        });
+
+        // Media Modal
+        const mediaModal = document.querySelector('.media-modal');
+        const modalContent = mediaModal.querySelector('.modal-content');
+        const closeModal = mediaModal.querySelector('.close-modal');
+
+        exampleItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                // Prevent modal opening if clicking on video controls or their children
+                if (e.target.closest('.video-controls') || e.target.classList.contains('video-controls')) {
+                    return;
+                }
+
+                const mediaSrc = item.dataset.media;
+                const mediaType = item.dataset.type;
+
+                modalContent.innerHTML = '';
+                if (mediaType === 'image') {
+                    const img = document.createElement('img');
+                    img.src = mediaSrc;
+                    img.alt = '';
+                    modalContent.appendChild(img);
+                } else if (mediaType === 'video') {
+                    const video = document.createElement('video');
+                    video.muted = true;
+                    video.playsinline = true;
+                    const source = document.createElement('source');
+                    source.src = mediaSrc;
+                    source.type = 'video/mp4';
+                    video.appendChild(source);
+                    const controls = document.createElement('div');
+                    controls.className = 'video-controls';
+                    controls.innerHTML = `
+                        <button class="play-pause" aria-label="Play or pause video"><i class="fas fa-play"></i></button>
+                        <div class="progress-bar" role="slider" aria-label="Video progress">
+                            <div class="progress-filled"></div>
+                        </div>
+                        <button class="seek-backward" aria-label="Seek backward 10 seconds"><i class="fas fa-backward"></i></button>
+                        <button class="seek-forward" aria-label="Seek forward 10 seconds"><i class="fas fa-forward"></i></button>
+                        <button class="speed-btn" data-speed="0.5" aria-label="Set playback speed to 0.5x">0.5x</button>
+                        <button class="speed-btn active" data-speed="1" aria-label="Set playback speed to 1x">1x</button>
+                        <button class="speed-btn" data-speed="1.5" aria-label="Set playback speed to 1.5x">1.5x</button>
+                        <button class="speed-btn" data-speed="2" aria-label="Set playback speed to 2x">2x</button>
+                        <button class="frame-prev" aria-label="Previous frame"><i class="fas fa-step-backward"></i></button>
+                        <button class="frame-next" aria-label="Next frame"><i class="fas fa-step-forward"></i></button>
+                        <button class="fullscreen-btn" aria-label="Toggle fullscreen"><i class="fas fa-expand"></i></button>
+                    `;
+                    modalContent.appendChild(video);
+                    modalContent.appendChild(controls);
+
+                    const modalVideo = modalContent.querySelector('video');
+                    const modalPlayPause = controls.querySelector('.play-pause');
+                    const modalSeekBackward = controls.querySelector('.seek-backward');
+                    const modalSeekForward = controls.querySelector('.seek-forward');
+                    const modalFramePrev = controls.querySelector('.frame-prev');
+                    const modalFrameNext = controls.querySelector('.frame-next');
+                    const modalProgressBar = controls.querySelector('.progress-bar');
+                    const modalProgressFilled = controls.querySelector('.progress-filled');
+                    const modalSpeedButtons = controls.querySelectorAll('.speed-btn');
+                    const modalFullscreenBtn = controls.querySelector('.fullscreen-btn');
+                    modalVideo.dataset.isPlaying = 'false';
+
+                    // Play/Pause with promise
+                    modalPlayPause.addEventListener('click', async (e) => {
+                        e.stopPropagation(); // Prevent modal closing
+                        if (modalVideo.dataset.isPlaying === 'true') {
+                            pauseVideo(modalVideo);
+                            modalPlayPause.innerHTML = '<i class="fas fa-play"></i>';
+                        } else {
+                            await playVideo(modalVideo);
+                            modalVideo.loop = false;
+                            modalPlayPause.innerHTML = '<i class="fas fa-pause"></i>';
+                        }
+                    });
+
+                    // Playback Speed
+                    if (modalSpeedButtons.length > 0) {
+                        modalSpeedButtons.forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation(); // Prevent modal closing
+                                modalSpeedButtons.forEach(b => b.classList.remove('active'));
+                                btn.classList.add('active');
+                                modalVideo.playbackRate = parseFloat(btn.dataset.speed);
+                            });
+                        });
+                    }
+
+                    // Frame-by-Frame Navigation
+                    if (modalFramePrev) {
+                        modalFramePrev.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Prevent modal closing
+                            if (modalVideo.readyState >= 2 && isFinite(modalVideo.duration)) {
+                                if (!modalVideo.paused) {
+                                    modalVideo.pause();
+                                    modalPlayPause.innerHTML = '<i class="fas fa-play"></i>';
+                                    modalVideo.dataset.isPlaying = 'false';
+                                }
+                                modalVideo.currentTime = Math.max(0, modalVideo.currentTime - (1 / 30));
+                            }
+                        });
+                    }
+
+                    if (modalFrameNext) {
+                        modalFrameNext.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Prevent modal closing
+                            if (modalVideo.readyState >= 2 && isFinite(modalVideo.duration)) {
+                                if (!modalVideo.paused) {
+                                    modalVideo.pause();
+                                    modalPlayPause.innerHTML = '<i class="fas fa-play"></i>';
+                                    modalVideo.dataset.isPlaying = 'false';
+                                }
+                                modalVideo.currentTime = Math.min(modalVideo.duration, modalVideo.currentTime + (1 / 30));
+                            }
+                        });
+                    }
+
+                    // Fullscreen
+                    if (modalFullscreenBtn) {
+                        modalFullscreenBtn.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Prevent modal closing
+                            if (!document.fullscreenElement) {
+                                modalVideo.requestFullscreen().catch(err => console.warn('Fullscreen failed:', err));
+                                modalFullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                            } else {
+                                document.exitFullscreen();
+                                modalFullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                            }
+                        });
+                        document.addEventListener('fullscreenchange', () => {
+                            if (!document.fullscreenElement) {
+                                modalFullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                            }
+                        });
+                    }
+
+                    modalSeekBackward.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent modal closing
+                        if (modalVideo.readyState >= 2 && isFinite(modalVideo.duration)) {
+                            modalVideo.currentTime = Math.max(0, modalVideo.currentTime - 10);
+                        }
+                    });
+
+                    modalSeekForward.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent modal closing
+                        if (modalVideo.readyState >= 2 && isFinite(modalVideo.duration)) {
+                            modalVideo.currentTime = Math.min(modalVideo.duration, modalVideo.currentTime + 10);
+                        }
+                    });
+
+                    modalVideo.addEventListener('timeupdate', () => {
+                        if (modalVideo.readyState >= 2 && isFinite(modalVideo.duration)) {
+                            const percentage = (modalVideo.currentTime / modalVideo.duration) * 100;
+                            modalProgressFilled.style.width = `${percentage}%`;
+                        }
+                    });
+
+                    modalProgressBar.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent modal closing
+                        if (modalVideo.readyState >= 2 && isFinite(modalVideo.duration)) {
+                            const rect = modalProgressBar.getBoundingClientRect();
+                            const pos = (e.clientX - rect.left) / rect.width;
+                            modalVideo.currentTime = pos * modalVideo.duration;
+                        }
+                    });
+
+                    modalVideo.addEventListener('ended', () => {
+                        modalPlayPause.innerHTML = '<i class="fas fa-play"></i>';
+                        modalVideo.currentTime = 0;
+                        modalVideo.loop = true;
+                        modalVideo.dataset.isPlaying = 'false';
+                        playVideo(modalVideo);
+                    });
+
+                    modalVideo.classList.add('loading');
+                    modalVideo.addEventListener('loadeddata', () => {
+                        modalVideo.classList.remove('loading');
+                        playVideo(modalVideo);
+                    });
+                }
+
+                mediaModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            const modalVideo = modalContent.querySelector('video');
+            if (modalVideo) {
+                pauseVideo(modalVideo);
+                modalVideo.currentTime = 0;
+            }
+            mediaModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        mediaModal.addEventListener('click', (e) => {
+            if (e.target === mediaModal || e.target.classList.contains('modal-content') || e.target.tagName === 'IMG') {
+                const modalVideo = modalContent.querySelector('video');
+                if (modalVideo) {
+                    pauseVideo(modalVideo);
+                    modalVideo.currentTime = 0;
+                }
+                mediaModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOONLANCE - Backgrounds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="../content/toonlance.png">
+    <style>
+        :root {
+            --primary: #2A1F7A;
+            --primary-light: #5A4DBF;
+            --accent: #B8A1FF;
+            --secondary: #0A0A1A;
+            --secondary-light: #1A1A3A;
+            --text: #F8F8FF;
+            --text-secondary: #D0D0F0;
+            --card-bg: rgba(10, 10, 26, 0.9);
+            --card-border: rgba(184, 161, 255, 0.3);
+            --gradient: linear-gradient(135deg, #2A1F7A 0%, #5A4DBF 50%, #B8A1FF 100%);
+            --gradient-horizontal: linear-gradient(90deg, #2A1F7A 0%, #B8A1FF 100%);
+            --section-padding: 80px 0;
+            --grid-gap: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); }
+        h2 { font-size: clamp(2rem, 5vw, 3rem); }
+        h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
+
+        /* Video Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-video {
+            width: 100%;
+            height: 100%;
+            min-width: 100vw;
+            min-height: 100vh;
+            object-fit: cover;
+            object-position: center;
+            filter: brightness(0.4);
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(10, 10, 26, 0.9) 0%, rgba(90, 77, 191, 0.5) 100%);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        header.scrolled {
+            transform: translateY(0);
+            box-shadow: 0 6px 24px rgba(90, 77, 191, 0.15);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo img {
+            height: 48px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover { transform: scale(1.05); }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover { color: var(--accent); }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        nav a.active {
+            color: var(--accent);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 32px;
+            height: 24px;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: var(--text);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 10px; }
+        .hamburger span:nth-child(3) { top: 20px; }
+
+        .hamburger.active span:nth-child(1) {
+            top: 10px;
+            transform: rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+
+        .hamburger.active span:nth-child(3) {
+            top: 10px;
+            transform: rotate(-45deg);
+        }
+
+        /* Sections */
+        section {
+            padding: var(--section-padding);
+            position: relative;
+            background: var(--secondary);
+            transition: opacity 0.6s ease;
+        }
+
+        #backgrounds {
+            background: var(--secondary-light);
+            padding-top: 100px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0.5rem auto 0;
+        }
+
+        /* Background Showcase */
+        .background-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--grid-gap);
+        }
+
+        .background-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-item:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(90, 77, 191, 0.5);
+        }
+
+        .background-title {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .background-image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .background-item:hover .background-image {
+            transform: scale(1.05);
+        }
+
+        .click-me-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 26, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .background-item:hover .click-me-overlay {
+            opacity: 1;
+        }
+
+        .click-me-overlay span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Media Modal */
+        .media-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 26, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            animation: fadeInModal 0.3s ease-out;
+        }
+
+        .media-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 80%;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 12px 40px rgba(90, 77, 191, 0.5);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .media-modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: var(--text);
+            font-size: 2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2100;
+        }
+
+        .close-modal:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Buttons */
+        .buttons {
+            text-align: center;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--text);
+            box-shadow: 0 6px 24px rgba(90, 77, 191, 0.15);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(90, 77, 191, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 960px;
+            }
+
+            .background-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--secondary);
+                padding: 1.5rem;
+                gap: 1.5rem;
+                box-shadow: 0 6px 24px rgba(90, 77, 191, 0.15);
+                z-index: 999;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav a {
+                font-size: 1.25rem;
+                text-align: center;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .background-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .background-image-container {
+                aspect-ratio: 4/3;
+            }
+
+            .click-me-overlay span {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .background-title {
+                font-size: 1.25rem;
+            }
+
+            .background-item {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 85%;
+            }
+
+            .close-modal {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .background-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .background-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Selection Styles */
+        ::selection {
+            background: rgba(168, 156, 255, 0.35);
+            color: var(--text);
+        }
+
+        ::-moz-selection {
+            background: rgba(168, 156, 255, 0.35);
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="../content/Animation Showreel.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo" aria-label="TOONLANCE Home">
+                <img src="../content/toonlance_transparent.png" alt="TOONLANCE Logo">
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/" aria-label="Home">Home</a></li>
+                    <li><a href="/services" aria-label="Services">Services</a></li>
+                    <li><a href="/background.html" class="active" aria-label="Backgrounds">Backgrounds</a></li>
+                    <li><a href="/contact" aria-label="Contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Backgrounds Section -->
+    <section id="backgrounds">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Featured Backgrounds</h2>
+                <p>The are our Featured Backgrounds <br/> Needs Backrounds <br/> just DM on Discord - Toonlance.</p>
+            </div>
+            <div class="background-grid">
+                <div class="background-item">
+                    <!-- <h3 class="background-title">Room for Storytime Animation</h3> -->
+                    <div class="background-image-container" data-media="../content/SBG3.jpg">
+                        <img src="../content/SBG3.jpg" alt="Mystical Forest Background" class="background-image" loading="lazy">
+                        <div class="click-me-overlay">
+                            <span>View Larger</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="background-item">
+                    <!-- <h3 class="background-title">BG Shot for Animation</h3> -->
+                    <div class="background-image-container" data-media="../content/Sbg2.jpg">
+                        <img src="../content/Sbg2.jpg" alt="Cosmic Cityscape Background" class="background-image" loading="lazy">
+                        <div class="click-me-overlay">
+                            <span>View Larger</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="background-item">
+                    <!-- <h3 class="background-title">Desert Oasis</h3> -->
+                    <div class="background-image-container" data-media="../content/Sbg1.jpg">
+                        <img src="../content/Sbg1.jpg" alt="Desert Oasis Background" class="background-image" loading="lazy">
+                        <div class="click-me-overlay">
+                            <span>View Larger</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="background-item">
+                    <!-- <h3 class="background-title">Enchanted Castle</h3> -->
+                    <div class="background-image-container" data-media="../content/sbg4.png">
+                        <img src="../content/sbg4.png" alt="Enchanted Castle Background" class="background-image" loading="lazy">
+                        <div class="click-me-overlay">
+                            <span>View Larger</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="/#contact" class="btn btn-primary">Contact Us</a>
+                <a href="/services" class="btn btn-outline">View More Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Modal -->
+    <div class="media-modal" role="dialog" aria-label="Image preview">
+        <span class="close-modal" aria-label="Close modal">&times;</span>
+        <div class="modal-content"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Navigation
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Background items animation
+        const backgroundItems = document.querySelectorAll('.background-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        backgroundItems.forEach(item => observer.observe(item));
+
+        // Media Modal
+        const mediaModal = document.querySelector('.media-modal');
+        const modalContent = mediaModal.querySelector('.modal-content');
+        const closeModal = mediaModal.querySelector('.close-modal');
+        const backgroundContainers = document.querySelectorAll('.background-image-container');
+
+        backgroundContainers.forEach(container => {
+            container.addEventListener('click', () => {
+                const mediaSrc = container.dataset.media;
+                modalContent.innerHTML = `<img src="${mediaSrc}" alt="Background Image">`;
+                mediaModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            mediaModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            modalContent.innerHTML = '';
+        });
+
+        mediaModal.addEventListener('click', (e) => {
+            if (e.target === mediaModal || e.target.classList.contains('modal-content') || e.target.tagName === 'IMG') {
+                mediaModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                modalContent.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | ToonLance</title>
+     <link rel="icon" href="../content/toonlance.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="../" class="logo">ToonLance</a>
+            
+            <nav>
+                <ul>
+                    <li><a href="../">Home</a></li>
+                    <li><a href="../showcase">Showcase</a></li>
+                    <li><a href="../gallery">Gallery</a></li>
+                    <li><a href="../about" class="active">About</a></li>
+                    <li><a href="../pricing">Pricing</a></li>
+                    <li><a href="../testimonials">Testimonials</a></li>
+                    <li><a href="../contact" >Contact</a></li>
+                </ul>
+            </nav>
+            
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        
+        <div class="mobile-menu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="showcase.html">Showcase</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>About Us</h1>
+            <p>Learn about our approach to animation and what sets us apart in the industry.</p>
+        </div>
+    </section>
+
+    <section id="about-page">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Our Story</h2>
+                    <p>ToonLance was founded on the principle that great animation should be accessible to storytellers of all scales. We believe that every project, whether big or small, deserves the same level of care, creativity, and technical excellence.</p>
+                    
+                    <p>Our team consists of passionate animators who have honed their craft through years of experience in both traditional and digital animation. We understand that animation is more than just moving images—it's about creating emotional connections and bringing ideas to life in ways that resonate with audiences.</p>
+                    
+                    <h2>Our Approach</h2>
+                    <p>We take a collaborative approach to every project, working closely with our clients to understand their vision and bring it to life through animation. Our process combines traditional animation principles with modern digital tools, ensuring that each project benefits from both time-tested techniques and contemporary innovation.</p>
+                    
+                    <p>Quality is at the heart of everything we do. From the initial concept to the final delivery, we maintain the highest standards of craftsmanship, paying attention to every detail to ensure that the final product exceeds expectations.</p>
+                </div>
+                
+                <div class="expertise-grid">
+                    <div class="expertise-item animate-in">
+                        <div class="expertise-icon">🎨</div>
+                        <h4>Character Animation</h4>
+                        <p>Bringing characters to life with personality and emotion through precise movement and timing.</p>
+                    </div>
+                    
+                    <div class="expertise-item animate-in">
+                        <div class="expertise-icon">📜</div>
+                        <h4>Storyboarding</h4>
+                        <p>Crafting visual narratives that guide the storytelling process from concept to completion.</p>
+                    </div>
+                    
+                    <div class="expertise-item animate-in">
+                        <div class="expertise-icon">✨</div>
+                        <h4>Motion Design</h4>
+                        <p>Creating fluid, dynamic movements that enhance visual communication and engagement.</p>
+                    </div>
+                    
+                    <div class="expertise-item animate-in">
+                        <div class="expertise-icon">🎭</div>
+                        <h4>Visual Development</h4>
+                        <p>Establishing unique visual styles and aesthetics that define the look of each project.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">ToonLance</div>
+            <p class="footer-tagline">Professional 2D Animation Studio</p>
+            <p class="copyright">&copy; 2023 ToonLance. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Include the same JavaScript as in index.html
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            
+            if (mobileMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        const animateElements = document.querySelectorAll('.animate-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animateElements.forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
