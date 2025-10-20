@@ -222,6 +222,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
         }
 
         .btn-primary {
@@ -288,15 +289,24 @@
             flex-wrap: wrap;
         }
 
-        /* Featured Animations */
-        #featured-work {
+        /* 2D Animation Showreel Section */
+        #showreel {
             background: var(--secondary-light);
-            padding: var(--section-padding);
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .showreel-container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
         .section-header h2 {
@@ -310,6 +320,145 @@
             font-size: clamp(0.95rem, 2vw, 1rem);
             max-width: 500px;
             margin: 0.5rem auto 0;
+        }
+
+        .showreel-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .showreel-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .showreel-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .showreel-video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .showreel-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .showreel-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 30, 0.9);
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .showreel-item:hover .showreel-controls {
+            opacity: 1;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .control-btn:hover {
+            color: var(--accent);
+        }
+
+        .volume-slider {
+            width: 100px;
+            accent-color: var(--accent);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            width: 0;
+        }
+
+        .speed-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .speed-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .speed-btn.active {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Button Container for Showreel */
+        .showreel-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(0.75rem, 2vw, 1rem);
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .showreel-buttons .btn {
+            min-width: clamp(160px, 40%, 200px);
+            padding: clamp(0.6rem, 1.5vw, 0.75rem) clamp(1.2rem, 3vw, 1.5rem);
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .showreel-buttons .btn-primary:hover,
+        .showreel-buttons .btn-outline:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Featured Animations */
+        #featured-work {
+            background: var(--secondary-light);
+            padding: var(--section-padding);
         }
 
         .work-grid {
@@ -427,33 +576,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: clamp(1rem, 2vw, 1.1rem);
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .control-btn:hover { color: var(--accent); }
-
-        .progress-bar {
-            flex-grow: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            margin: 0 0.75rem;
-            position: relative;
-        }
-
-        .progress {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
-            transition: width 0.1s linear;
         }
 
         .playback-controls {
@@ -1140,9 +1262,20 @@
             .section-header { margin-bottom: 2rem; }
             .process-timeline::before { left: 20px; }
             .modal-controls { flex-wrap: wrap; gap: 0.5rem; }
+            .showreel-video-container { aspect-ratio: 4/3; }
+            .showreel-controls { opacity: 1; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+            .volume-slider { width: 80px; }
+            .control-btn { font-size: 1rem; }
+            .showreel-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .showreel-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
         }
 
-        /* FIX: Specific fix for 985px width issue */
         @media (max-width: 992px) and (min-width: 769px) {
             .container { 
                 max-width: 90%;
@@ -1163,6 +1296,15 @@
             .step-content { flex-direction: column; }
             .step-media { padding: 1rem 0; }
             .contact-container { grid-template-columns: 1fr; gap: 1.5rem; }
+            .showreel-buttons {
+                flex-direction: row;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            .showreel-buttons .btn {
+                min-width: 180px;
+                max-width: 220px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1191,6 +1333,19 @@
             .modal-controls { padding: 0.4rem; }
             .playback-controls { gap: 0.2rem; }
             .playback-btn { font-size: 0.8rem; padding: 0.2rem 0.4rem; }
+            .showreel-title { font-size: 1.25rem; }
+            .showreel-item { padding: 1.5rem; }
+            .control-btn { padding: 0.4rem; font-size: 0.9rem; }
+            .speed-btn { font-size: 0.8rem; padding: 0.2rem 0.5rem; }
+            .volume-slider { width: 60px; }
+            .showreel-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .showreel-buttons .btn {
+                width: 100%;
+                max-width: 280px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1226,6 +1381,17 @@
             .process-timeline::before { display: none; }
             .step-info { padding: 1rem; }
             .playback-controls { flex-wrap: wrap; justify-content: center; }
+            .showreel-controls { padding: 0.5rem; }
+            .showreel-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .showreel-buttons .btn {
+                width: 100%;
+                max-width: 260px;
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
         }
 
         @media (max-width: 360px) {
@@ -1237,9 +1403,13 @@
             .section-header { margin-bottom: 1rem; }
             .modal-controls { flex-direction: column; gap: 0.4rem; }
             .progress-bar { margin: 0.4rem 0; }
+            .showreel-buttons .btn {
+                max-width: 240px;
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
         }
 
-        /* PC-specific optimizations */
         @media (min-width: 1025px) {
             .container { max-width: 1400px; }
             .hero-content { max-width: 700px; }
@@ -1252,6 +1422,14 @@
             .process-step:nth-child(even) { flex-direction: row-reverse; }
             .step-content { flex-direction: row; }
             .contact-container { grid-template-columns: 1fr 1fr; }
+            .showreel-buttons {
+                flex-direction: row;
+                gap: 1.25rem;
+            }
+            .showreel-buttons .btn {
+                min-width: 200px;
+                max-width: 240px;
+            }
         }
 
         /* Button alignment fix for all screen sizes */
@@ -1263,9 +1441,8 @@
             align-items: center;
         }
 
-        /* FIX: Mobile-specific subtle animations - Fixed selector for process steps */
         @media (max-width: 768px) {
-            .work-item, .service-card, .testimonial-card, .pricing-card, .step-info {
+            .work-item, .service-card, .testimonial-card, .pricing-card, .step-info, .showreel-item {
                 transform: translateY(10px);
                 opacity: 0;
                 transition: transform 0.4s ease, opacity 0.4s ease;
@@ -1275,7 +1452,8 @@
             .service-card.animate-in, 
             .testimonial-card.animate-in, 
             .pricing-card.animate-in, 
-            .step-info.animate-in {
+            .step-info.animate-in,
+            .showreel-item.animate-in {
                 transform: translateY(0);
                 opacity: 1;
             }
@@ -1291,8 +1469,7 @@
             .hero-btns {
                 animation: fadeInUp 0.8s ease-out 0.4s both;
             }
-            
-            /* FIX: Ensure process step content is visible on mobile */
+
             .process-step .step-info {
                 opacity: 1 !important;
                 transform: translateY(0) !important;
@@ -1330,7 +1507,7 @@
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/Services">Services</a></li>
+                    <li><a href="#showreel">Showreel</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
@@ -1349,9 +1526,50 @@
                 <h1>toonlance.com</h1>
                 <p>We're a freelance team specializing in 2D animation, turning your concepts into engaging visuals with care and skill.</p>
                 <div class="hero-btns">
-                    <a href="#featured-work" class="btn btn-primary">View Our Work</a>
+                    <a href="#showreel" class="btn btn-primary">View Our Showreel</a>
                     <a href="#contact" class="btn btn-outline">Start Your Project</a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2D Animation Showreel Section -->
+    <section id="showreel">
+        <div class="container showreel-container">
+            <div class="section-header">
+                <h2>2D Animation Showreel</h2>
+                <p>Explore our signature 2D animation showreel, showcasing our creativity and expertise.</p>
+            </div>
+            <div class="showreel-item animate">
+                <h3 class="showreel-title">Toonlance Animation Showcase</h3>
+                <div class="showreel-video-container">
+                    <video class="showreel-video" autoplay muted loop playsinline>
+                        <source src="content/animationshowreel.mp4" type="video/mp4">
+                    </video>
+                    <div class="showreel-controls">
+                        <button class="control-btn play-pause"><i class="fas fa-pause"></i></button>
+                        <button class="control-btn mute-unmute"><i class="fas fa-volume-mute"></i></button>
+                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0">
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <button class="control-btn seek-backward"><i class="fas fa-backward"></i></button>
+                        <button class="control-btn seek-forward"><i class="fas fa-forward"></i></button>
+                        <div class="speed-controls">
+                            <button class="speed-btn" data-speed="0.5">0.5x</button>
+                            <button class="speed-btn active" data-speed="1">1x</button>
+                            <button class="speed-btn" data-speed="1.5">1.5x</button>
+                            <button class="speed-btn" data-speed="2">2x</button>
+                        </div>
+                        <button class="control-btn frame-prev"><i class="fas fa-step-backward"></i></button>
+                        <button class="control-btn frame-next"><i class="fas fa-step-forward"></i></button>
+                        <button class="control-btn fullscreen"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="showreel-buttons">
+                <a href="#contact" class="btn btn-primary">Contact Us <i class="fas fa-paper-plane"></i></a>
+                <a href="/Services/" class="btn btn-outline">View More Services <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
@@ -1402,51 +1620,6 @@
                             <p>Click for large view</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our Services</h2>
-                <p>We provide tailored 2D animation options to match what you need for your project.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-pencil-ruler"></i></div>
-                    <h3>Storyboard Creation</h3>
-                    <p>We map out your story with clear, practical storyboards built around your input.</p>
-                    <ul class="service-features">
-                        <li>Conceptual Sketches</li>
-                        <li>Scene Planning</li>
-                        <li>Narrative Flow</li>
-                    </ul>
-                    <a href="/Storyboard" class="see-more-btn">See More <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
-                    <h3>2D Background Design</h3>
-                    <p>We craft settings that fit seamlessly into your animation, adding real depth.</p>
-                    <ul class="service-features">
-                        <li>Custom Art Styles</li>
-                        <li>Environment Design</li>
-                        <li>Detail Enhancement</li>
-                    </ul>
-                    <a href="/Backgrounds" class="see-more-btn">See More <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-film"></i></div>
-                    <h3>2D Animation</h3>
-                    <p>We create solid 2D animations suited for various uses, from start to finish.</p>
-                    <ul class="service-features">
-                        <li>Character Animation</li>
-                        <li>Motion Graphics</li>
-                        <li>Visual Effects</li>
-                    </ul>
-                    <a href="/Animation" class="see-more-btn">See More <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -1552,6 +1725,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </section>
 
@@ -1730,6 +1904,7 @@
         </div>
     </div>
 
+
     <!-- Scripts -->
     <script>
         // Navigation
@@ -1751,6 +1926,95 @@
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Showreel video controls
+        const showreelItem = document.querySelector('.showreel-item');
+        const showreelVideo = showreelItem.querySelector('.showreel-video');
+        const playPause = showreelItem.querySelector('.play-pause');
+        const muteUnmute = showreelItem.querySelector('.mute-unmute');
+        const volumeSlider = showreelItem.querySelector('.volume-slider');
+        const progressBar = showreelItem.querySelector('.progress-bar');
+        const progress = showreelItem.querySelector('.progress');
+        const seekBackward = showreelItem.querySelector('.seek-backward');
+        const seekForward = showreelItem.querySelector('.seek-forward');
+        const speedBtns = showreelItem.querySelectorAll('.speed-btn');
+        const framePrev = showreelItem.querySelector('.frame-prev');
+        const frameNext = showreelItem.querySelector('.frame-next');
+        const fullscreen = showreelItem.querySelector('.fullscreen');
+
+        // Play/Pause
+        playPause.addEventListener('click', () => {
+            if (showreelVideo.paused) {
+                showreelVideo.play();
+                playPause.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                showreelVideo.pause();
+                playPause.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        // Mute/Unmute
+        muteUnmute.addEventListener('click', () => {
+            showreelVideo.muted = !showreelVideo.muted;
+            muteUnmute.innerHTML = showreelVideo.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+            volumeSlider.value = showreelVideo.muted ? 0 : showreelVideo.volume;
+        });
+
+        // Volume
+        volumeSlider.addEventListener('input', () => {
+            showreelVideo.muted = false;
+            showreelVideo.volume = volumeSlider.value;
+            muteUnmute.innerHTML = volumeSlider.value == 0 ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+        });
+
+        // Progress
+        showreelVideo.addEventListener('timeupdate', () => {
+            const percent = (showreelVideo.currentTime / showreelVideo.duration) * 100;
+            progress.style.width = `${percent}%`;
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = showreelVideo.duration;
+            showreelVideo.currentTime = (clickX / width) * duration;
+        });
+
+        // Seek
+        seekBackward.addEventListener('click', () => {
+            showreelVideo.currentTime = Math.max(0, showreelVideo.currentTime - 10);
+        });
+
+        seekForward.addEventListener('click', () => {
+            showreelVideo.currentTime = Math.min(showreelVideo.duration, showreelVideo.currentTime + 10);
+        });
+
+        // Speed
+        speedBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                speedBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showreelVideo.playbackRate = parseFloat(btn.dataset.speed);
+            });
+        });
+
+        // Frame navigation (assuming 30fps)
+        framePrev.addEventListener('click', () => {
+            showreelVideo.currentTime = Math.max(0, showreelVideo.currentTime - 1/30);
+        });
+
+        frameNext.addEventListener('click', () => {
+            showreelVideo.currentTime = Math.min(showreelVideo.duration, showreelVideo.currentTime + 1/30);
+        });
+
+        // Fullscreen
+        fullscreen.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                showreelVideo.requestFullscreen().catch(err => console.error(err));
+            } else {
+                document.exitFullscreen();
+            }
         });
 
         // Video modal
@@ -1802,13 +2066,11 @@
             }
         });
 
-        // Playback speed controls
         playbackBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const speed = parseFloat(btn.dataset.speed);
                 modalVideo.playbackRate = speed;
                 
-                // Update active state
                 playbackBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             });
@@ -1837,7 +2099,6 @@
             const submitBtn = contactForm.querySelector('.btn');
             const originalText = submitBtn.innerHTML;
             
-            // Show loading state
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
             
@@ -1861,7 +2122,6 @@
                 formMessage.classList.add('form-error');
                 formMessage.style.display = 'block';
             } finally {
-                // Reset button state
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             }
@@ -1892,7 +2152,7 @@
             });
         }, { threshold: 0.15 });
 
-        document.querySelectorAll('.work-item, .service-card, .testimonial-card, .pricing-card, .process-step, .contact-form-wrapper').forEach(el => {
+        document.querySelectorAll('.work-item, .service-card, .testimonial-card, .pricing-card, .process-step, .contact-form-wrapper, .showreel-item').forEach(el => {
             el.classList.add('animate');
             observer.observe(el);
         });
