@@ -670,27 +670,35 @@
             margin-bottom: 0.75rem;
         }
 
-        .step-features {
-            list-style: none;
-            margin-top: 0.75rem;
-        }
+/* Process Section - Fix for ul/li overflow & hover glitch */
+.step-features {
+    list-style: none;
+    margin-top: 0.75rem;
+    padding: 0;
+}
 
-        .step-features li {
-            font-size: clamp(0.8rem, 1.8vw, 0.85rem);
-            color: var(--text-secondary);
-            padding: 0.3rem 0;
-            position:AA relative;
-            padding-left: 1.2rem;
-        }
+.step-features li {
+    font-size: clamp(0.8rem, 1.8vw, 0.85rem);
+    color: var(--text-secondary);
+    padding: 0.3rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+    min-height: 1.2em;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-        .step-features li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
+.step-features li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    color: var(--accent);
+    font-weight: bold;
+    width: 1em;
+    text-align: center;
+}
         .step-media {
             flex: 1;
             display: flex;
