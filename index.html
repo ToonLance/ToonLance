@@ -236,6 +236,18 @@
             transform: translateY(-2px);
         }
         
+        /* Support Button */
+        .btn-support {
+            background: linear-gradient(135deg, #29abe0 0%, #13a3d6 50%, #0095c8 100%);
+            color: white;
+            box-shadow: 0 6px 24px rgba(41, 171, 224, 0.25);
+        }
+        .btn-support:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(41, 171, 224, 0.35);
+            background: linear-gradient(135deg, #29abe0 0%, #13a3d6 70%, #0095c8 100%);
+        }
+        
         /* HOME SECTION - SIMPLIFIED BACKGROUND */
         #home {
             position: relative;
@@ -746,6 +758,71 @@
             padding: 1.5rem 1.8rem;
         }
         
+        /* Support Section */
+        .support-section {
+            text-align: center;
+            padding: 60px 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .support-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .support-icon {
+            font-size: 4rem;
+            color: #29abe0;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .support-description {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            margin: 1.5rem auto 2rem;
+            max-width: 800px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        /* Ko-fi Iframe Container */
+        .ko-fi-iframe-container {
+            margin-top: 2.5rem;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-hover);
+            background: white;
+            min-height: 700px;
+        }
+        
+        .ko-fi-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            display: block;
+            background: white;
+        }
+        
+        .ko-fi-note {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 2vw, 0.95rem);
+            max-width: 800px;
+            margin: 2rem auto 0;
+            line-height: 1.5;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
         /* Contact Section - IMPROVED FOR MOBILE */
         .contact-container {
             display: grid;
@@ -970,6 +1047,39 @@
             .section-header p {
                 font-size: 1rem;
                 padding: 0 10px;
+            }
+            
+            /* Support Section Mobile */
+            .support-section {
+                padding: 40px 20px;
+                border-radius: 15px;
+            }
+            
+            .support-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+            
+            .ko-fi-iframe-container {
+                min-height: 600px;
+                max-width: 100%;
+                margin-top: 2rem;
+            }
+            
+            .ko-fi-iframe {
+                height: 600px;
+            }
+            
+            .support-description {
+                font-size: 1rem;
+                margin: 1.2rem auto 1.8rem;
+                padding: 0 10px;
+            }
+            
+            .ko-fi-note {
+                font-size: 0.9rem;
+                padding: 0 10px;
+                margin-top: 1.5rem;
             }
             
             /* Grid layouts for mobile */
@@ -1209,6 +1319,33 @@
                 font-size: 0.95rem;
             }
             
+            /* Support Section Small Mobile */
+            .support-section {
+                padding: 30px 15px;
+            }
+            
+            .support-icon {
+                font-size: 2.5rem;
+            }
+            
+            .ko-fi-iframe-container {
+                min-height: 500px;
+            }
+            
+            .ko-fi-iframe {
+                height: 500px;
+            }
+            
+            .support-description {
+                font-size: 0.95rem;
+                margin: 1rem auto 1.5rem;
+            }
+            
+            .ko-fi-note {
+                font-size: 0.85rem;
+                margin-top: 1.2rem;
+            }
+            
             .service-card,
             .testimonial-card,
             .pricing-card {
@@ -1296,6 +1433,27 @@
             
             .home-section {
                 padding: 25px 12px;
+            }
+            
+            /* Support Section Extra Small */
+            .support-section {
+                padding: 25px 12px;
+            }
+            
+            .support-icon {
+                font-size: 2.2rem;
+            }
+            
+            .ko-fi-iframe-container {
+                min-height: 450px;
+            }
+            
+            .ko-fi-iframe {
+                height: 450px;
+            }
+            
+            .support-description {
+                font-size: 0.9rem;
             }
             
             .contact-container {
@@ -1405,6 +1563,7 @@
                     <!-- <li><a href="#showreel">Showreel</a></li> -->
                     <li><a href="#process">Process</a></li>
                     <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#support">Support</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
@@ -1423,7 +1582,7 @@
             <div class="hero-container">
                 <div class="hero-content">
                     <h1>Toonlance</h1>
-                    <p>Group of Talented Animators, Our Vision is to help as much as Indie Animation Creators as possible and Our USP is we can easily adapt in different artstyles from Anime to Cartoonish whatever you want.
+                    <p>Toonlance. Group of Talented Animators, Our Vision is to help as much as Indie Animation Creators as possible and Our USP is we can easily adapt in different artstyles from Anime to Cartoonish whatever you want.
                     </p>
                     <div class="hero-btns">
                         <a href="#showreel" class="btn btn-primary">View Our Showreel</a>
@@ -1445,21 +1604,22 @@
                             <h3>Storyboarding</h3>
                             <p>Visual planning, shot composition, timing and emotion flow</p>
                         </div>
-                        <div class="service-card">
-                            <i class="fas fa-image"></i>
-                            <h3>Background Design</h3>
-                            <p>Rich, consistent, story-supporting environments</p>
-                        </div>
-                        <div class="service-card">
+                                                <div class="service-card">
                             <i class="fas fa-play"></i>
                             <h3>Full Animation</h3>
                             <p>Rough pass → cleanup → color → effects → final delivery</p>
                         </div>
                         <div class="service-card">
+                            <i class="fas fa-image"></i>
+                            <h3>Background Design</h3>
+                            <p>Rich, consistent, story-supporting environments</p>
+                        </div>
+
+                        <!-- <div class="service-card">
                             <i class="fas fa-magic"></i>
                             <h3>Motion Graphics</h3>
                             <p>Explainer videos, UI motion, lyric videos, titles</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -1681,16 +1841,13 @@
                     </div>  
                     <div class="pricing-overview" id="pricing">
                         <h2>Our Pricing</h2>
-                        <p>Choose a plan that fits your project's scope and budget.</p>
+                        <p>If we fail to meet your expectations, we will refund 100% of your payment.</p>
                         <div class="pricing-grid">
                             <div class="pricing-card">
                                 <h3>Basic</h3>
                                 <p class="price">$250/min</p>
                                 <ul>
-                                    <li>Basic Storyboards</li>
-                                    <li>Standard Backgrounds</li>
-                                    <li>Basic Animation</li>
-                                    <li>Basic Effects</li>
+<li>Basic Storyboard</li> <li>Clean & Simple Backgrounds</li> <li>Smooth Animation</li> <li>Basic Effects</li> <li>Complete Animation (Start to Finish)</li>
                                 </ul>
                                 <a href="#contact" class="btn btn-primary">Get Quote</a>
                             </div>
@@ -1698,10 +1855,7 @@
                                 <h3>Standard</h3>
                                 <p class="price">$500/min</p>
                                 <ul>
-                                    <li>Custom Storyboards</li>
-                                    <li>Vivid Backgrounds</li>
-                                    <li>Smooth Animation</li>
-                                    <li>Advanced Effects</li>
+<li>Advanced Storyboards</li> <li>More Detailed Backgrounds</li> <li>More Smooth Animation</li> <li>Advanced Effects</li> <li>High-Quality Full Animation</li>
                                 </ul>
                                 <a href="#contact" class="btn btn-primary">Get Quote</a>
                             </div>
@@ -1720,7 +1874,7 @@
                     <div class="faq-item">
                         <button class="faq-question">How long does a project usually take?</button>
                         <div class="faq-answer">
-                            <p>30-second animation: 3–6 weeks<br>1–3 minute explainer: 6–10 weeks<br>Longer projects: 2–6+ months depending on complexity. We always provide a clear timeline after discussion.</p>
+                            <p>30-second animation: 2–3 weeks<br>1–3 minute explainer: 4–1o weeks<br>Longer projects: 2–6+ months depending on complexity. We always provide a clear timeline after discussion.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -1732,8 +1886,34 @@
                     <div class="faq-item">
                         <button class="faq-question">What files do I receive at the end?</button>
                         <div class="faq-answer">
-                            <p>Final MP4 (H.264), transparent MOV/WebM (if needed), source files (.fla/.aep/.psd etc.) on request.</p>
+                            <p>Final MP4 (H.264), transparent MOV/WebM (if needed), source files (.fla/.aep/.psd/ .csp etc.) on request.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW SUPPORT SECTION WITH KO-FI IFRAME -->
+            <div id="support" class="home-section">
+                <div class="support-section animate">
+                    <div class="support-content">
+                        <i class="fas fa-heart support-icon"></i>
+                        <h2>Support Our Lovely Client</h2>
+                        <p class="support-description">
+                            Panic Toons Humor with Uglydoll characters is really enjoyable,ngl for me he is the one of the best indie animation creator on youtube
+                        </p>
+                        
+                        <!-- Ko-fi Iframe Widget -->
+                        <div class="ko-fi-iframe-container">
+                            <iframe 
+                                class="ko-fi-iframe"
+                                src="https://ko-fi.com/panictoons/?hidefeed=true&widget=true&embed=true&preview=true"
+                                title="Support Panic Toons on Ko-fi">
+                            </iframe>
+                        </div>
+                        
+                        <p class="ko-fi-note">
+                            Your support helps my client to produce his upcoming animations.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -1897,7 +2077,7 @@
                 }
             });
         }, { threshold: 0.15 });
-        document.querySelectorAll('.work-item, .service-card, .testimonial-card, .pricing-card, .process-step, .contact-form-wrapper, .showreel-item').forEach(el => {
+        document.querySelectorAll('.work-item, .service-card, .testimonial-card, .pricing-card, .process-step, .contact-form-wrapper, .showreel-item, .support-section').forEach(el => {
             el.classList.add('animate');
             observer.observe(el);
         });
