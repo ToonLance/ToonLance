@@ -51,21 +51,9 @@
         h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
         h3 { font-size: clamp(1.1rem, 2.5vw, 1.3rem); }
         
-        /* Video Background - SIMPLIFIED */
+        /* Remove background video styles */
         .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .bg-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.4);
+            display: none;
         }
         
         /* Container */
@@ -248,7 +236,7 @@
             background: linear-gradient(135deg, #29abe0 0%, #13a3d6 70%, #0095c8 100%);
         }
         
-        /* HOME SECTION - SIMPLIFIED BACKGROUND */
+        /* HOME SECTION */
         #home {
             position: relative;
             min-height: 100vh;
@@ -285,10 +273,6 @@
             min-height: 70vh;
             width: 100%;
             padding: 40px 0;
-            /* background: rgba(13, 13, 31, 0.7); */
-            /* backdrop-filter: blur(10px); */
-            /* border-radius: 20px;
-            border: 1px solid var(--card-border); */
         }
         .hero-content {
             max-width: 900px;
@@ -329,17 +313,14 @@
         
         /* Content sections inside home */
         .home-section {
-            /* background: var(--secondary-light); */
             border-radius: 20px;
             padding: 60px 30px;
-            /* box-shadow: var(--shadow-soft); */
-            /* border: 1px solid var(--card-border); */
             width: 100%;
             position: relative;
             z-index: 2;
         }
         
-        /* 2D Animation Showreel Section - REMOVED BG AND BORDER */
+        /* Showreel Section with 3 animations */
         .showreel-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -361,7 +342,15 @@
             margin: 0.5rem auto 0;
             padding: 0 15px;
         }
-        /* REMOVED ALL BORDERS from showreel-item */
+        
+        /* Showreel Grid - 3 animations */
+        .showreel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
         .showreel-item {
             background: transparent;
             border: none;
@@ -369,16 +358,12 @@
             padding: 0;
             box-shadow: none;
             transition: all 0.3s ease;
-            margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-        .showreel-item:hover {
-            transform: translateY(-5px);
-            box-shadow: none;
-        }
+        
         .showreel-video-container {
             position: relative;
             width: 100%;
@@ -386,32 +371,23 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--shadow-soft);
+            background: #000;
         }
+        
         .youtube-embed {
             width: 100%;
             height: 100%;
             border: none;
-            pointer-events: none;
         }
         
-        /* Button Container for Showreel */
-        .showreel-buttons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: clamp(0.75rem, 2vw, 1rem);
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .showreel-buttons .btn {
-            min-width: clamp(180px, 40%, 220px);
-            padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3.5vw, 2rem);
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            border-radius: 30px;
-            transition: all 0.3s ease;
+        .local-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         
-        /* Featured Animations - REMOVED BG AND BORDER */
+        /* Featured Animations */
         .work-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -435,7 +411,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: none;
             border-radius: 12px;
         }
         
@@ -569,7 +544,7 @@
             object-fit: cover;
         }
 
-        /* Services Section - FIXED DROPDOWN */
+        /* Services Section */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -594,7 +569,7 @@
             margin-bottom: 1.2rem;
         }
         
-        /* Testimonials + Pricing - REMOVED BG AND BORDER */
+        /* Testimonials + Pricing */
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -696,7 +671,7 @@
             color: var(--accent);
         }
         
-        /* Trusted By Section - REMOVED BG AND BORDER */
+        /* Trusted By Section */
         .trusted-section {
             padding: 60px 30px;
             text-align: center;
@@ -823,7 +798,7 @@
             padding: 0 20px;
         }
         
-        /* Contact Section - IMPROVED FOR MOBILE */
+        /* Contact Section */
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -911,7 +886,6 @@
             transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
         }
-        /* FIXED DROPDOWN BACKGROUND */
         .form-group select {
             background-color: rgba(10, 10, 30, 0.8);
             color: var(--text);
@@ -974,15 +948,106 @@
             max-width: 300px;
         }
         
-        /* Animations */
+        /* Simple Fade-in Animation */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate { opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease; }
-        .animate-in { opacity: 1; transform: translateY(0); animation: fadeInUp 0.5s ease-out; }
+        
+        /* Back to top button */
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(90,79,207,0.4);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--primary-light);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            background-color: #0d0d1f;
+        }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+        
+        /* Prevent horizontal scroll */
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+            background: var(--secondary);
+        }
         
         /* STRICT MOBILE RESPONSIVENESS */
+        @media (max-width: 1024px) {
+            .showreel-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .process-timeline::before {
+                display: none;
+            }
+            
+            .process-step {
+                margin-bottom: 3rem;
+                flex-direction: column !important;
+            }
+            
+            .step-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .step-info {
+                text-align: center;
+                padding: 1.5rem;
+                width: 100%;
+            }
+            
+            .step-number {
+                margin: 0 auto 1rem;
+            }
+            
+            .step-media {
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .step-media-content {
+                max-width: 100%;
+                height: 200px;
+            }
+        }
+        
         @media (max-width: 768px) {
             /* General mobile adjustments */
             body {
@@ -1001,7 +1066,6 @@
             .hero-container {
                 min-height: auto;
                 padding: 40px 20px;
-                /* backdrop-filter: blur(8px); */
             }
             
             .hero-content h1 {
@@ -1102,58 +1166,9 @@
                 margin-bottom: 1rem;
             }
             
-            /* Process section mobile fixes */
-            .process-timeline::before {
-                display: none;
-            }
-            
-            .process-step {
-                margin-bottom: 3rem;
-                flex-direction: column !important;
-            }
-            
-            .step-content {
-                flex-direction: column;
-                gap: 1.5rem;
-                align-items: center;
-                text-align: center;
-            }
-            
-            .step-info {
-                text-align: center;
-                padding: 1.5rem;
-                width: 100%;
-            }
-            
-            .step-number {
-                margin: 0 auto 1rem;
-            }
-            
-            .step-media {
-                padding: 0;
-                width: 100%;
-                max-width: 100%;
-            }
-            
-            .step-media-content {
-                max-width: 100%;
-                height: 200px;
-            }
-            
-            .step-features {
-                text-align: left;
-                margin: 1rem auto 0;
-                max-width: 300px;
-            }
-            
             /* Showreel section */
             .showreel-video-container {
                 border-radius: 10px;
-            }
-            
-            .showreel-buttons .btn {
-                width: 100%;
-                max-width: 300px;
             }
             
             /* Trusted section */
@@ -1171,7 +1186,7 @@
                 max-width: 150px;
             }
             
-            /* IMPROVED CONTACT SECTION FOR MOBILE */
+            /* Contact Section Mobile */
             .contact-container {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -1469,55 +1484,6 @@
             }
         }
         
-        /* Back to top button */
-        #back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            box-shadow: 0 5px 20px rgba(90,79,207,0.4);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        #back-to-top:hover {
-            transform: translateY(-5px);
-            background: var(--primary-light);
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            background-color: #0d0d1f;
-        }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 3px;
-        }
-        
-        /* Prevent horizontal scroll */
-        body {
-            max-width: 100%;
-            overflow-x: hidden;
-            background: transparent;
-        }
-        
         /* Touch-friendly improvements */
         @media (hover: none) and (pointer: coarse) {
             .btn, .contact-item, .faq-question, nav a {
@@ -1542,13 +1508,6 @@
     </style>
 </head>
 <body>
-    <!-- Animated Background - SIMPLIFIED -->
-    <div class="animated-bg">
-        <video class="bg-video" autoplay muted loop playsinline>
-            <source src="content/Uglydoll.mp4" type="video/mp4">
-        </video>
-    </div>
-
     <!-- Header -->
     <header>
         <div class="container header-container">
@@ -1560,7 +1519,7 @@
                     <li><a href="#home">Home</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#featured-work">Work</a></li>
-                    <!-- <li><a href="#showreel">Showreel</a></li> -->
+                    <li><a href="#showreel">Showreel</a></li>
                     <li><a href="#process">Process</a></li>
                     <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#support">Support</a></li>
@@ -1604,7 +1563,7 @@
                             <h3>Storyboarding</h3>
                             <p>Visual planning, shot composition, timing and emotion flow</p>
                         </div>
-                                                <div class="service-card">
+                        <div class="service-card">
                             <i class="fas fa-play"></i>
                             <h3>Full Animation</h3>
                             <p>Rough pass → cleanup → color → effects → final delivery</p>
@@ -1614,17 +1573,11 @@
                             <h3>Background Design</h3>
                             <p>Rich, consistent, story-supporting environments</p>
                         </div>
-
-                        <!-- <div class="service-card">
-                            <i class="fas fa-magic"></i>
-                            <h3>Motion Graphics</h3>
-                            <p>Explainer videos, UI motion, lyric videos, titles</p>
-                        </div> -->
                     </div>
                 </div>
             </div>
 
-            <!-- Featured Animations - REMOVED BG AND BORDER -->
+            <!-- Featured Animations -->
             <div id="featured-work" class="home-section" style="background: transparent; border: none; box-shadow: none; padding: 40px 0;">
                 <div class="container">
                     <div class="section-header">
@@ -1657,27 +1610,49 @@
                 </div>
             </div>
 
-            <!-- Showreel with YouTube Video - REMOVED BG AND BORDER -->
+            <!-- Showreel with 3 Best Animations -->
             <div id="showreel" class="home-section" style="background: transparent; border: none; box-shadow: none; padding: 40px 0;">
                 <div class="container showreel-container">
-             <!--       <div class="section-header">
-                        <h2>Latest Animation</h2>
+                    <!-- <div class="section-header">
+                        <h2>Our Best Animations</h2>
+                        <p>Showcasing our top 3 animation works</p>
                     </div> -->
-                    <div class="showreel-item animate">
-                        <div class="showreel-video-container">
-                            <iframe 
-                                class="youtube-embed"
-                                src="https://www.youtube.com/embed/u7Z7tp2DZ5U?autoplay=1&mute=1&loop=1&playlist=u7Z7tp2DZ5U&controls=0&modestbranding=1&rel=0&enablejsapi=1"
-                                title="TOONLANCE Animation Showreel"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
+                    <div class="showreel-grid">
+                        <!-- YouTube Video -->
+                        <div class="showreel-item">
+                            <div class="showreel-video-container">
+                                <iframe 
+                                    class="youtube-embed"
+                                    src="https://www.youtube.com/embed/u7Z7tp2DZ5U?autoplay=1&mute=1&loop=1&playlist=u7Z7tp2DZ5U&controls=1&modestbranding=1&rel=0"
+                                    title="TOONLANCE Animation Showreel"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        
+                        <!-- Local Video 1 -->
+                        <div class="showreel-item">
+                            <div class="showreel-video-container">
+                                <video class="local-video" autoplay muted loop playsinline>
+                                    <source src="content/Uglydoll.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        
+
+                        </div>
+                                                <div class="showreel-item">
+                            <div class="showreel-video-container">
+                                <video class="local-video" autoplay muted loop playsinline>
+                                    <source src="content/tutu.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
                         </div>
                     </div>
-                  <!--  <div class="showreel-buttons">
-                        <a href="#contact" class="btn btn-primary">Contact Us <i class="fas fa-paper-plane"></i></a>
-                    </div>  -->
                 </div>
             </div>
 
@@ -1779,7 +1754,7 @@
                 </div>
             </div>
 
-            <!-- Trusted By - REMOVED BG AND BORDER -->
+            <!-- Trusted By -->
             <div class="trusted-section home-section" style="background: transparent; border: none; box-shadow: none; padding: 40px 0;">
                 <div class="container">
                     <h2>Trusted By Indie Creators</h2>
@@ -1792,7 +1767,7 @@
                 </div>
             </div>
 
-            <!-- Testimonials + Pricing - REMOVED BG AND BORDER FOR TESTIMONIALS -->
+            <!-- Testimonials + Pricing -->
             <div id="testimonials" class="home-section">
                 <div class="container">
                     <div class="section-header">
@@ -1836,9 +1811,8 @@
                                 </div>
                             </div>
                         </div>
-                    
                     </div>
-                    </div>  
+                    
                     <div class="pricing-overview" id="pricing">
                         <h2>Our Pricing</h2>
                         <p>If we fail to meet your expectations, we will refund 100% of your payment.</p>
@@ -1847,7 +1821,11 @@
                                 <h3>Basic</h3>
                                 <p class="price">$250/min</p>
                                 <ul>
-<li>Basic Storyboard</li> <li>Clean & Simple Backgrounds</li> <li>Smooth Animation</li> <li>Basic Effects</li> <li>Complete Animation (Start to Finish)</li>
+                                    <li>Basic Storyboard</li>
+                                    <li>Clean & Simple Backgrounds</li>
+                                    <li>Smooth Animation</li>
+                                    <li>Basic Effects</li>
+                                    <li>Complete Animation (Start to Finish)</li>
                                 </ul>
                                 <a href="#contact" class="btn btn-primary">Get Quote</a>
                             </div>
@@ -1855,7 +1833,11 @@
                                 <h3>Standard</h3>
                                 <p class="price">$500/min</p>
                                 <ul>
-<li>Advanced Storyboards</li> <li>More Detailed Backgrounds</li> <li>More Smooth Animation</li> <li>Advanced Effects</li> <li>High-Quality Full Animation</li>
+                                    <li>Advanced Storyboards</li>
+                                    <li>More Detailed Backgrounds</li>
+                                    <li>More Smooth Animation</li>
+                                    <li>Advanced Effects</li>
+                                    <li>High-Quality Full Animation</li>
                                 </ul>
                                 <a href="#contact" class="btn btn-primary">Get Quote</a>
                             </div>
@@ -1874,7 +1856,7 @@
                     <div class="faq-item">
                         <button class="faq-question">How long does a project usually take?</button>
                         <div class="faq-answer">
-                            <p>30-second animation: 2–3 weeks<br>1–3 minute explainer: 4–1o weeks<br>Longer projects: 2–6+ months depending on complexity. We always provide a clear timeline after discussion.</p>
+                            <p>30-second animation: 2–3 weeks<br>1–3 minute explainer: 4–10 weeks<br>Longer projects: 2–6+ months depending on complexity. We always provide a clear timeline after discussion.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -1886,20 +1868,20 @@
                     <div class="faq-item">
                         <button class="faq-question">What files do I receive at the end?</button>
                         <div class="faq-answer">
-                            <p>Final MP4 (H.264), transparent MOV/WebM (if needed), source files (.fla/.aep/.psd/ .csp etc.) on request.</p>
+                            <p>Final MP4 (H.264), transparent MOV/WebM (if needed), source files (.fla/.aep/.psd/.csp etc.) on request.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- NEW SUPPORT SECTION WITH KO-FI IFRAME -->
+            <!-- Support Section -->
             <div id="support" class="home-section">
-                <div class="support-section animate">
+                <div class="support-section">
                     <div class="support-content">
                         <i class="fas fa-heart support-icon"></i>
                         <h2>Support Our Lovely Client</h2>
                         <p class="support-description">
-                            Panic Toons Humor with Uglydoll characters is really enjoyable,ngl for me he is the one of the best indie animation creator on youtube
+                            Panic Toons Humor with Uglydoll characters is really enjoyable, ngl for me he is the one of the best indie animation creator on youtube
                         </p>
                         
                         <!-- Ko-fi Iframe Widget -->
@@ -2069,19 +2051,6 @@
             }, 5000);
         });
         
-        // Scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                }
-            });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.work-item, .service-card, .testimonial-card, .pricing-card, .process-step, .contact-form-wrapper, .showreel-item, .support-section').forEach(el => {
-            el.classList.add('animate');
-            observer.observe(el);
-        });
-        
         // Back to top
         const backToTop = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
@@ -2116,27 +2085,23 @@
         setVH();
         window.addEventListener('resize', setVH);
         
-        // YouTube video loop control
-        const youtubeIframe = document.querySelector('.youtube-embed');
-        if (youtubeIframe) {
-            // This function will be called by YouTube API if you enable it
-            function onYouTubeIframeAPIReady() {
-                // You can add YouTube API control here if needed
-            }
-        }
-        
-        // Stop video playing when not in viewport (optional for performance)
-        const videos = document.querySelectorAll('video');
-        const videoObserver = new IntersectionObserver((entries) => {
+        // Simple fade-in for elements when they come into view
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.play();
-                } else {
-                    entry.target.pause();
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, { threshold: 0.3 });
-        videos.forEach(video => videoObserver.observe(video));
+        }, { threshold: 0.1 });
+        
+        // Apply fade-in to elements
+        document.querySelectorAll('.service-card, .work-item, .testimonial-card, .pricing-card, .process-step, .showreel-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
