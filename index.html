@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
-    <title>TOONLANCE | Premium 2D Animation & Storyboard Studio</title>
+    <title>TOONLANCE | Premium 2D Animation & Cartoon Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="content/toonlance.png">
     <style>
         /* Minimal Custom Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #1A1629; }
+::-webkit-scrollbar-track { background: #1A1429; }
 ::-webkit-scrollbar-thumb { 
-    background: #6d5dfc; 
+    background: #7A6DFC; 
     border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover { background: #9b8aff; }
+::-webkit-scrollbar-thumb:hover { background: #B4A6FF; }
         /* ===== BASE STYLES & MOBILE FIRST ===== */
         :root {
-            --primary-color: #6d5dfc;
-            --secondary-color: #9b8aff;
-            --accent-color: #d1c8ff;
-            --dark-bg: #0C0C14;
-            --dark-card: #1A1629;
-            --text-primary: #F5F0FF;
-            --text-secondary: #c3b8ff;
-            --gradient-primary: linear-gradient(135deg, #6d5dfc 0%, #9b8aff 100%);
-            --gradient-dark: linear-gradient(135deg, #0C0C14 0%, #1A1629 100%);
+            --primary-color: #7A6DFC;
+            --secondary-color: #B4A6FF;
+            --accent-color: #E0D3FF;
+            --dark-bg: #0F0B1A;
+            --dark-card: #1F1A30;
+            --text-primary: #FFFFFF;
+            --text-secondary: #D6CCFF;
+            --gradient-primary: linear-gradient(145deg, #7A6DFC 0%, #B4A6FF 100%);
+            --gradient-dark: linear-gradient(145deg, #0F0B1A 0%, #1F1A30 100%);
             --header-height: 70px;
             --safe-area-inset-top: env(safe-area-inset-top);
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
@@ -98,19 +98,19 @@
             left: 0;
             width: 100%;
             height: var(--header-height);
-            background: rgba(10, 10, 30, 0.98);
+            background: rgba(15, 11, 26, 0.98);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             z-index: 1000;
             padding: 0;
-            border-bottom: 1px solid rgba(109, 93, 252, 0.22);
+            border-bottom: 1px solid rgba(122, 109, 252, 0.3);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: var(--safe-area-inset-top);
         }
         
         header.scrolled {
             height: calc(var(--header-height) - 10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
         
         .header-container {
@@ -269,7 +269,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(10, 10, 30, 0.98);
+            background: rgba(15, 11, 26, 0.98);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             z-index: 999;
@@ -328,7 +328,7 @@
         nav.mobile-nav a:hover,
         nav.mobile-nav a.active {
             color: var(--accent-color);
-            background: rgba(109, 93, 252, 0.15);
+            background: rgba(122, 109, 252, 0.2);
             padding-left: 28px;
         }
         
@@ -393,8 +393,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(109, 93, 252, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(155, 138, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(122, 109, 252, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(180, 166, 255, 0.2) 0%, transparent 50%);
             z-index: -1;
         }
 
@@ -463,7 +463,7 @@
         }
 
         .hero-title span {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+            background: linear-gradient(145deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -527,8 +527,8 @@
 
         .filter-btn {
             padding: 14px 16px;
-            background: rgba(109, 93, 252, 0.09);
-            border: 2px solid rgba(109, 93, 252, 0.22);
+            background: rgba(122, 109, 252, 0.15);
+            border: 2px solid rgba(122, 109, 252, 0.3);
             border-radius: 12px;
             color: var(--text-secondary);
             font-weight: 600;
@@ -563,7 +563,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
 
@@ -572,16 +572,16 @@
         }
 
         .filter-btn.active {
-            background: linear-gradient(135deg, rgba(109, 93, 252, 0.2), rgba(155, 138, 255, 0.2));
+            background: linear-gradient(145deg, rgba(122, 109, 252, 0.3), rgba(180, 166, 255, 0.3));
             color: var(--text-primary);
             border-color: var(--accent-color);
-            box-shadow: 0 8px 24px rgba(109, 93, 252, 0.2);
+            box-shadow: 0 8px 24px rgba(122, 109, 252, 0.3);
             transform: translateY(-2px);
         }
 
         .filter-btn:hover:not(.active) {
-            background: rgba(109, 93, 252, 0.15);
-            border-color: rgba(109, 93, 252, 0.4);
+            background: rgba(122, 109, 252, 0.25);
+            border-color: rgba(122, 109, 252, 0.5);
             transform: translateY(-2px);
         }
 
@@ -677,8 +677,8 @@
         }
 
         .video-card {
-            background: linear-gradient(135deg, rgba(109, 93, 252, 0.09), rgba(155, 138, 255, 0.05));
-            border: 1px solid rgba(109, 93, 252, 0.22);
+            background: linear-gradient(145deg, rgba(122, 109, 252, 0.15), rgba(180, 166, 255, 0.1));
+            border: 1px solid rgba(122, 109, 252, 0.3);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.4s ease;
@@ -688,8 +688,8 @@
 
         .video-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(109, 93, 252, 0.15);
-            border-color: rgba(157, 145, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(122, 109, 252, 0.25);
+            border-color: rgba(224, 211, 255, 0.5);
         }
 
         .video-player-container {
@@ -797,8 +797,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 10% 20%, rgba(155, 138, 255, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(109, 93, 252, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(180, 166, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(122, 109, 252, 0.1) 0%, transparent 50%);
             z-index: -1;
         }
 
@@ -857,8 +857,8 @@
         }
 
         .testimonial-card {
-            background: linear-gradient(135deg, rgba(26, 22, 41, 0.95), rgba(42, 38, 64, 0.95));
-            border: 1px solid rgba(109, 93, 252, 0.22);
+            background: linear-gradient(145deg, rgba(31, 26, 48, 0.95), rgba(46, 38, 70, 0.95));
+            border: 1px solid rgba(122, 109, 252, 0.3);
             border-radius: 16px;
             padding: 24px;
             transition: all 0.4s ease;
@@ -884,14 +884,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent 40%, rgba(109, 93, 252, 0.05) 100%);
+            background: linear-gradient(45deg, transparent 40%, rgba(122, 109, 252, 0.1) 100%);
             z-index: -1;
         }
 
         .testimonial-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(109, 93, 252, 0.15);
-            border-color: rgba(157, 145, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(122, 109, 252, 0.2);
+            border-color: rgba(224, 211, 255, 0.5);
         }
 
         .testimonial-card::after {
@@ -928,7 +928,7 @@
             flex-grow: 1;
             position: relative;
             padding-left: 16px;
-            border-left: 3px solid rgba(109, 93, 252, 0.3);
+            border-left: 3px solid rgba(122, 109, 252, 0.5);
         }
         
         @media (min-width: 768px) {
@@ -961,7 +961,7 @@
             align-items: center;
             gap: 16px;
             padding-top: 16px;
-            border-top: 1px solid rgba(109, 93, 252, 0.15);
+            border-top: 1px solid rgba(122, 109, 252, 0.25);
         }
         
         @media (min-width: 768px) {
@@ -983,7 +983,7 @@
             font-weight: 700;
             font-size: 1.2rem;
             flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(109, 93, 252, 0.3);
+            box-shadow: 0 4px 15px rgba(122, 109, 252, 0.4);
         }
         
         @media (min-width: 768px) {
@@ -1043,8 +1043,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 30% 70%, rgba(109, 93, 252, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(155, 138, 255, 0.08) 0%, transparent 50%);
+                radial-gradient(circle at 30% 70%, rgba(122, 109, 252, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(180, 166, 255, 0.15) 0%, transparent 50%);
             z-index: -1;
         }
 
@@ -1093,10 +1093,10 @@
             align-items: center;
             gap: 16px;
             padding: 20px;
-            background: linear-gradient(135deg, rgba(109, 93, 252, 0.08), rgba(155, 138, 255, 0.04));
+            background: linear-gradient(145deg, rgba(122, 109, 252, 0.15), rgba(180, 166, 255, 0.1));
             border-radius: 12px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(109, 93, 252, 0.1);
+            border: 1px solid rgba(122, 109, 252, 0.2);
         }
         
         @media (min-width: 768px) {
@@ -1107,8 +1107,8 @@
         }
 
         .contact-detail:hover {
-            background: linear-gradient(135deg, rgba(109, 93, 252, 0.12), rgba(155, 138, 255, 0.08));
-            border-color: rgba(109, 93, 252, 0.2);
+            background: linear-gradient(145deg, rgba(122, 109, 252, 0.2), rgba(180, 166, 255, 0.15));
+            border-color: rgba(122, 109, 252, 0.3);
             transform: translateX(8px);
         }
 
@@ -1167,10 +1167,10 @@
         }
 
         .contact-form {
-            background: linear-gradient(135deg, rgba(109, 93, 252, 0.1), rgba(155, 138, 255, 0.05));
+            background: linear-gradient(145deg, rgba(122, 109, 252, 0.15), rgba(180, 166, 255, 0.1));
             padding: 24px;
             border-radius: 16px;
-            border: 1px solid rgba(109, 93, 252, 0.22);
+            border: 1px solid rgba(122, 109, 252, 0.3);
             width: 100%;
             backdrop-filter: blur(10px);
         }
@@ -1230,8 +1230,8 @@
         input, textarea {
             width: 100%;
             padding: 16px;
-            background: rgba(10, 10, 30, 0.8);
-            border: 2px solid rgba(109, 93, 252, 0.22);
+            background: rgba(15, 11, 26, 0.9);
+            border: 2px solid rgba(122, 109, 252, 0.3);
             border-radius: 10px;
             color: var(--text-primary);
             font-size: 1rem;
@@ -1252,16 +1252,16 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(155, 138, 255, 0.2);
-            background: rgba(10, 10, 30, 0.9);
+            box-shadow: 0 0 0 3px rgba(180, 166, 255, 0.3);
+            background: rgba(15, 11, 26, 0.95);
         }
 
         /* ENHANCED DROPDOWN */
         select {
             width: 100%;
             padding: 16px;
-            background: rgba(10, 10, 30, 0.8) !important;
-            border: 2px solid rgba(109, 93, 252, 0.22);
+            background: rgba(15, 11, 26, 0.9) !important;
+            border: 2px solid rgba(122, 109, 252, 0.3);
             border-radius: 10px;
             color: var(--text-primary) !important;
             font-size: 1rem;
@@ -1270,7 +1270,7 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d1c8ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E0D3FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
             background-repeat: no-repeat !important;
             background-position: right 16px center !important;
             background-size: 18px !important;
@@ -1292,12 +1292,12 @@
         select:focus {
             outline: none;
             border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(155, 138, 255, 0.2);
-            background: rgba(10, 10, 30, 0.9) !important;
+            box-shadow: 0 0 0 3px rgba(180, 166, 255, 0.3);
+            background: rgba(15, 11, 26, 0.95) !important;
         }
 
         select option {
-            background-color: rgba(10, 10, 30, 0.98) !important;
+            background-color: rgba(15, 11, 26, 0.98) !important;
             color: var(--text-primary) !important;
             padding: 12px !important;
             font-size: 1rem !important;
@@ -1354,7 +1354,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.6s ease;
         }
 
@@ -1363,9 +1363,9 @@
         }
 
         .submit-btn:hover {
-            background: linear-gradient(135deg, #5a4ce8 0%, #8a7aff 100%);
+            background: linear-gradient(145deg, #6A5CF0 0%, #A394F0 100%);
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(109, 93, 252, 0.4);
+            box-shadow: 0 8px 25px rgba(122, 109, 252, 0.5);
         }
 
         .submit-btn:active {
@@ -1406,22 +1406,22 @@
         }
 
         .form-message.success {
-            background: linear-gradient(135deg, rgba(76, 217, 100, 0.15), rgba(76, 217, 100, 0.05));
-            border: 1px solid rgba(76, 217, 100, 0.3);
-            color: #4CD964;
+            background: linear-gradient(145deg, rgba(76, 217, 100, 0.2), rgba(76, 217, 100, 0.1));
+            border: 1px solid rgba(76, 217, 100, 0.4);
+            color: #6CE07C;
         }
 
         .form-message.error {
-            background: linear-gradient(135deg, rgba(255, 59, 48, 0.15), rgba(255, 59, 48, 0.05));
-            border: 1px solid rgba(255, 59, 48, 0.3);
-            color: #FF3B30;
+            background: linear-gradient(145deg, rgba(255, 59, 48, 0.2), rgba(255, 59, 48, 0.1));
+            border: 1px solid rgba(255, 59, 48, 0.4);
+            color: #FF6B5E;
         }
 
         /* ===== ENHANCED FOOTER - MOBILE OPTIMIZED ===== */
         .site-footer {
             padding: 60px 0 40px;
-            background: linear-gradient(180deg, rgba(8, 8, 16, 0.95), #0A0A1E);
-            border-top: 1px solid rgba(109, 93, 252, 0.22);
+            background: linear-gradient(180deg, rgba(12, 8, 22, 0.95), #0F0B1F);
+            border-top: 1px solid rgba(122, 109, 252, 0.3);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -1441,8 +1441,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 10%, rgba(109, 93, 252, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 90%, rgba(155, 138, 255, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 20% 10%, rgba(122, 109, 252, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 90%, rgba(180, 166, 255, 0.1) 0%, transparent 50%);
             z-index: -1;
         }
 
@@ -1499,7 +1499,7 @@
         .social-link {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, rgba(109, 93, 252, 0.1), rgba(155, 138, 255, 0.05));
+            background: linear-gradient(145deg, rgba(122, 109, 252, 0.15), rgba(180, 166, 255, 0.1));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1508,7 +1508,7 @@
             font-size: 1.3rem;
             transition: all 0.3s ease;
             text-decoration: none;
-            border: 1px solid rgba(109, 93, 252, 0.22);
+            border: 1px solid rgba(122, 109, 252, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -1538,7 +1538,7 @@
             color: white;
             border-color: transparent;
             transform: translateY(-4px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(109, 93, 252, 0.3);
+            box-shadow: 0 8px 20px rgba(122, 109, 252, 0.4);
         }
 
         .social-link:hover::before {
@@ -1592,7 +1592,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(109, 93, 252, 0.3);
+            box-shadow: 0 6px 20px rgba(122, 109, 252, 0.4);
             backdrop-filter: blur(10px);
         }
         
@@ -1612,9 +1612,9 @@
         }
 
         #back-to-top:hover {
-            background: linear-gradient(135deg, #5a4ce8, #8a7aff);
+            background: linear-gradient(145deg, #6A5CF0, #A394F0);
             transform: translateY(-4px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(109, 93, 252, 0.4);
+            box-shadow: 0 10px 25px rgba(122, 109, 252, 0.5);
         }
 
         /* ===== UTILITY CLASSES ===== */
@@ -1818,34 +1818,34 @@
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
-                <span class="hero-subtitle">Premium 2D Animation Studio</span>
+                <span class="hero-subtitle">2D Animation Studio</span>
                 <h1 class="hero-title">
-                    Where Stories<br>
-                    <span>Come to Life</span>
+                    Toonlance<br>
+                    <span>Cartoon & Anime Animation</span>
                 </h1>
                 <p class="hero-description">
-                    We create Nice 2D animations, storyboards, and cartoons that connect with audiences. 
+                    We create Nice 2D animations and cartoons that connect with audiences. 
                     From concept to final frame, we bring your vision to Frames.
                 </p>
                 
-                <!-- Category Filters -->
+                <!-- Category Filters (Storyboard Removed) -->
                 <div class="category-filters">
                     <div class="filter-buttons" id="filterButtons">
                         <button class="filter-btn active" data-category="all" aria-label="Show all projects">
                             <i class="fas fa-th-large"></i>
                             All Projects
                         </button>
-                        <button class="filter-btn" data-category="storyboards" aria-label="Show storyboard projects">
-                            <i class="fas fa-clipboard-list"></i>
-                            Storyboards
-                        </button>
                         <button class="filter-btn" data-category="animations" aria-label="Show animation projects">
                             <i class="fas fa-film"></i>
-                            2D Animations
+                            Anime
                         </button>
                         <button class="filter-btn" data-category="cartoons" aria-label="Show cartoon projects">
                             <i class="fas fa-user-circle"></i>
-                            Cartoon Series
+                            Cartoon
+                        </button>
+                        <button class="filter-btn" data-category="others" aria-label="Show other projects">
+                            <i class="fas fa-folder-open"></i>
+                            Others
                         </button>
                     </div>
                 </div>
@@ -1858,7 +1858,7 @@
         <div class="container">
             <div class="section-intro">
                 <h2>Our <span>Animation Portfolio</span></h2>
-                <p>Explore our collection of 2D animations, storyboards, and cartoon projects.</p>
+                <p>Explore our collection of 2D animations and cartoon projects.</p>
             </div>
             
             <div class="video-grid" id="videoGrid">
@@ -2012,7 +2012,7 @@
             </div>
             
             <p class="copyright">
-                © 2025 <strong>TOONLANCE</strong> • Professional 2D Animation & Storyboard Studio<br>
+                © 2025 <strong>TOONLANCE</strong> • Professional 2D Animation & Cartoon Studio<br>
                 Every frame crafted with passion, every story told with purpose.
             </p>
         </div>
@@ -2023,15 +2023,8 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // Video Data
+        // Video Data (Storyboard Removed, Others Added)
         const videoData = [
-            {
-                id: 1,
-                title: "Action Scene Storyboard",
-                description: "Dynamic storyboard sequence for action-packed animation sequence",
-                category: "storyboards",
-                youtubeId: "X-TL9H4Cv1w"
-            },
             {
                 id: 3,
                 title: "Deva - Animation Teaser",
@@ -2066,10 +2059,18 @@
                 description: "Preview of ongoing cartoon series with original characters",
                 category: "cartoons",
                 youtubeId: "xw2HJPBsniQ"
+            },
+            // Others Category - Add your manual video links here later
+            {
+                id: 10,
+                title: "Other Project 1",
+                description: "This is a placeholder for other projects. You can manually replace the YouTube ID.",
+                category: "others",
+                youtubeId: "hFTyIe_n_LA" // Replace with your video ID
             }
         ];
 
-        // Testimonials Data
+        // Testimonials Data (Exactly the same)
         const testimonialsData = [
             {
                 id: 1,
