@@ -595,7 +595,7 @@
             }
         }
 
-        /* ===== VIDEO GRID - RESPONSIVE ===== */
+        /* ===== VIDEO GRID - RESPONSIVE (only video, no text) ===== */
         .video-grid-section {
             padding: 0 0 80px;
         }
@@ -695,7 +695,7 @@
         .video-player-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
             background: #000;
             overflow: hidden;
         }
@@ -708,73 +708,15 @@
             height: 100%;
             border: 0;
             transition: transform 0.4s ease;
+            object-fit: contain;   /* ensures full video visibility without cropping */
+            background: #000;
         }
 
         .video-card:hover .video-player {
             transform: scale(1.02);
         }
 
-        .video-info {
-            padding: 16px;
-            position: relative;
-        }
-        
-        @media (min-width: 768px) {
-            .video-info {
-                padding: 20px;
-            }
-        }
-
-        .video-category {
-            position: absolute;
-            top: -12px;
-            right: 16px;
-            background: var(--gradient-primary);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        @media (min-width: 768px) {
-            .video-category {
-                right: 20px;
-                padding: 6px 16px;
-                font-size: 0.8rem;
-                letter-spacing: 1px;
-            }
-        }
-
-        .video-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            line-height: 1.4;
-            margin-bottom: 8px;
-            word-break: break-word;
-        }
-        
-        @media (min-width: 768px) {
-            .video-title {
-                font-size: 1.15rem;
-            }
-        }
-
-        .video-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-        
-        @media (min-width: 768px) {
-            .video-desc {
-                font-size: 0.9rem;
-            }
-        }
+        /* NO video-info (title/description) displayed */
 
         /* ===== ENHANCED TESTIMONIALS - MOBILE OPTIMIZED ===== */
         .testimonials-section {
@@ -1697,12 +1639,6 @@
                 font-size: 0.85rem;
             }
             
-            .video-info,
-            .testimonial-card,
-            .contact-form {
-                padding: 16px;
-            }
-            
             .contact-detail {
                 padding: 16px;
             }
@@ -1824,11 +1760,10 @@
                     <span>Cartoon & Anime Animation</span>
                 </h1>
                 <p class="hero-description">
-                    We create Nice 2D animations and cartoons that connect with audiences. 
-                    From concept to final frame, we bring your vision to Frames.
+                    We create Nice 2D Animations. 
                 </p>
                 
-                <!-- Category Filters (Storyboard Removed) -->
+                <!-- Category Filters -->
                 <div class="category-filters">
                     <div class="filter-buttons" id="filterButtons">
                         <button class="filter-btn active" data-category="all" aria-label="Show all projects">
@@ -2023,54 +1958,43 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // Video Data (Storyboard Removed, Others Added)
+        // Video Data: 'animations' & 'cartoons' use YouTube, 'others' use local files (muted+loop+autoplay, no controls)
         const videoData = [
-            {
+                    {
                 id: 3,
-                title: "Deva - Animation Teaser",
-                description: "Character animation showcase with fluid motion and expressions",
-                category: "animations",
-                youtubeId: "tHUBBXaYyP8"
+                category: "others",
+                file: "content/deva sword animation.mp4"
             },
             {
-                id: 5,
-                title: "Animation Project Showcase",
-                description: "Complete 2D animation project with background and character animation",
+                id: 4,
+                category: "others",
+                file: "content/deva fight.mp4"
+            },    
+            {
+                id: 6,
                 category: "animations",
                 youtubeId: "oBKLgM0k_0E"
             },
             {
-                id: 6,
-                title: "Short Animation Story",
-                description: "Narrative-driven animation with visual storytelling techniques",
+                id: 7,
                 category: "animations",
                 youtubeId: "1L9nH4nPT8Y"
             },
             {
-                id: 7,
-                title: "Uglydoll Cartoon - Episode 2",
-                description: "Cartoon series episode with character animation and voice acting",
+                id: 8,
                 category: "cartoons",
                 youtubeId: "u7Z7tp2DZ5U"
             },
             {
                 id: 9,
-                title: "Cartoon Series Preview",
-                description: "Preview of ongoing cartoon series with original characters",
                 category: "cartoons",
                 youtubeId: "xw2HJPBsniQ"
             },
-            // Others Category - Add your manual video links here later
-            {
-                id: 10,
-                title: "Other Project 1",
-                description: "This is a placeholder for other projects. You can manually replace the YouTube ID.",
-                category: "others",
-                youtubeId: "hFTyIe_n_LA" // Replace with your video ID
-            }
+            // Others category uses local video files (place them in the content/ folder)
+
         ];
 
-        // Testimonials Data (Exactly the same)
+        // Testimonials Data (exactly the same)
         const testimonialsData = [
             {
                 id: 1,
@@ -2135,12 +2059,10 @@
             });
         });
 
-        // Setup all event listeners
+        // Setup all event listeners (unchanged)
         function setupEventListeners() {
-            // Mobile menu toggle
             hamburger.addEventListener('click', toggleMobileMenu);
             
-            // Close mobile menu when clicking outside or on link
             document.addEventListener('click', closeMobileMenuOnOutsideClick);
             mobileNav.addEventListener('click', (e) => {
                 if (e.target.tagName === 'A') {
@@ -2148,24 +2070,18 @@
                 }
             });
             
-            // Category filtering
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const category = button.dataset.category;
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     
-                    // Scroll to portfolio section when filtering (on mobile)
                     if (window.innerWidth < 768) {
                         const portfolioSection = document.getElementById('portfolio');
                         if (portfolioSection) {
                             const headerHeight = header.offsetHeight;
                             const targetPosition = portfolioSection.offsetTop - headerHeight;
-                            
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
+                            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                         }
                     }
                     
@@ -2173,38 +2089,31 @@
                 });
             });
             
-            // Form submission
             contactForm.addEventListener('submit', handleFormSubmit);
             
-            // Smooth scrolling for nav links
             navLinks.forEach(link => {
                 link.addEventListener('click', handleNavClick);
             });
             
-            // Back to top button
             backToTop.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             
-            // Handle window resize
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
                     setVH();
-                    // Close mobile menu on resize to desktop
                     if (window.innerWidth >= 1024) {
                         closeMobileMenu();
                     }
                 }, 250);
             });
             
-            // Handle orientation change
             window.addEventListener('orientationchange', () => {
                 setTimeout(setVH, 100);
             });
             
-            // Prevent form zoom on iOS
             document.querySelectorAll('input, select, textarea').forEach(el => {
                 el.addEventListener('focus', () => {
                     if (window.innerWidth <= 768) {
@@ -2216,7 +2125,7 @@
             });
         }
 
-        // Mobile Menu Functions
+        // Mobile Menu Functions (unchanged)
         function toggleMobileMenu(e) {
             if (e) e.stopPropagation();
             const isActive = hamburger.classList.contains('active');
@@ -2226,7 +2135,6 @@
             mobileNav.classList.toggle('active');
             body.classList.toggle('menu-open', !isActive);
             
-            // Prevent body scroll when menu is open
             if (!isActive) {
                 document.documentElement.style.overflow = 'hidden';
             } else {
@@ -2248,7 +2156,7 @@
             }
         }
 
-        // Render Enhanced Video Grid
+        // Render Video Grid (only video, no text)
         function renderVideoGrid(category) {
             videoGrid.innerHTML = '';
             
@@ -2272,7 +2180,6 @@
                 videoGrid.appendChild(videoCard);
             });
             
-            // Re-initialize animations for new cards
             initAnimations();
         }
 
@@ -2281,33 +2188,46 @@
             div.className = 'video-card';
             div.setAttribute('data-category', video.category);
             
-            const categoryLabel = video.category.charAt(0).toUpperCase() + video.category.slice(1);
+            let playerHtml = '';
             
-            div.innerHTML = `
-                <div class="video-player-container">
+            // If it has a file property -> local video (only for 'others')
+            if (video.file) {
+                playerHtml = `
+                    <video class="video-player" autoplay muted loop playsinline disablePictureInPicture>
+                        <source src="${video.file}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+            } 
+            // Otherwise it's a YouTube embed
+            else if (video.youtubeId) {
+                // Only 'others' previously had autoplay params; now others use local files, so no special params for youtube
+                let src = `https://www.youtube.com/embed/${video.youtubeId}?rel=0&modestbranding=1&showinfo=0`;
+                playerHtml = `
                     <iframe 
                         class="video-player" 
-                        src="https://www.youtube.com/embed/${video.youtubeId}?rel=0&modestbranding=1&showinfo=0" 
-                        title="${video.title}"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        src="${src}"
+                        title="Video player"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                         loading="lazy">
                     </iframe>
-                </div>
-                <div class="video-info">
-                    <div class="video-category">${categoryLabel}</div>
-                    <h3 class="video-title">${video.title}</h3>
-                    <p class="video-desc">${video.description}</p>
+                `;
+            }
+            
+            div.innerHTML = `
+                <div class="video-player-container">
+                    ${playerHtml}
                 </div>
             `;
+            // No video-info div (title/description removed completely)
             
             return div;
         }
 
-        // Render Enhanced Testimonials
+        // Render Testimonials (unchanged)
         function renderTestimonials() {
             testimonialsGrid.innerHTML = '';
-            
             testimonialsData.forEach(testimonial => {
                 const testimonialCard = createTestimonialCard(testimonial);
                 testimonialsGrid.appendChild(testimonialCard);
@@ -2345,42 +2265,33 @@
             return div;
         }
 
-        // Navigation Click Handler
+        // Navigation Click Handler (unchanged)
         function handleNavClick(e) {
             e.preventDefault();
             const href = this.getAttribute('href');
             
-            // Update active nav link
             navLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
             
-            // Close mobile menu
             closeMobileMenu();
             
-            // Scroll to section
             const targetSection = document.querySelector(href);
             if (targetSection) {
                 const headerHeight = header.offsetHeight;
                 const targetPosition = targetSection.offsetTop - headerHeight;
                 
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Update URL without page reload
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                 history.pushState(null, null, href);
             }
         }
 
-        // Form Submission Handler
+        // Form Submission Handler (unchanged)
         async function handleFormSubmit(e) {
             e.preventDefault();
             
             const submitBtn = contactForm.querySelector('.submit-btn');
             const originalText = submitBtn.innerHTML;
             
-            // Show loading
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<div class="loading"></div> Sending...';
             formMessage.style.display = 'none';
@@ -2389,25 +2300,18 @@
             
             try {
                 const formData = new FormData(contactForm);
-                
                 const response = await fetch(formspreeEndpoint, {
                     method: 'POST',
                     body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
                 
                 if (response.ok) {
-                    // Success
                     formMessage.textContent = "🎉 Thank you for your inquiry! We'll review your project and contact you within 24 hours.";
                     formMessage.className = 'form-message success';
                     formMessage.style.display = 'block';
-                    
-                    // Reset form
                     contactForm.reset();
                     
-                    // Scroll to message on mobile
                     if (window.innerWidth <= 768) {
                         setTimeout(() => {
                             formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2419,7 +2323,6 @@
                 }
             } catch (error) {
                 console.error('Form submission error:', error);
-                
                 formMessage.textContent = "⚠️ There was an error sending your message. Please try again or email us directly at toonlanceservice@gmail.com";
                 formMessage.className = 'form-message error';
                 formMessage.style.display = 'block';
@@ -2430,11 +2333,9 @@
                     }, 300);
                 }
             } finally {
-                // Reset button state
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
                 
-                // Hide message after 10 seconds
                 setTimeout(() => {
                     if (formMessage.style.display === 'block') {
                         formMessage.style.display = 'none';
@@ -2443,7 +2344,7 @@
             }
         }
 
-        // Scroll Effects
+        // Scroll Effects (unchanged)
         function setupScrollEffects() {
             let lastScroll = 0;
             let ticking = false;
@@ -2451,21 +2352,18 @@
             function updateOnScroll() {
                 const currentScroll = window.scrollY;
                 
-                // Header effect
                 if (currentScroll > 50) {
                     header.classList.add('scrolled');
                 } else {
                     header.classList.remove('scrolled');
                 }
                 
-                // Back to top button
                 if (currentScroll > 400) {
                     backToTop.classList.add('visible');
                 } else {
                     backToTop.classList.remove('visible');
                 }
                 
-                // Update active nav based on scroll
                 updateActiveNav(currentScroll);
                 
                 lastScroll = currentScroll;
@@ -2507,7 +2405,7 @@
             }
         }
 
-        // Prevent iOS Zoom
+        // Prevent iOS Zoom (unchanged)
         function preventIOSZoom() {
             document.addEventListener('touchstart', (e) => {
                 if (e.touches.length > 1) {
@@ -2524,7 +2422,6 @@
                 lastTouchEnd = now;
             }, false);
             
-            // Prevent zoom on input focus in iOS
             document.addEventListener('focus', (e) => {
                 if (e.target.matches('input, select, textarea') && window.innerWidth <= 768) {
                     setTimeout(() => {
@@ -2534,13 +2431,13 @@
             }, true);
         }
 
-        // Set viewport height for mobile
+        // Set viewport height for mobile (unchanged)
         function setVH() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
         }
 
-        // Initialize animations on scroll
+        // Initialize animations on scroll (unchanged)
         function initAnimations() {
             const observerOptions = {
                 threshold: 0.1,
@@ -2557,7 +2454,6 @@
                 });
             }, observerOptions);
 
-            // Observe elements for animation
             document.querySelectorAll('.video-card, .testimonial-card, .contact-detail').forEach(el => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(20px)';
@@ -2566,7 +2462,7 @@
             });
         }
 
-        // Handle browser back/forward buttons
+        // Handle browser back/forward buttons (unchanged)
         window.addEventListener('popstate', () => {
             const hash = window.location.hash;
             if (hash) {
@@ -2583,22 +2479,15 @@
             }
         });
 
-        // Performance optimizations
+        // Performance optimizations (unchanged)
         function optimizePerformance() {
-            // Use passive event listeners for scroll
             document.addEventListener('touchstart', function() {}, { passive: true });
             
-            // Defer non-critical CSS
             const criticalStyles = document.querySelectorAll('style');
             if (criticalStyles.length > 0) {
                 const lastStyle = criticalStyles[criticalStyles.length - 1];
                 const nonCritical = document.createElement('style');
-                nonCritical.innerHTML = `
-                    /* Non-critical styles can be loaded later */
-                    @media (min-width: 1200px) {
-                        /* Large desktop styles */
-                    }
-                `;
+                nonCritical.innerHTML = `/* non-critical */`;
                 nonCritical.setAttribute('media', 'print');
                 nonCritical.onload = function() {
                     nonCritical.media = 'all';
@@ -2607,21 +2496,18 @@
             }
         }
 
-        // Initialize performance optimizations
         if (document.readyState === 'complete') {
             optimizePerformance();
         } else {
             window.addEventListener('load', optimizePerformance);
         }
 
-        // Handle keyboard navigation
+        // Handle keyboard navigation (unchanged)
         document.addEventListener('keydown', (e) => {
-            // Close mobile menu on Escape
             if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
                 closeMobileMenu();
             }
             
-            // Trap focus in mobile menu
             if (mobileNav.classList.contains('active') && e.key === 'Tab') {
                 const focusableElements = mobileNav.querySelectorAll('a[href], button');
                 const firstElement = focusableElements[0];
@@ -2637,7 +2523,6 @@
             }
         });
 
-        // Add touch-friendly hover effects
         if ('ontouchstart' in window) {
             document.addEventListener('touchstart', function() {}, false);
         }
