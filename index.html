@@ -5,33 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, viewport-fit=cover">
     <meta name="description" content="TOONLANCE is a professional 2D animation studio for indie creators. We animate series and films on affordable budgets – human-made, no AI, pure passion.">
     <title>TOONLANCE | Premium 2D Animation & Cartoon Studio for Indie Creators</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="icon" href="content/toonlance.png">
     <style>
-        /* Minimal Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1A1429; }
-        ::-webkit-scrollbar-thumb { background: #7A6DFC; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #B4A6FF; }
-
-        /* ===== BASE STYLES ===== */
-        :root {
-            --primary: #7A6DFC;
-            --primary-light: #9B8FFF;
-            --secondary: #B4A6FF;
-            --accent: #E0D3FF;
-            --dark-bg: #0F0B1A;
-            --card-bg: rgba(31, 26, 48, 0.85);
-            --text-primary: #FFFFFF;
-            --text-secondary: #D6CCFF;
-            --gradient-primary: linear-gradient(135deg, #7A6DFC 0%, #B4A6FF 100%);
-            --gradient-dark: linear-gradient(145deg, #0F0B1A 0%, #1A1433 100%);
-            --header-height: 70px;
-            --safe-area-inset-top: env(safe-area-inset-top);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom);
-        }
-
+        /* --- RESET & DESIGN SYSTEM --- */
         * {
             margin: 0;
             padding: 0;
@@ -39,66 +17,109 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
-            scroll-behavior: smooth;
-            font-size: 14px;
-            -webkit-text-size-adjust: 100%;
-            -webkit-font-smoothing: antialiased;
+        :root {
+            --primary: #7A6DFC;
+            --primary-dark: #5f50f5;
+            --primary-light: #9B8FFF;
+            --secondary: #B4A6FF;
+            --accent: #E0D3FF;
+            --dark-bg: #0b0716;
+            --surface: #15102a;
+            --surface-elevated: #1e1838;
+            --text-primary: #FFFFFF;
+            --text-secondary: #D6CCFF;
+            --text-muted: #a89fc9;
+            --gradient-primary: linear-gradient(135deg, #7A6DFC 0%, #B4A6FF 100%);
+            --gradient-dark: radial-gradient(circle at 20% 30%, rgba(122,109,252,0.05) 0%, #0b0716 90%);
+            --header-height: 72px;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+            --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.4);
+            --border-glow: 1px solid rgba(122, 109, 252, 0.35);
+            --border-glow-hover: 1px solid rgba(180, 166, 255, 0.7);
         }
 
-        @media (min-width: 360px) { html { font-size: 15px; } }
-        @media (min-width: 768px) { html { font-size: 16px; } }
-        @media (min-width: 1200px) { html { font-size: 17px; } }
+        html {
+            scroll-behavior: smooth;
+            font-size: 15px;
+        }
+
+        @media (min-width: 768px) {
+            html { font-size: 16px; }
+        }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--gradient-dark);
+            font-family: 'Inter', sans-serif;
+            background: #0b0716;
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
             overflow-x: hidden;
             min-height: 100vh;
-            padding-top: var(--safe-area-inset-top);
-            padding-bottom: var(--safe-area-inset-bottom);
         }
 
         .container {
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         @media (max-width: 768px) {
-            .container { padding: 0 16px; }
-        }
-        @media (max-width: 480px) {
-            .container { padding: 0 14px; }
+            .container {
+                padding: 0 20px;
+            }
         }
 
         section {
-            padding: 60px 0;
+            padding: 80px 0;
+            position: relative;
         }
-        @media (min-width: 768px) { section { padding: 80px 0; } }
-        @media (min-width: 1200px) { section { padding: 100px 0; } }
 
-        /* ===== HEADER ===== */
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+        }
+
+        /* --- SCROLLBAR (refined) --- */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0b1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5f50f5;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8a7eff;
+        }
+
+        /* --- HEADER & NAVIGATION (fixed + glass) --- */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: var(--header-height);
-            background: rgba(15, 11, 26, 0.98);
-            backdrop-filter: blur(15px);
+            background: rgba(11, 7, 22, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             z-index: 1000;
-            border-bottom: 1px solid rgba(122, 109, 252, 0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-top: var(--safe-area-inset-top);
+            border-bottom: var(--border-glow);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            padding-top: var(--safe-top);
         }
+
         header.scrolled {
-            height: calc(var(--header-height) - 10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            height: calc(var(--header-height) - 8px);
+            background: rgba(11, 7, 22, 0.96);
+            border-bottom-color: rgba(122, 109, 252, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
+
         .header-container {
             display: flex;
             align-items: center;
@@ -106,327 +127,343 @@
             height: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 16px;
+            padding: 0 24px;
         }
-        @media (min-width: 768px) {
-            .header-container { padding: 0 24px; }
-        }
-        .logo img {
-            height: 36px;
-            transition: transform 0.3s ease;
-        }
-        @media (min-width: 768px) {
-            .logo img { height: 48px; }
-        }
-        .logo:hover img { transform: scale(1.05); }
 
-        nav ul {
-            display: none;
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 20px;
+            }
+        }
+
+        .logo img {
+            height: 42px;
+            transition: transform 0.25s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .logo:hover img {
+            transform: scale(1.03);
+        }
+
+        /* desktop nav */
+        .desktop-nav ul {
+            display: flex;
+            gap: 2rem;
             list-style: none;
         }
-        @media (min-width: 1024px) {
-            nav ul {
-                display: flex;
-                gap: 1.5rem;
-            }
-            nav a {
-                color: var(--text-secondary);
-                text-decoration: none;
-                font-weight: 500;
-                padding: 8px 12px;
-                border-radius: 8px;
-                transition: all 0.3s ease;
-                position: relative;
-                font-size: 0.95rem;
-            }
-            nav a::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                width: 0;
-                height: 2px;
-                background: var(--gradient-primary);
-                transition: width 0.3s ease;
-                transform: translateX(-50%);
-            }
-            nav a:hover, nav a.active {
-                color: var(--text-primary);
-            }
-            nav a:hover::after, nav a.active::after {
-                width: 70%;
-            }
+
+        .desktop-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 6px 0;
+            position: relative;
+            transition: color 0.2s;
+            letter-spacing: -0.2px;
         }
 
-        .hamburger {
-            display: block;
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            position: relative;
-            z-index: 1001;
-            padding: 10px;
+        .desktop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            transition: width 0.25s ease;
         }
+
+        .desktop-nav a:hover::after,
+        .desktop-nav a.active::after {
+            width: 100%;
+        }
+
+        .desktop-nav a:hover,
+        .desktop-nav a.active {
+            color: white;
+        }
+
+        /* --- HAMBURGER (enhanced) --- */
+        .hamburger {
+            display: none;
+            background: rgba(122, 109, 252, 0.12);
+            border: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 30px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+
+        .hamburger:hover {
+            background: rgba(122, 109, 252, 0.25);
+        }
+
         .hamburger span {
             display: block;
             position: absolute;
-            height: 3px;
+            height: 2.5px;
             width: 24px;
             background: var(--accent);
             border-radius: 3px;
-            transition: all 0.3s ease;
-            left: 10px;
+            left: 11px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        .hamburger span:nth-child(1) { top: 14px; }
-        .hamburger span:nth-child(2) { top: 21px; }
-        .hamburger span:nth-child(3) { top: 28px; }
-        .hamburger.active span:nth-child(1) { top: 21px; transform: rotate(45deg); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { top: 21px; transform: rotate(-45deg); }
-        @media (min-width: 1024px) { .hamburger { display: none; } }
 
-        nav.mobile-nav {
+        .hamburger span:nth-child(1) { top: 16px; }
+        .hamburger span:nth-child(2) { top: 22px; }
+        .hamburger span:nth-child(3) { top: 28px; }
+
+        .hamburger.active span:nth-child(1) {
+            top: 21px;
+            transform: rotate(45deg);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-8px);
+        }
+        .hamburger.active span:nth-child(3) {
+            top: 21px;
+            transform: rotate(-45deg);
+        }
+
+        /* --- MOBILE NAV (proper dark theme, elegant) --- */
+        .mobile-nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(15, 11, 26, 0.98);
-            backdrop-filter: blur(20px);
+            background: radial-gradient(circle at 10% 20%, rgba(20, 14, 44, 0.98), #07040f);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 999;
             display: flex;
             flex-direction: column;
-            padding: calc(var(--header-height) + 40px) 24px 40px;
+            justify-content: flex-start;
+            padding: calc(var(--header-height) + 20px) 28px 40px;
             transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             overflow-y: auto;
+            border-right: 1px solid rgba(122, 109, 252, 0.4);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
         }
-        nav.mobile-nav.active { transform: translateX(0); }
-        nav.mobile-nav a {
-            display: block;
-            font-size: 1.2rem;
-            padding: 18px;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
-        }
-        body.menu-open { overflow: hidden; height: 100vh; }
 
-        /* ===== HERO ===== */
-        .hero {
-            padding: calc(var(--header-height) + 30px) 0 40px;
-            position: relative;
-            overflow: hidden;
-            min-height: auto;
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-nav li a {
             display: flex;
             align-items: center;
-            background: var(--gradient-dark);
+            padding: 16px 20px;
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.2s;
+            background: transparent;
+            border: 1px solid transparent;
         }
-        @media (min-width: 768px) {
-            .hero { min-height: calc(100vh - var(--header-height)); padding: calc(var(--header-height) + 40px) 0 60px; }
+
+        .mobile-nav li a i {
+            margin-right: 14px;
+            width: 28px;
+            font-size: 1.3rem;
+            color: var(--primary-light);
         }
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(122,109,252,0.25) 0%, transparent 60%),
-                        radial-gradient(circle at 80% 70%, rgba(180,166,255,0.25) 0%, transparent 60%);
-            z-index: 0;
+
+        .mobile-nav li a:hover {
+            background: rgba(122, 109, 252, 0.2);
+            color: white;
+            border-color: rgba(122, 109, 252, 0.4);
+            transform: translateX(6px);
         }
+
+        .mobile-nav li a.active {
+            background: linear-gradient(95deg, rgba(122, 109, 252, 0.25), rgba(180, 166, 255, 0.1));
+            color: white;
+            border-left: 3px solid var(--primary);
+            font-weight: 700;
+            border-radius: 20px;
+            padding-left: 17px;
+        }
+
+        /* remove default list padding */
+        .mobile-nav ul, .mobile-nav li {
+            margin: 0;
+            padding: 0;
+        }
+
+        body.menu-open {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        @media (min-width: 1024px) {
+            .hamburger {
+                display: none;
+            }
+            .mobile-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .desktop-nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* --- HERO (refined)--- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(ellipse at 30% 40%, rgba(122, 109, 252, 0.12), transparent 70%);
+        }
+
         .hero-content {
             text-align: center;
-            max-width: 900px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 0 16px;
-            position: relative;
-            z-index: 1;
         }
+
         .hero-subtitle {
             font-size: 0.8rem;
-            color: var(--secondary);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
+            letter-spacing: 4px;
             font-weight: 600;
+            color: var(--secondary);
+            background: rgba(122, 109, 252, 0.2);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+            margin-bottom: 20px;
         }
-        @media (min-width: 768px) {
-            .hero-subtitle { font-size: 1rem; letter-spacing: 3px; margin-bottom: 16px; }
-        }
+
         .hero-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(1.8rem, 7vw, 4rem);
+            font-size: clamp(2.2rem, 8vw, 4.8rem);
             font-weight: 900;
-            margin-bottom: 16px;
             line-height: 1.2;
+            margin-bottom: 20px;
         }
+
         .hero-title span {
-            background: linear-gradient(145deg, var(--primary), var(--secondary), var(--accent));
+            background: linear-gradient(145deg, #9B8FFF, #E0D3FF, #C6B9FF);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: block;
         }
+
         .hero-description {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 20px;
-            line-height: 1.6;
+            max-width: 560px;
+            margin: 0 auto 28px;
         }
-        @media (min-width: 768px) {
-            .hero-description { font-size: 1.1rem; line-height: 1.7; margin-bottom: 24px; }
-        }
+
         .indie-badge {
+            background: rgba(122, 109, 252, 0.18);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 166, 255, 0.5);
+            border-radius: 100px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(122, 109, 252, 0.2);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(180, 166, 255, 0.5);
-            border-radius: 60px;
-            padding: 8px 18px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--accent);
-            letter-spacing: 0.3px;
+            gap: 12px;
+            padding: 8px 24px;
+            font-weight: 500;
         }
-        @media (min-width: 768px) {
-            .indie-badge { padding: 10px 24px; font-size: 0.9rem; gap: 10px; }
-        }
-        .indie-badge i { font-size: 1rem; color: var(--primary-light); }
 
-        /* ===== SHOWREEL (now autoplay, loop, muted, no controls) ===== */
-        .showreel-section {
-            padding: 40px 0;
-            background: linear-gradient(145deg, #0F0B1A, #15102A);
+        /* --- VIDEO SECTIONS --- */
+        .showreel-section, .big-portfolio-video-section {
+            padding: 0 0 40px 0;
         }
-        @media (min-width: 768px) { .showreel-section { padding: 60px 0; } }
-        .showreel-container {
+
+        .showreel-container, .big-portfolio-container {
             max-width: 1200px;
             margin: 0 auto;
-            border-radius: 24px;
+            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.4);
-            border: 1px solid rgba(122,109,252,0.4);
-            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-md);
+            border: var(--border-glow);
+            transition: transform 0.3s, border-color 0.2s;
             background: #000;
         }
-        @media (max-width: 640px) { .showreel-container { border-radius: 16px; } }
-        .showreel-container:hover {
+
+        .showreel-container:hover, .big-portfolio-container:hover {
             transform: scale(1.01);
-            border-color: var(--accent);
+            border-color: var(--primary-light);
         }
-        .showreel-video {
+
+        .showreel-video, .big-portfolio-video {
             width: 100%;
             display: block;
             aspect-ratio: 16 / 9;
             object-fit: cover;
-            background: #000;
         }
 
-        /* ===== BIG FEATURED VIDEO SECTION (Portfolio) ===== */
-        .big-portfolio-video-section {
-            margin-bottom: 60px;
-        }
-        .big-portfolio-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
-            border: 1px solid rgba(122,109,252,0.5);
-            background: #000;
-            transition: transform 0.3s ease;
-        }
-        .big-portfolio-container:hover {
-            transform: scale(1.01);
-            border-color: var(--accent);
-        }
-        .big-portfolio-video {
-            width: 100%;
-            display: block;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            background: #000;
-        }
-        @media (max-width: 768px) {
-            .big-portfolio-container { border-radius: 20px; }
+        .video-grid-section {
+            padding-top: 20px;
         }
 
-        /* ===== PORTFOLIO - FEATURED & SECONDARY ===== */
-        .video-grid-section { padding: 0 0 50px; }
-        @media (min-width: 768px) { .video-grid-section { padding: 0 0 70px; } }
-        
         .featured-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-bottom: 56px;
         }
-        @media (min-width: 640px) {
-            .featured-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 30px;
-            }
-        }
-        @media (min-width: 1024px) {
-            .featured-grid {
-                gap: 35px;
-            }
-        }
-        .featured-card {
-            background: linear-gradient(145deg, rgba(122,109,252,0.2), rgba(180,166,255,0.12));
-            border: 1px solid rgba(122,109,252,0.5);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            transform: scale(1.02);
-            box-shadow: 0 15px 30px rgba(122,109,252,0.3);
-        }
-        .featured-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 25px 40px rgba(122,109,252,0.4);
-            border-color: var(--accent);
-        }
-        .featured-card .video-player-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            background: #000;
-        }
+
         .secondary-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
         }
-        @media (min-width: 480px) {
-            .secondary-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-        }
-        @media (min-width: 768px) {
-            .secondary-grid { gap: 25px; }
-        }
-        .video-card {
-            background: linear-gradient(145deg, rgba(122,109,252,0.15), rgba(180,166,255,0.1));
-            border: 1px solid rgba(122,109,252,0.3);
-            border-radius: 16px;
+
+        .featured-card, .video-card {
+            background: var(--surface-elevated);
+            border-radius: 24px;
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: all 0.3s;
+            border: 1px solid rgba(122, 109, 252, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(122,109,252,0.2);
-            border-color: rgba(224,211,255,0.5);
+
+        .featured-card:hover, .video-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 25px 35px rgba(122, 109, 252, 0.2);
         }
+
         .video-player-container {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
             background: #000;
         }
+
         .video-player {
             position: absolute;
             top: 0;
@@ -434,56 +471,58 @@
             width: 100%;
             height: 100%;
             border: 0;
-            object-fit: contain;
-            background: #000;
+            object-fit: cover;
         }
 
-        /* ===== PRICING ===== */
-        .pricing-section { padding: 50px 0; background: radial-gradient(ellipse at 30% 40%, rgba(122,109,252,0.1), transparent); }
-        @media (min-width: 768px) { .pricing-section { padding: 70px 0; } }
-        .pricing-card {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(31, 26, 48, 0.8);
-            backdrop-filter: blur(16px);
-            border-radius: 40px;
-            padding: 36px 24px;
-            text-align: center;
-            border: 1px solid rgba(122, 109, 252, 0.5);
-            box-shadow: 0 25px 35px rgba(0,0,0,0.3);
-            transition: all 0.4s ease;
+        @media (max-width: 900px) {
+            .featured-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
         }
-        @media (min-width: 768px) { .pricing-card { padding: 48px 32px; border-radius: 48px; } }
-        .pricing-card:hover { transform: scale(1.01); border-color: var(--accent); box-shadow: 0 30px 45px rgba(122,109,252,0.25); }
+
+        @media (max-width: 640px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            .secondary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- PRICING CARD --- */
+        .pricing-section {
+            background: radial-gradient(circle at 50% 20%, rgba(122, 109, 252, 0.1), transparent);
+        }
+
+        .pricing-card {
+            max-width: 820px;
+            margin: 0 auto;
+            background: rgba(30, 24, 56, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 48px 40px;
+            text-align: center;
+            border: var(--border-glow);
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--accent);
+            transform: scale(1.01);
+            background: rgba(30, 24, 56, 0.85);
+        }
+
         .price-tag {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(2.6rem, 7vw, 5rem);
             font-weight: 800;
             font-family: 'Montserrat', sans-serif;
             background: var(--gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            line-height: 1.2;
-            margin-bottom: 12px;
         }
-        .price-sub {
-            font-size: 1rem;
-            color: var(--secondary);
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            border-bottom: 1px dashed rgba(180,166,255,0.4);
-            display: inline-block;
-            padding-bottom: 6px;
-        }
-        @media (min-width: 768px) { .price-sub { font-size: 1.2rem; margin-bottom: 30px; } }
-        .pricing-description {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin: 20px auto;
-            line-height: 1.6;
-        }
-        @media (min-width: 768px) { .pricing-description { font-size: 1.05rem; } }
+
         .indie-features {
             display: flex;
             flex-wrap: wrap;
@@ -491,261 +530,137 @@
             gap: 12px;
             margin: 28px 0;
         }
+
         .feature-badge {
-            background: rgba(122,109,252,0.2);
-            padding: 6px 14px;
-            border-radius: 60px;
-            font-size: 0.75rem;
+            background: rgba(122, 109, 252, 0.2);
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 0.8rem;
             font-weight: 500;
-            color: var(--accent);
-            border: 1px solid rgba(180,166,255,0.3);
         }
-        @media (min-width: 768px) { .feature-badge { padding: 8px 18px; font-size: 0.85rem; } }
-        .feature-badge i { margin-right: 6px; color: var(--primary-light); }
+
         .pricing-cta {
             background: var(--gradient-primary);
             border: none;
-            padding: 12px 28px;
+            padding: 14px 34px;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 0.9rem;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            transition: 0.2s;
+            color: white;
             text-decoration: none;
         }
-        @media (min-width: 768px) { .pricing-cta { padding: 14px 36px; font-size: 1rem; } }
-        .pricing-cta:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(122,109,252,0.5); gap: 14px; }
 
-        /* ===== TESTIMONIALS ===== */
-        .testimonials-section { padding: 50px 0; background: radial-gradient(ellipse at 50% 50%, rgba(122,109,252,0.08), transparent); }
-        @media (min-width: 768px) { .testimonials-section { padding: 70px 0; } }
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(1.6rem, 5vw, 2.8rem);
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
+        .pricing-cta:hover {
+            gap: 18px;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(122, 109, 252, 0.5);
         }
-        .section-title span { color: var(--accent); }
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-        @media (min-width: 768px) { .section-title { margin-bottom: 60px; } }
+
+        /* testi, contact etc */
         .testimonials-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
         }
-        @media (min-width: 640px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(4, 1fr); gap: 30px; } }
-        .testimonial-card {
-            background: rgba(31, 26, 48, 0.8);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 24px;
-            border: 1px solid rgba(122,109,252,0.3);
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        @media (min-width: 768px) { .testimonial-card { padding: 28px; } }
-        .testimonial-card:hover { transform: translateY(-5px); border-color: var(--primary-light); box-shadow: 0 15px 30px rgba(122,109,252,0.2); }
-        .quote-icon { color: var(--primary); font-size: 1.8rem; margin-bottom: 16px; opacity: 0.8; }
-        .testimonial-text {
-            font-style: italic;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 0.9rem;
-            flex: 1;
-        }
-        @media (min-width: 768px) { .testimonial-text { font-size: 0.95rem; } }
-        .testimonial-rating { color: #FFD966; margin-bottom: 18px; font-size: 0.85rem; }
-        .client-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            border-top: 1px solid rgba(122,109,252,0.3);
-            padding-top: 18px;
-        }
-        .client-avatar {
-            width: 48px;
-            height: 48px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        .client-details h4 { font-weight: 600; margin-bottom: 4px; font-size: 1rem; }
-        .client-details p { font-size: 0.7rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* ===== CONTACT ===== */
-        .contact-section { padding: 50px 0; position: relative; }
-        @media (min-width: 768px) { .contact-section { padding: 70px 0; } }
+        .testimonial-card {
+            background: rgba(31, 26, 48, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 28px;
+            border: 1px solid rgba(122, 109, 252, 0.3);
+            transition: 0.25s;
+        }
+
+        @media (max-width: 1000px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .contact-container {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
         }
-        @media (min-width: 992px) { .contact-container { grid-template-columns: 1fr 1fr; gap: 60px; } }
-        .contact-info h3 {
-            font-size: clamp(1.4rem, 4vw, 2.2rem);
-            margin-bottom: 25px;
-            font-family: 'Montserrat', sans-serif;
-        }
-        .contact-details { display: flex; flex-direction: column; gap: 18px; }
-        .contact-detail {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            padding: 18px;
-            background: rgba(122,109,252,0.1);
-            border-radius: 20px;
-            border: 1px solid rgba(122,109,252,0.2);
-            transition: all 0.3s;
-            backdrop-filter: blur(4px);
-        }
-        .contact-detail:hover { background: rgba(122,109,252,0.2); transform: translateX(6px); border-color: var(--primary-light); }
-        .contact-icon {
-            width: 52px;
-            height: 52px;
-            background: var(--gradient-primary);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
-        }
-        .contact-text h4 { font-weight: 600; margin-bottom: 4px; font-size: 1rem; }
-        .contact-text p { color: var(--text-secondary); font-size: 0.85rem; word-break: break-word; }
-        .contact-form {
-            background: rgba(122,109,252,0.1);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            padding: 28px;
-            border: 1px solid rgba(122,109,252,0.4);
-            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-        @media (min-width: 768px) { .contact-form { padding: 36px; } }
-        .contact-form:hover { border-color: var(--accent); box-shadow: 0 25px 40px rgba(122,109,252,0.2); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--accent);
-            font-weight: 500;
-            font-size: 0.85rem;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            background: rgba(15,11,26,0.9);
-            border: 1px solid rgba(122,109,252,0.3);
-            border-radius: 16px;
-            color: white;
-            font-family: inherit;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(122,109,252,0.2);
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--gradient-primary);
-            border: none;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 1rem;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,109,252,0.4); gap: 14px; }
-        .form-message {
-            padding: 12px;
-            border-radius: 16px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-            font-size: 0.85rem;
-        }
-        .form-message.success { background: rgba(76,217,100,0.2); border: 1px solid #6CE07C; color: #6CE07C; }
-        .form-message.error { background: rgba(255,59,48,0.2); border: 1px solid #FF6B5E; color: #FF6B5E; }
 
-        .site-footer {
-            padding: 50px 0 30px;
-            background: linear-gradient(180deg, rgba(12,8,22,0.95), #0F0B1F);
-            border-top: 1px solid rgba(122,109,252,0.3);
+        .contact-form {
+            background: rgba(31, 26, 48, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 36px;
+            padding: 32px;
+            border: var(--border-glow);
+        }
+
+        @media (max-width: 860px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        input, select, textarea {
+            background: #0f0b1c;
+            border: 1px solid rgba(122, 109, 252, 0.4);
+            border-radius: 20px;
+            padding: 14px 16px;
+            color: white;
+            width: 100%;
+        }
+
+        .submit-btn {
+            background: var(--gradient-primary);
+            border-radius: 60px;
+            padding: 14px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        footer {
+            background: #07040c;
+            border-top: 1px solid rgba(122, 109, 252, 0.3);
+            padding: 48px 0 32px;
             text-align: center;
         }
-        .footer-logo img { height: 40px; margin-bottom: 15px; }
-        .footer-tagline { color: var(--text-secondary); max-width: 600px; margin: 0 auto 25px; font-style: italic; font-size: 0.85rem; }
-        .social-links { display: flex; justify-content: center; gap: 15px; margin: 25px 0; flex-wrap: wrap; }
-        .social-link {
-            width: 44px;
-            height: 44px;
-            background: rgba(122,109,252,0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            transition: 0.2s;
-            font-size: 1.2rem;
-        }
-        .social-link:hover { background: var(--primary); transform: translateY(-3px); }
-        .copyright { color: var(--text-secondary); font-size: 0.75rem; }
+
         #back-to-top {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
-            border: none;
-            color: white;
-            cursor: pointer;
+            bottom: 24px;
+            right: 24px;
+            background: var(--primary);
+            border-radius: 30px;
+            width: 48px;
+            height: 48px;
             opacity: 0;
             visibility: hidden;
             transition: 0.2s;
-            z-index: 99;
+            border: none;
+            cursor: pointer;
+            color: white;
         }
-        #back-to-top.visible { opacity: 1; visibility: visible; }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
@@ -762,16 +677,18 @@
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+            <button class="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
         <nav class="mobile-nav" id="mobileNav">
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#showreel">Showreel</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#showreel"><i class="fas fa-video"></i> Showreel</a></li>
+                <li><a href="#portfolio"><i class="fas fa-film"></i> Portfolio</a></li>
+                <li><a href="#pricing"><i class="fas fa-tag"></i> Pricing</a></li>
+                <li><a href="#testimonials"><i class="fas fa-star"></i> Testimonials</a></li>
+                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -782,7 +699,7 @@
                 <span class="hero-subtitle">INDIE ANIMATION STUDIO</span>
                 <h1 class="hero-title">Toonlance<br><span>Cartoon & Anime Animation</span></h1>
                 <p class="hero-description">We create premium 2D animations for independent storytellers — human-made, no AI, pure passion.</p>
-                <div class="indie-badge"> <span>ONLY FOR INDIE CREATORS — Toonlance is yours</span></div>
+                <div class="indie-badge"> <span>✨ ONLY FOR INDIE CREATORS — Toonlance is yours</span></div>
             </div>
         </div>
     </section>
@@ -799,7 +716,6 @@
 
     <section id="portfolio" class="video-grid-section">
         <div class="container">
-            <!-- Big featured portfolio video: autoplay, loop, no controls -->
             <div class="big-portfolio-video-section">
                 <div class="big-portfolio-container">
                     <video class="big-portfolio-video" autoplay muted loop playsinline>
@@ -816,8 +732,8 @@
         <div class="container">
             <div class="pricing-card">
                 <div class="price-tag">$350 <span style="font-size: 0.5em;">/ minute</span></div>
-                <div class="price-sub">Indie Creator Rate — Premium 2D Animation</div>
-                <p class="pricing-description">We help indie creators, small studios, and storytellers bring their cartoons, animated films, and series to life — without breaking the bank.</p>
+                <div class="price-sub" style="color: var(--secondary); margin: 8px 0 12px;">Indie Creator Rate — Premium 2D Animation</div>
+                <p class="pricing-description" style="color: var(--text-muted);">We help indie creators, small studios, and storytellers bring their cartoons, animated films, and series to life — without breaking the bank.</p>
                 <div class="indie-features">
                     <span class="feature-badge"><i class="fas fa-film"></i> Cartoon Series</span>
                     <span class="feature-badge"><i class="fas fa-video"></i> Animated Films</span>
@@ -841,58 +757,50 @@
             <h2 class="section-title">Start Your <span>Animation Project</span></h2>
             <div class="contact-container">
                 <div class="contact-info">
-                    <h3>Get in Touch</h3>
-                    <div class="contact-details">
-                        <div class="contact-detail"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-text"><h4>Email Us</h4><p>toonlanceservice@gmail.com</p></div></div>
-                        <div class="contact-detail"><div class="contact-icon"><i class="fab fa-discord"></i></div><div class="contact-text"><h4>Discord</h4><p>@toonlance</p></div></div>
-                        <div class="contact-detail"><div class="contact-icon"><i class="fas fa-clock"></i></div><div class="contact-text"><h4>Response Time</h4><p>Within 24 hours</p></div></div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 24px;">Get in Touch</h3>
+                    <div class="contact-details" style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="contact-detail" style="display: flex; gap: 18px; align-items: center; background: rgba(122,109,252,0.1); border-radius: 24px; padding: 18px;"><div class="contact-icon" style="background: var(--gradient-primary); border-radius: 20px; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-envelope"></i></div><div><h4>Email</h4><p style="color: var(--secondary);">toonlanceservice@gmail.com</p></div></div>
+                        <div class="contact-detail" style="display: flex; gap: 18px; align-items: center; background: rgba(122,109,252,0.1); border-radius: 24px; padding: 18px;"><div class="contact-icon" style="background: var(--gradient-primary); border-radius: 20px; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-discord"></i></div><div><h4>Discord</h4><p style="color: var(--secondary);">@toonlance</p></div></div>
+                        <div class="contact-detail" style="display: flex; gap: 18px; align-items: center; background: rgba(122,109,252,0.1); border-radius: 24px; padding: 18px;"><div class="contact-icon" style="background: var(--gradient-primary); border-radius: 20px; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-clock"></i></div><div><h4>Response Time</h4><p style="color: var(--secondary);">Within 24 hours</p></div></div>
                     </div>
                 </div>
                 <form class="contact-form" id="contactForm" action="https://formspree.io/f/myzenzjg" method="POST">
-                    <div class="form-row" style="display:grid; gap:1rem; grid-template-columns:1fr 1fr;">
-                        <div class="form-group"><label>Your Name *</label><input type="text" name="name" required></div>
-                        <div class="form-group"><label>Email *</label><input type="email" name="email" required></div>
-                    </div>
+                    <div style="display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;"><div class="form-group"><label>Name *</label><input type="text" name="name" required></div><div class="form-group"><label>Email *</label><input type="email" name="email" required></div></div>
                     <div class="form-group"><label>Discord Username</label><input type="text" name="discord"></div>
-                    <div class="form-row" style="display:grid; gap:1rem; grid-template-columns:1fr 1fr;">
-                        <div class="form-group"><label>Project Budget *</label><input type="text" name="budget" placeholder="$350 - $5000" required></div>
-                        <div class="form-group"><label>Service *</label><select name="service" required><option value="">Select</option><option>2D Animation</option><option>Storyboard</option><option>Character Design</option><option>Background Art</option><option>Cartoon Series</option></select></div>
-                    </div>
+                    <div style="display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;"><div class="form-group"><label>Budget *</label><input type="text" name="budget" placeholder="$350 - $5000" required></div><div class="form-group"><label>Service *</label><select name="service" required><option value="">Select</option><option>2D Animation</option><option>Storyboard</option><option>Character Design</option><option>Background Art</option><option>Cartoon Series</option></select></div></div>
                     <div class="form-group"><label>Project Details *</label><textarea name="message" rows="4" required></textarea></div>
                     <button type="submit" class="submit-btn">Send Inquiry <i class="fas fa-paper-plane"></i></button>
-                    <div id="formMessage" class="form-message"></div>
+                    <div id="formMessage" class="form-message" style="margin-top: 18px; display: none;"></div>
                 </form>
             </div>
         </div>
     </section>
 
     <footer class="site-footer">
-        <div class="footer-logo"><img src="content/toonlance_transparent.png" alt="TOONLANCE"></div>
-        <p class="footer-tagline">Bringing creative visions to life through nice 2D animation.</p>
-        <div class="social-links">
-            <a href="https://x.com/TOONLANCE281374" class="social-link"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.youtube.com/@TOONLANCE" class="social-link"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.instagram.com/toonlance/" class="social-link"><i class="fab fa-instagram"></i></a>
-            <a href="http://discord.com/users/1389790176947077132" class="social-link"><i class="fab fa-discord"></i></a>
-            <a href="https://bsky.app/profile/toonlance.bsky.social" class="social-link"><i class="fab fa-bluesky"></i></a>
+        <div class="footer-logo"><img src="content/toonlance_transparent.png" alt="TOONLANCE" style="height: 44px;"></div>
+        <p class="footer-tagline" style="margin: 18px 0; color: #b4a6ff;">Bringing creative visions to life through nice 2D animation.</p>
+        <div class="social-links" style="display: flex; gap: 18px; justify-content: center; margin-bottom: 28px;">
+            <a href="https://x.com/TOONLANCE281374" class="social-link" style="background: #2a2352; width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s;"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@TOONLANCE" class="social-link" style="background: #2a2352; width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/toonlance/" class="social-link" style="background: #2a2352; width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fab fa-instagram"></i></a>
+            <a href="http://discord.com/users/1389790176947077132" class="social-link" style="background: #2a2352; width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fab fa-discord"></i></a>
+            <a href="https://bsky.app/profile/toonlance.bsky.social" class="social-link" style="background: #2a2352; width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fab fa-bluesky"></i></a>
         </div>
         <p class="copyright">© 2026 <strong>TOONLANCE</strong> — Human-made animation.</p>
     </footer>
     <button id="back-to-top"><i class="fas fa-arrow-up"></i></button>
 
     <script>
-        // Updated videoData: removed oBKLgM0k_0E (tsunami express) and 1L9nH4nPT8Y (fog episode 1 sneak peek)
-        // Kept PanicToons videos (u7Z7tp2DZ5U and xw2HJPBsniQ) as requested.
+        // Portfolio data (updated: keeping PanicToons as requested)
         const videoData = [
             { id: 3, category: "others", file: "content/deva sword animation.mp4" },
             { id: 4, category: "others", file: "content/deva fight.mp4" },
             { id: 12, category: "others", file: "content/horse.mp4" },
             { id: 13, category: "animations", youtubeId: "nxgTtCF656E" },
             { id: 14, category: "animations", youtubeId: "Onews4v4Blc" },
-            { id: 8, category: "cartoons", youtubeId: "u7Z7tp2DZ5U" },    // PanicToons video (kept)
-            { id: 9, category: "cartoons", youtubeId: "xw2HJPBsniQ" }     // PanicToons video (kept)
+            { id: 8, category: "cartoons", youtubeId: "u7Z7tp2DZ5U" },
+            { id: 9, category: "cartoons", youtubeId: "xw2HJPBsniQ" }
         ];
-
         const testimonialsData = [
             { id:1, text:"the people at ToonLance, are some of the nicest and coolest people I have ever worked with. They focused on quality over quantity even at a cheap price when it comes to animation. I highly recommend them if you ever need a freelancing animation company to work with.", client:"PanicToons", role:"Indie Animation Studio", avatar:"PT", rating:5 },
             { id:2, text:"Toonlance's team of animators continue to provide my studio with the animations we need, intuitively and with a level of quality that reflects famous TV series. We negotiated prices that a working-class person can afford. I'll definitely be reaching out again.", client:"Ryan Edgar", role:"Game Development Studio", avatar:"RE", rating:5 },
@@ -900,133 +808,130 @@
             { id:4, text:"Toonlance has been a big help animating on my show. They are very effective and deliver quality work at an affordable price. I highly recommend you hire them for your cartoons.", client:"Plushbomb Productions", role:"Cartoon Studio", avatar:"PP", rating:5 }
         ];
 
-        const hamburger = document.querySelector('.hamburger');
-        const mobileNav = document.getElementById('mobileNav');
         const featuredGrid = document.getElementById('featuredGrid');
         const secondaryGrid = document.getElementById('secondaryGrid');
         const testimonialsGrid = document.getElementById('testimonialsGrid');
-        const contactForm = document.getElementById('contactForm');
-        const formMessage = document.getElementById('formMessage');
-        const navLinks = document.querySelectorAll('nav a');
+        const hamburger = document.querySelector('.hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        const bodyEl = document.body;
+        const navLinksAll = document.querySelectorAll('nav a');
         const header = document.querySelector('header');
-        const backToTop = document.getElementById('back-to-top');
-        const body = document.body;
+        const backBtn = document.getElementById('back-to-top');
 
         function createVideoCard(video, isFeatured = false) {
             const card = document.createElement('div');
             card.className = isFeatured ? 'featured-card' : 'video-card';
-            let playerHtml = '';
+            let innerHtml = '<div class="video-player-container">';
             if (video.file) {
-                playerHtml = `<video class="video-player" autoplay muted loop playsinline><source src="${video.file}" type="video/mp4"></video>`;
+                innerHtml += `<video class="video-player" autoplay muted loop playsinline><source src="${video.file}" type="video/mp4"></video>`;
             } else if (video.youtubeId) {
-                playerHtml = `<iframe class="video-player" src="https://www.youtube.com/embed/${video.youtubeId}?rel=0&modestbranding=1&showinfo=0" allowfullscreen loading="lazy"></iframe>`;
+                innerHtml += `<iframe class="video-player" src="https://www.youtube.com/embed/${video.youtubeId}?rel=0&modestbranding=1&showinfo=0" allowfullscreen loading="lazy"></iframe>`;
             }
-            card.innerHTML = `<div class="video-player-container">${playerHtml}</div>`;
+            innerHtml += '</div>';
+            card.innerHTML = innerHtml;
             return card;
         }
 
         function renderPortfolio() {
-            const loopingVideos = videoData.filter(v => v.file);
-            const otherVideos = videoData.filter(v => v.youtubeId);
+            const loopingFiles = videoData.filter(v => v.file);
+            const youtubeClips = videoData.filter(v => v.youtubeId);
             featuredGrid.innerHTML = '';
-            loopingVideos.forEach(video => {
-                featuredGrid.appendChild(createVideoCard(video, true));
-            });
+            loopingFiles.forEach(v => featuredGrid.appendChild(createVideoCard(v, true)));
             secondaryGrid.innerHTML = '';
-            otherVideos.forEach(video => {
-                secondaryGrid.appendChild(createVideoCard(video, false));
-            });
+            youtubeClips.forEach(v => secondaryGrid.appendChild(createVideoCard(v, false)));
         }
 
         function renderTestimonials() {
             testimonialsGrid.innerHTML = testimonialsData.map(t => `
                 <div class="testimonial-card">
-                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
-                    <div class="testimonial-text">"${t.text}"</div>
-                    <div class="testimonial-rating">${'<i class="fas fa-star"></i>'.repeat(t.rating)}</div>
-                    <div class="client-info">
-                        <div class="client-avatar">${t.avatar}</div>
-                        <div class="client-details"><h4>${t.client}</h4><p>${t.role}</p></div>
-                    </div>
+                    <div class="quote-icon"><i class="fas fa-quote-left" style="color:#7A6DFC; font-size: 1.8rem;"></i></div>
+                    <div class="testimonial-text" style="margin: 16px 0;">“${t.text}”</div>
+                    <div class="testimonial-rating">${'<i class="fas fa-star" style="color:#FFD966;"></i>'.repeat(t.rating)}</div>
+                    <div class="client-info" style="margin-top: 20px; display: flex; gap: 14px; align-items: center;"><div class="client-avatar" style="background: linear-gradient(145deg, #7A6DFC, #B4A6FF); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">${t.avatar}</div><div><h4>${t.client}</h4><p style="color: #B4A6FF;">${t.role}</p></div></div>
                 </div>
             `).join('');
         }
 
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitBtn = contactForm.querySelector('.submit-btn');
-            const original = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<div class="loading"></div> Sending...';
-            formMessage.style.display = 'none';
-            try {
-                const fd = new FormData(contactForm);
-                const res = await fetch('https://formspree.io/f/myzenzjg', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-                if (res.ok) {
-                    formMessage.textContent = '✅ Inquiry sent! We’ll get back within 24 hours.';
-                    formMessage.className = 'form-message success';
-                    contactForm.reset();
-                } else throw new Error();
-            } catch (err) {
-                formMessage.textContent = '⚠️ Error sending. Please email toonlanceservice@gmail.com';
-                formMessage.className = 'form-message error';
-            }
-            formMessage.style.display = 'block';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = original;
-            setTimeout(() => { formMessage.style.display = 'none'; }, 6000);
-        });
-
-        function handleNavClick(e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            if (mobileNav.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                mobileNav.classList.remove('active');
-                body.classList.remove('menu-open');
-            }
-            const target = document.querySelector(href);
-            if (target) {
-                window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
-                history.pushState(null, null, href);
-            }
+        // Form handler
+        const contactForm = document.getElementById('contactForm');
+        const formMessageDiv = document.getElementById('formMessage');
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = contactForm.querySelector('.submit-btn');
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = 'Sending...';
+                formMessageDiv.style.display = 'none';
+                try {
+                    const fd = new FormData(contactForm);
+                    const res = await fetch('https://formspree.io/f/myzenzjg', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+                    if (res.ok) {
+                        formMessageDiv.textContent = '✅ Thanks! We’ll reach out within 24h.';
+                        formMessageDiv.className = 'form-message success';
+                        formMessageDiv.style.display = 'block';
+                        contactForm.reset();
+                    } else throw new Error();
+                } catch (err) {
+                    formMessageDiv.textContent = '⚠️ Error. Please email toonlanceservice@gmail.com directly.';
+                    formMessageDiv.className = 'form-message error';
+                    formMessageDiv.style.display = 'block';
+                }
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                setTimeout(() => { formMessageDiv.style.display = 'none'; }, 6000);
+            });
         }
-        navLinks.forEach(link => link.addEventListener('click', handleNavClick));
 
+        // Mobile menu logic
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            mobileNav.classList.remove('active');
+            bodyEl.classList.remove('menu-open');
+        }
+        function openMenu() {
+            hamburger.classList.add('active');
+            mobileNav.classList.add('active');
+            bodyEl.classList.add('menu-open');
+        }
         hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            mobileNav.classList.toggle('active');
-            body.classList.toggle('menu-open');
+            if (mobileNav.classList.contains('active')) closeMenu();
+            else openMenu();
+        });
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                closeMenu();
+                const targetId = link.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    const targetEl = document.querySelector(targetId);
+                    if (targetEl) window.scrollTo({ top: targetEl.offsetTop - 80, behavior: 'smooth' });
+                }
+            });
         });
         document.addEventListener('click', (e) => {
-            if (!mobileNav.contains(e.target) && !hamburger.contains(e.target) && mobileNav.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                mobileNav.classList.remove('active');
-                body.classList.remove('menu-open');
-            }
+            if (mobileNav.classList.contains('active') && !mobileNav.contains(e.target) && !hamburger.contains(e.target)) closeMenu();
         });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && mobileNav.classList.contains('active')) closeMenu(); });
 
+        // active link update on scroll & back to top
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
-            backToTop.classList.toggle('visible', window.scrollY > 400);
+            if (backBtn) backBtn.classList.toggle('visible', window.scrollY > 400);
             let current = '';
             document.querySelectorAll('section[id]').forEach(s => {
-                const top = s.offsetTop - 100;
-                if (scrollY >= top) current = s.getAttribute('id');
+                const offset = s.offsetTop - 100;
+                if (window.scrollY >= offset) current = s.getAttribute('id');
             });
-            navLinks.forEach(a => {
+            navLinksAll.forEach(a => {
                 a.classList.remove('active');
                 if (a.getAttribute('href') === `#${current}`) a.classList.add('active');
             });
         });
-        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        if (backBtn) backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
         renderPortfolio();
         renderTestimonials();
-        document.querySelectorAll('img').forEach(img => img.loading = 'lazy');
     </script>
 </body>
 </html>
